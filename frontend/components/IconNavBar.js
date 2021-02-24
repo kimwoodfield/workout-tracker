@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { faDumbbell } from '@fortawesome/free-solid-svg-icons'
 import { faFileAlt } from '@fortawesome/free-solid-svg-icons'
 import { faCog } from '@fortawesome/free-solid-svg-icons'
@@ -6,51 +7,64 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styled from 'styled-components'
 
 const BottomNavBar = styled.div`
-    height: 7rem;
-    border: 2px solid red;
-    width: 100%;
+    height: 9rem;
+    width: 23rem;
     box-sizing: border-box;
     display: flex;
     align-items: center;
 `
 
 const IconContainer = styled.div`
-    height: 6.5rem;
+    height: 100%;
     width: 25%;
-    padding: 0.5rem;
-    border: 1px dashed blue;
     display: flex;
+    border: 1px dotted blue;
 `
 
 const IconButton = styled.button`
-    height: 100%;
+    height: 8rem;
     width: 100%;
-    font-size: 15px;
+    background-color: white;
+    outline: none;
+    border: 1px solid green;
+    border-radius: 5px;
+    padding: 15px;
+    align-items: flex-end;
+    justify-content: flex-end;
 `
 
 export default function IconNavBar() {
     return(
         <BottomNavBar>
+            <Link href="log">
             <IconContainer>
                 <IconButton>
-                    <FontAwesomeIcon icon={faFileAlt} />
+                    <FontAwesomeIcon icon={faFileAlt} size="xs" />
+                    <p>Log</p>
                 </IconButton>
+                
             </IconContainer>
+            </Link>
             <IconContainer>
                 <IconButton>
-                    <FontAwesomeIcon icon={faDumbbell} />
+                    <FontAwesomeIcon icon={faDumbbell} size="lg" />
+                    <p>Routines</p>
                 </IconButton>
             </IconContainer>
             <IconContainer>
                 <IconButton>
                     <FontAwesomeIcon icon={faUser} />
+                    <p>Personal</p>
                 </IconButton>
             </IconContainer>
+            <Link href="settings">
             <IconContainer>
                 <IconButton>
                     <FontAwesomeIcon icon={faCog} />
+                    <p>Settings</p>
                 </IconButton>
             </IconContainer>
+            </Link>
         </BottomNavBar>
     )
 }

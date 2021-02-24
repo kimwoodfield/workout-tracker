@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link'
 
 export default function LoginForm() {
 
@@ -45,7 +46,9 @@ export default function LoginForm() {
             </Divider>
 
             <Divider>
-                <Login type="submit">Login</Login>
+                <Link href="log">
+                    <Login type="submit">Login</Login>
+                </Link>
             </Divider>
         </LoginForm>
     )
