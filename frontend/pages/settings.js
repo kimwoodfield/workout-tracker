@@ -1,40 +1,32 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import LoginForm from '../components/LoginForm'
 import styled from 'styled-components';
 import IconNavBar from '../components/IconNavBar';
+import AddNewItem from '../components/AddNewItem'
+import PageTitle from '../components/PageTitle'
 
 const LoginLink = styled.a`
   color: #6200EE;
   font-weight: bold;
 `;
 
-export default function Home() {
+export default function Log() {
   return (
     <div className="container">
       <Head>
-        <title>Register</title>
+        <title>Settings</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <AddNewItem />
+      <PageTitle name="Settings"/>
+
       <main>
-        <h1 className="title">
-          Workout Tracker
-        </h1>
+        <div>
 
         <p className="description">
-          Settings
+          Your settings appear here.
         </p>
 
-        <LoginForm />
-
-        <div>
-          <p>
-            Don't have an account? {' '}
-            <Link href="/register">
-              <LoginLink>Register</LoginLink>
-            </Link>
-          </p>
         </div>
       </main>
 
@@ -43,7 +35,7 @@ export default function Home() {
       <style jsx>{`
         .container {
           min-height: 100vh;
-          padding: 0 0.5rem;
+          // padding: 0 0.5rem;
           display: flex;
           flex-direction: column;
           justify-content: center;

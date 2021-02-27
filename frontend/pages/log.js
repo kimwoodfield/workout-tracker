@@ -3,6 +3,8 @@ import Link from 'next/link'
 import LoginForm from '../components/LoginForm'
 import styled from 'styled-components';
 import IconNavBar from '../components/IconNavBar';
+import AddNewItem from '../components/AddNewItem'
+import PageTitle from '../components/PageTitle'
 
 const LoginLink = styled.a`
   color: #6200EE;
@@ -13,18 +15,18 @@ export default function Log() {
   return (
     <div className="container">
       <Head>
-        <title>Register</title>
+        <title>Log</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <AddNewItem />
+      <PageTitle name="Log"/>
+
       <main>
         <div>
-        <h1 className="title">
-          Workout Tracker
-        </h1>
 
         <p className="description">
-          Start getting in shape today.
+          Your workouts are recorded here.
         </p>
 
         </div>
@@ -35,7 +37,7 @@ export default function Log() {
       <style jsx>{`
         .container {
           min-height: 100vh;
-          padding: 0 0.5rem;
+          // padding: 0 0.5rem;
           display: flex;
           flex-direction: column;
           justify-content: center;

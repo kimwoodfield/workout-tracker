@@ -42,21 +42,24 @@ export default function IconNavBar() {
                     <FontAwesomeIcon icon={faFileAlt} size="xs" />
                     <p>Log</p>
                 </IconButton>
-                
             </IconContainer>
             </Link>
+            <Link href="routines">
             <IconContainer>
                 <IconButton>
                     <FontAwesomeIcon icon={faDumbbell} size="lg" />
                     <p>Routines</p>
                 </IconButton>
             </IconContainer>
+            </Link>
+            <Link href="profile">
             <IconContainer>
                 <IconButton>
                     <FontAwesomeIcon icon={faUser} />
-                    <p>Personal</p>
+                    <p>Profile</p>
                 </IconButton>
             </IconContainer>
+            </Link>
             <Link href="settings">
             <IconContainer>
                 <IconButton>
