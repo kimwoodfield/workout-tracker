@@ -1,4 +1,4 @@
-#workout-tracker
+# workout-tracker
 
 A workout tracking web-application that provides users with a platform to log workouts and track progress.
 
