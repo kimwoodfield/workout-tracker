@@ -3,11 +3,8 @@ import styled from 'styled-components';
 import IconNavBar from '../components/Navigation/IconNavBar';
 import AddNewItem from '../components/AddNewItem'
 import PageTitle from '../components/PageTitle'
+import SettingsButton from '../components/Common/SettingsButton'
 
-const LoginLink = styled.a`
-  color: #6200EE;
-  font-weight: bold;
-`;
 
 export default function Log() {
   return (
@@ -20,12 +17,12 @@ export default function Log() {
       <AddNewItem />
       <PageTitle name="Settings"/>
 
+      <SettingsButton route="/" Name="Change theme" />
+      <SettingsButton route="/" Name="Send feedback" />
+      <SettingsButton route="/" Name="Logout" />
+
       <main>
         <div>
-
-        <p className="description">
-          Your settings appear here.
-        </p>
 
         </div>
       </main>
@@ -34,6 +31,7 @@ export default function Log() {
 
       <style jsx>{`
         .container {
+          background-color: #fafafa;
           min-height: 100vh;
           // padding: 0 0.5rem;
           display: flex;
@@ -43,7 +41,7 @@ export default function Log() {
         }
 
         main {
-          padding: 5rem 0;
+          // padding: 5rem 0;
           flex: 1;
           display: flex;
           flex-direction: column;
