@@ -1,15 +1,20 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import LoginForm from '../components/LoginForm'
 import styled from 'styled-components';
-import IconNavBar from '../components/IconNavBar';
+import IconNavBar from '../components/Navigation/IconNavBar';
 import AddNewItem from '../components/AddNewItem'
 import PageTitle from '../components/PageTitle'
+import PastWorkoutPreview from '../components/WorkoutOverview/PastWorkoutPreview'
+import PastWorkoutDate from '../components/WorkoutOverview/PastWorkoutDate'
+
+import { AiOutlinePlus } from "react-icons/ai";
 
 const LoginLink = styled.a`
   color: #6200EE;
   font-weight: bold;
 `;
+
+const Add = <AiOutlinePlus />
+
 
 export default function Log() {
   return (
@@ -19,17 +24,23 @@ export default function Log() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddNewItem />
+      <AddNewItem icon={Add} />
       <PageTitle name="Log"/>
 
       <main>
-        <div>
-
-        <p className="description">
-          Your workouts are recorded here.
-        </p>
-
-        </div>
+        <PastWorkoutDate WorkoutDate="February 2021" WorkoutQty="2 Workouts"/>
+        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
       </main>
 
       <IconNavBar />
@@ -45,12 +56,11 @@ export default function Log() {
         }
 
         main {
-          padding: 5rem 0;
+          // padding: 5rem 0;
           flex: 1;
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
+          width: 100%;
         }
 
         footer {

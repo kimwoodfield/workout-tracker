@@ -1,8 +1,6 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import LoginForm from '../components/LoginForm'
 import styled from 'styled-components';
-import IconNavBar from '../components/IconNavBar';
+import IconNavBar from '../components/Navigation/IconNavBar';
 import AddNewItem from '../components/AddNewItem'
 import PageTitle from '../components/PageTitle'
 
@@ -15,7 +13,7 @@ export default function Log() {
   return (
     <div className="container">
       <Head>
-        <title>Register</title>
+        <title>Profile</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { AiOutlinePlus } from "react-icons/ai";
 
 const AddNewItemContainer = styled.div`
-    border: 1px dashed black;
+    // border: 1px dashed black;
     height: 4rem;
     width: 100%;
     display: flex;
@@ -22,11 +22,13 @@ const AddItemButton = styled.button`
     border: none;
 `
 
-export default function AddNewItem() {
+const Add = <AiOutlinePlus />
+
+export default function AddNewItem(props) {
     return (
         <AddNewItemContainer>
             <AddItemButton>
-                <AiOutlinePlus />
+                {props.icon}
             </AddItemButton>
         </AddNewItemContainer>
     )

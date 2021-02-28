@@ -1,25 +1,21 @@
 import Head from 'next/head'
-import Link from 'next/link'
-import LoginForm from '../components/LoginForm'
-import styled from 'styled-components';
-import IconNavBar from '../components/IconNavBar';
+import IconNavBar from '../components/Navigation/IconNavBar';
 import AddNewItem from '../components/AddNewItem'
 import PageTitle from '../components/PageTitle'
 
-const LoginLink = styled.a`
-  color: #6200EE;
-  font-weight: bold;
-`;
+import { AiOutlinePlus } from "react-icons/ai";
+
+const Add = <AiOutlinePlus />
 
 export default function Log() {
   return (
     <div className="container">
       <Head>
-        <title>Register</title>
+        <title>Routines</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddNewItem />
+      <AddNewItem icon={Add}/>
       <PageTitle name="Routines"/>
 
       <main>

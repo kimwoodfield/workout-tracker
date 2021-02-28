@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import styled from 'styled-components';
-import IconNavBar from '../components/IconNavBar';
+import IconNavBar from '../components/Navigation/IconNavBar';
 import AddNewItem from '../components/AddNewItem'
 import PageTitle from '../components/PageTitle'
 

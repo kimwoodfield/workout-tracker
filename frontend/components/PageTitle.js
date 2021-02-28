@@ -1,14 +1,15 @@
 import styled from 'styled-components'
 
 const PageTitleContainer = styled.div`
-    border: 1px dashed black;
+    // border: 1px dashed black;
     display: flex;
     align-items: flex-start;
-    height: 3.75rem;
+    height: 4.5rem;
     width: 100%;
 `
 
 const PageTitleText = styled.h2`
+    // border: 1px dashed black;
     font-size: 2.5rem;
     padding: 0;
     margin: 0;
