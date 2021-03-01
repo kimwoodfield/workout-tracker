@@ -2,6 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/settings": "pages/settings.js",
-  "/log": "pages/log.js"
+  "/log": "pages/log.js",
+  "/profile": "pages/profile.js",
+  "/settings": "pages/settings.js"
 }

@@ -19,7 +19,7 @@ export default function Log() {
 
       <SettingsButton route="/" Name="Change theme" />
       <SettingsButton route="/" Name="Send feedback" />
-      <SettingsButton route="/" Name="Logout" />
+      <SettingsButton route="/" Name="Sign out" />
 
       <main>
         <div>

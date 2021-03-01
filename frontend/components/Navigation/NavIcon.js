@@ -12,6 +12,7 @@ const IconButton = styled.button`
     height: 100%;
     width: 100%;
     background-color: #ededed;
+    color: ${props => props.active ? '#6200EE;' : ''};
     outline: none;
     border: none;
     font-size: 2.25rem;
@@ -31,9 +32,9 @@ export default function NavIcon(props) {
     return (
         <Link href={props.route}>
             <IconContainer>
-                <IconButton>
+                <IconButton active={props.active}>
                     {props.icon}
-                    <IconDesc>{props.page}</IconDesc>
+                    <IconDesc active={props.active}>{props.page}</IconDesc>
                 </IconButton>
             </IconContainer>
         </Link>

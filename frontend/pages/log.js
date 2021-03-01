@@ -41,6 +41,7 @@ export default function Log() {
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
         <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
       </main>
 
       <IconNavBar />
@@ -61,6 +62,7 @@ export default function Log() {
           display: flex;
           flex-direction: column;
           width: 100%;
+          padding-bottom: 7rem;
         }
 
         footer {
