@@ -1,11 +1,10 @@
 import Head from 'next/head'
 import IconNavBar from '../components/Navigation/IconNavBar';
-import AddNewItem from '../components/AddNewItem'
 import PageTitle from '../components/PageTitle'
+import NewRoutineLink from '../components/NewRoutineLink'
+
 
 import { AiOutlinePlus } from "react-icons/ai";
-
-const Add = <AiOutlinePlus />
 
 export default function Log() {
   return (
@@ -15,7 +14,7 @@ export default function Log() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddNewItem icon={Add}/>
+      <NewRoutineLink />
       <PageTitle name="Routines"/>
 
       <main>

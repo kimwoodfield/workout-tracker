@@ -1,9 +1,13 @@
 import Head from 'next/head'
 import styled from 'styled-components';
 import IconNavBar from '../components/Navigation/IconNavBar';
-import AddNewItem from '../components/AddNewItem'
+import NewWorkoutLink from '../components/NewWorkoutLink'
 import PageTitle from '../components/PageTitle'
 import SettingsButton from '../components/Common/SettingsButton'
+
+const Padding = styled.div`
+  height: 4rem;
+`
 
 
 export default function Log() {
@@ -14,7 +18,7 @@ export default function Log() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddNewItem />
+      <Padding />
       <PageTitle name="Settings"/>
 
       <SettingsButton route="/" Name="Change theme" />

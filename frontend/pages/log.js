@@ -1,19 +1,12 @@
 import Head from 'next/head'
 import styled from 'styled-components';
 import IconNavBar from '../components/Navigation/IconNavBar';
-import AddNewItem from '../components/AddNewItem'
+import NewWorkoutLink from '../components/NewWorkoutLink'
 import PageTitle from '../components/PageTitle'
 import PastWorkoutPreview from '../components/WorkoutOverview/PastWorkoutPreview'
 import PastWorkoutDate from '../components/WorkoutOverview/PastWorkoutDate'
 
 import { AiOutlinePlus } from "react-icons/ai";
-
-const LoginLink = styled.a`
-  color: #6200EE;
-  font-weight: bold;
-`;
-
-const Add = <AiOutlinePlus />
 
 
 export default function Log() {
@@ -24,7 +17,7 @@ export default function Log() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddNewItem icon={Add} />
+      <NewWorkoutLink />
       <PageTitle name="Log"/>
 
       <main>

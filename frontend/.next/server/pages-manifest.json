@@ -3,5 +3,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/log": "pages/log.js",
-  "/settings": "pages/settings.js"
+  "/addworkout": "pages/addworkout.js"
 }

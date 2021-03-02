@@ -1,13 +1,12 @@
 import Head from 'next/head'
 import styled from 'styled-components';
 import IconNavBar from '../components/Navigation/IconNavBar';
-import AddNewItem from '../components/AddNewItem'
+import NewWorkoutLink from '../components/NewWorkoutLink'
 import PageTitle from '../components/PageTitle'
 
-const LoginLink = styled.a`
-  color: #6200EE;
-  font-weight: bold;
-`;
+const Padding = styled.div`
+  height: 4rem;
+`
 
 export default function Log() {
   return (
@@ -17,7 +16,7 @@ export default function Log() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddNewItem />
+      <Padding />
       <PageTitle name="Profile"/>
 
       <main>

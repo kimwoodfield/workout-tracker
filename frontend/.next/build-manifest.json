@@ -24,15 +24,15 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
+    "/addworkout": [
+      "static/chunks/main.js",
+      "static/chunks/webpack.js",
+      "static/chunks/pages/addworkout.js"
+    ],
     "/log": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/chunks/pages/log.js"
-    ],
-    "/settings": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/settings.js"
     ]
   },
   "ampFirstPages": []
