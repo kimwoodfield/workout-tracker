@@ -18,7 +18,7 @@ export default function AddWorkout() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddWorkoutHeader />
+      <AddWorkoutHeader date="Mar 3" route="log" text="Finish"/>
 
 
       <Details>
@@ -30,9 +30,12 @@ export default function AddWorkout() {
 
       <main>
         <div>
-          
+        
         </div>
+        
       </main>
+
+      
 
 
       <style jsx>{`

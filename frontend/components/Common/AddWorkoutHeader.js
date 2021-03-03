@@ -6,12 +6,14 @@ import BackButton from './BackButton'
 
 const Wrapper = styled.div`
     background-color: white;
+    height: 4rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin: 0;
     padding: 0.75rem 0.85rem;
-    border-bottom: 0.5px solid #BDBDBD;
+    align-items: center;
+    // border-bottom: 0.5px solid #BDBDBD;
 `
 
 const Finish = styled.p`
@@ -27,13 +29,13 @@ const Date = styled.p`
     font-weight: 700;
 `
 
-export default function AddWorkoutHeader() {
+export default function AddWorkoutHeader(props) {
     return (
         <Wrapper>
-            <BackButton route="log" />
-            <Date>2 Mar</Date>
+            <BackButton route={props.route} />
+            <Date>{props.date}</Date>
             <Link href="log">
-                <Finish>Finish</Finish>
+                <Finish>{props.text}</Finish>
             </Link>
         </Wrapper>
     )

@@ -18,7 +18,7 @@ const AddNewItemContainer = styled.div`
 export default function NewRoutineLink(props) {
     return (
         <AddNewItemContainer>
-            <AddButton route="log"/>
+            <AddButton route="addroutine"/>
         </AddNewItemContainer>
     )
 }

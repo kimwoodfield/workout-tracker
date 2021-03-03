@@ -11,7 +11,7 @@ const IconContainer = styled.div`
 const IconButton = styled.button`
     height: 100%;
     width: 100%;
-    background-color: #ededed;
+    background-color: #E0E0E0;
     color: ${props => props.active ? '#6200EE;' : ''};
     outline: none;
     border: none;

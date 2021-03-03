@@ -10,7 +10,7 @@ const PageTitleContainer = styled.div`
 
 const PageTitleText = styled.h2`
     // border: 1px dashed black;
-    font-size: 2.5rem;
+    font-size: 2rem;
     padding: 0;
     margin: 0;
     padding-left: 1.25rem;
