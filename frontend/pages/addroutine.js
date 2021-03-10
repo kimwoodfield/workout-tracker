@@ -32,7 +32,7 @@ const NewRoutineForm = styled.form`
 `
 
 const AddExerciseContainer = styled.div`
-  width: 90%;
+  width: 91%;
 `
 
 const FormDivider = styled.div`
