@@ -6,6 +6,7 @@ import PageTitle from '../components/PageTitle'
 import TextButton from '../components/Common/TextButton'
 import BackButton from '../components/Common/BackButton'
 import Input from '../components/Common/Input'
+import RegisterForm from '../components/Common/RegisterForm'
 
 const Container = styled.div`
     min-height: 100vh;
@@ -55,40 +56,8 @@ export default function AddRoutine() {
 
       <PageTitle name="Unnamed routine" />
         
-      <NewRoutineForm method="POST">
-        <Input placeholder="Routine name"/>
-        <Input placeholder="Notes"/>
-
-        <FormDivider>
-          <Input placeholder="Exercise name"/>
-          <Input placeholder="Sets"/>
-        </FormDivider>
-
-        <FormDivider>
-          <Input placeholder="Exercise name"/>
-          <Input placeholder="Sets"/>
-        </FormDivider>
-
-        <FormDivider>
-          <Input placeholder="Exercise name"/>
-          <Input placeholder="Sets"/>
-        </FormDivider>
-
-        <FormDivider>
-          <Input placeholder="Exercise name"/>
-          <Input placeholder="Sets"/>
-        </FormDivider>
-
-        <FormDivider>
-          <Input placeholder="Exercise name"/>
-          <Input placeholder="Sets"/>
-        </FormDivider>
-
-      </NewRoutineForm>
-
-      <AddExerciseContainer>
-        <TextButton text="Save routine"/>
-      </AddExerciseContainer>
+      <RegisterForm />
+      
 
       <main>
         <div>

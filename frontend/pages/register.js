@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import RegisterForm from '../components/RegisterForm'
+import RegisterForm from '../components/Common/RegisterForm'
 import styled from 'styled-components'
 
 const RegisterLink = styled.a`
@@ -8,7 +8,7 @@ const RegisterLink = styled.a`
   font-weight: bold;
 `;
 
-export default function Home() {
+export default function Register() {
   return (
     <div className="container">
       <Head>
