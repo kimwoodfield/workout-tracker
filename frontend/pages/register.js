@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import RegisterForm from '../components/Common/RegisterForm'
+import RegisterForm from '../components/Forms/RegisterForm'
 import styled from 'styled-components'
 
 const RegisterLink = styled.a`
@@ -21,32 +21,11 @@ export default function Register() {
           Workout Tracker
         </h1>
 
-        <p className="description">
+        <h2 className="description">
           Sign up to start tracking your workouts today.
-        </p>
+        </h2>
 
-        <RegisterForm action="index.js" method="POST">
-          <div>
-            <p>
-              <input type="email" placeholder="Email"></input>
-            </p>
-
-            <p>
-              <input type="text" placeholder="Full Name"></input>
-            </p>
-
-            <p>
-              <input type="text" placeholder="Username"></input>
-            </p>
-
-            <p>
-              <input type="password" placeholder="Password"></input>
-            </p>
-
-            <button type="submit">Sign up</button>
-
-          </div>
-        </RegisterForm>
+        <RegisterForm />
 
         <div>
           <p>

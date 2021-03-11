@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import LoginForm from '../components/LoginForm'
+import LoginForm from '../components/Forms/LoginForm'
 import styled from 'styled-components';
 
 const LoginLink = styled.a`
