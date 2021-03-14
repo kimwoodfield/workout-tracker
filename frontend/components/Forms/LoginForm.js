@@ -3,6 +3,7 @@ import SubmitBtn from './SubmitBtn'
 import Input from './FormInput'
 import ErrorMessage from '../Common/ErrorMessage'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 const Form = styled.form`
     display: flex;
@@ -12,22 +13,53 @@ const Form = styled.form`
 
 const LoginForm = () => {
 
+    const router = useRouter()
+
+    // Setting the state
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const [usernameErr, setUsernameErr] = useState({});
     const [passwordErr, setPasswordErr] = useState({});
 
-    // Prevents form from submitting normally on submit
+    const [ submitting, setSubmitting ] = useState(false);
+
+    // Handles the form submission
     const onSubmit = (e) => {
         e.preventDefault();
+        setSubmitting(true);
         const isValid = formValidation();
-        // If the data that is input is valid -
+        // If the input data is valid -
         if (isValid) {
             // Send this data to the api
-            setUsername('');
-            setPassword('');
-        }
+            fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password }),
+            })
+            .then(res => res.json()) // parse the response as JSON
+            .then(data => {
+                // Request sent.
+                if (data.ok === false) {
+                    // if the response is a 401, block the submission..
+                    console.log(data.msg);
+                    alert(data.msg);
+                } else {
+                    // if the response is not a 401, allow the submission.
+                    console.log(data.msg);
+                    alert(data.msg);
+                    setUsername('');
+                    setPassword('');
+                    router.push('/log');
+                }
+            })
+            .catch(err => {
+                // Fetch couldn't send the request.
+                console.log('fetch failed');
+            })
+        } 
     }
 
     /* Frontend form validation is handled here */

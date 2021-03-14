@@ -12,6 +12,7 @@ const Form = styled.form`
 
 const RegisterForm = () => {
 
+
     // Setting the state
     const [email, setEmail] = useState('');
     const [fullname, setFullname] = useState('');
@@ -45,6 +46,7 @@ const RegisterForm = () => {
               .then(data => {
                 // Request sent.
                 console.log(data.msg);
+                alert(data.msg);
                 setEmail('');
                 setFullname('');
                 setUsername('');
