@@ -59,7 +59,9 @@ const LoginForm = () => {
                 // Fetch couldn't send the request.
                 console.log('fetch failed');
             })
-        } 
+        } else {
+            e.preventDefault();
+        }
     }
 
     /* Frontend form validation is handled here */

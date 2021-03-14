@@ -56,6 +56,8 @@ const RegisterForm = () => {
                 // Fetch couldn't send the request.
                 console.log('fetch failed');
               })
+        } else {
+            e.preventDefault();
         }
     }
 
