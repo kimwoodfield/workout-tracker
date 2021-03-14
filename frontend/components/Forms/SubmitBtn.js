@@ -10,5 +10,6 @@ const SubmitBtn = styled.button`
     border: none;
     letter-spacing: 0.9px;
     margin: 4px 0;
+    cursor: pointer;
 `
 export default SubmitBtn;

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 const RegisterLink = styled.a`
   color: #6200EE;
   font-weight: bold;
+  cursor: pointer;
 `;
 
 export default function Register() {

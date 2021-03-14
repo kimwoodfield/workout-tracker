@@ -23,18 +23,37 @@ const RegisterForm = () => {
     const [usernameErr, setUsernameErr] = useState({});
     const [passwordErr, setPasswordErr] = useState({});
 
+    const [ submitting, setSubmitting ] = useState(false);
 
-    // Prevents form from submitting normally on submit
+
+    // Handles the form submission
     const onSubmit = (e) => {
         e.preventDefault();
+        setSubmitting(true);
         const isValid = formValidation();
-        // If the data that is input is valid -
+        // If the input data is valid - 
         if (isValid) {
-            // Send this data to the api
-            setEmail('');
-            setFullname('');
-            setUsername('');
-            setPassword('');
+            // Make a POST request to our api route with the input data
+            fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, fullname, username, password }),
+              })
+              .then(res => res.json()) // parse the response as JSON
+              .then(data => {
+                // Request sent.
+                console.log(data.msg);
+                setEmail('');
+                setFullname('');
+                setUsername('');
+                setPassword('');
+              })
+              .catch(err => {
+                // Fetch couldn't send the request.
+                console.log('fetch failed');
+              })
         }
     }
 
