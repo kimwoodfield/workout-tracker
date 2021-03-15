@@ -22,6 +22,8 @@ const LoginForm = () => {
     const [usernameErr, setUsernameErr] = useState({});
     const [passwordErr, setPasswordErr] = useState({});
 
+    const [invalidLogin, setInvalidLogin] = useState("");
+
     const [ submitting, setSubmitting ] = useState(false);
 
     // Handles the form submission
@@ -37,15 +39,21 @@ const LoginForm = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, password })
+                // credentials: "include"
             })
             .then(res => res.json()) // parse the response as JSON
             .then(data => {
                 // Request sent.
+                if (data.status === 401) {
+                    setInvalidLogin("Invalid login - This user does not exist.");
+                    e.preventDefault();
+                }
                 if (data.ok === false) {
                     // if the response is a 401, block the submission..
+                    console.log(data);
                     console.log(data.msg);
-                    alert(data.msg);
+                    e.preventDefault();
                 } else {
                     // if the response is not a 401, allow the submission.
                     console.log(data.msg);
@@ -99,6 +107,7 @@ const LoginForm = () => {
                     placeholder="Username"
                     value={username}
                     onChange={(e) => {setUsername(e.target.value)}}/>
+                    <ErrorMessage>{invalidLogin}</ErrorMessage>
                     {Object.keys(usernameErr).map((key) => {
                        return <ErrorMessage>{usernameErr[key]}</ErrorMessage>
                    })}
