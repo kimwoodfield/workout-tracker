@@ -22,7 +22,10 @@ const LoginForm = () => {
     const [usernameErr, setUsernameErr] = useState({});
     const [passwordErr, setPasswordErr] = useState({});
 
-    const [invalidLogin, setInvalidLogin] = useState("");
+    const [invalidUser, setInvalidUser] = useState("");
+    const [invalidPass, setInvalidPass] = useState("");
+
+
 
     const [ submitting, setSubmitting ] = useState(false);
 
@@ -42,29 +45,76 @@ const LoginForm = () => {
                 body: JSON.stringify({ username, password })
                 // credentials: "include"
             })
-            .then(res => res.json()) // parse the response as JSON
-            .then(data => {
-                // Request sent.
-                if (data.status === 401) {
-                    setInvalidLogin("Invalid login - This user does not exist.");
-                    e.preventDefault();
-                }
-                if (data.ok === false) {
-                    // if the response is a 401, block the submission..
-                    console.log(data);
-                    console.log(data.msg);
-                    e.preventDefault();
-                } else {
-                    // if the response is not a 401, allow the submission.
-                    console.log(data.msg);
-                    alert(data.msg);
-                    setUsername('');
-                    setPassword('');
-                    router.push('/log');
-                }
-            })
+            .then((res) => {
+                switch(res.status) {
+                    case 400:
+                        console.log('400 works');
+                        setInvalidPass('Invalid username and password.');
+                        break;
+                    case 429:
+                        console.log('429 error');
+                        setInvalidPass('Login limit exceeded. Please try again later');
+                        break;
+                    case 201:
+                        router.push('/log');
+                        break;
+            //             res.json().then((data) => {
+            //             // Request sent.
+        
+            //             console.log(data);
+        
+            //             console.log(data.status);
+        
+            //             if (data.status == 400) {
+            //                 console.log(data);
+            //                 setInvalidUser(errors.msg);
+            //                 setUsername('');
+            //                 setPassword('');
+            //                 e.preventDefault();
+            //             }
+        
+            //             // If username issue
+            //             if (data.status === 401 && data.issue === 'Username') {
+            //                 setInvalidUser(data.msg);
+            //                 setUsername('');
+            //                 setPassword('');
+            //                 e.preventDefault();
+            //             }
+            //             // If password issue
+            //             if (data.status === 401 && data.issue === 'Password') {
+            //                 setInvalidPass(data.msg);
+            //                 setUsername('');
+            //                 setPassword('');
+            //                 e.preventDefault();
+            //             }
+            //             if (data.ok === false && data.issue === 'doesnt exist') {
+            //                 // if the response is a 401, block the submission..
+            //                 console.log(data);
+            //                 console.log(data.msg);
+            //                 setInvalidUser(data.msg);
+            //                 setUsername('');
+            //                 setPassword('');
+            //                 e.preventDefault();
+            //             } else if (data.ok === false) {
+            //                 // if the response is a 401, block the submission..
+            //                 console.log(data);
+            //                 console.log(data.msg);
+            //                 setUsername('');
+            //                 setPassword('');
+            //                 e.preventDefault();
+            //             } else {
+            //                 // if the response is not a 401, allow the submission.
+            //                 console.log(data.msg);
+            //                 alert(data.msg);
+            //                 setUsername('');
+            //                 setPassword('');
+            //                 router.push('/log');
+            //             }
+            // })
+        }})
             .catch(err => {
                 // Fetch couldn't send the request.
+                // 500 Error
                 console.log('fetch failed');
             })
         } else {
@@ -78,21 +128,6 @@ const LoginForm = () => {
         const passwordErr = {};
         let isValid = true;
 
-        // If username is left empty or length of the username is less than five characters -
-        if (username.length === 0) {
-            usernameErr.usernameEmpty = "You must enter a username.";
-        } else if (username.length < 5) {
-            usernameErr.usernameShort = "Username needs to be 5 or more characters.";
-            isValid = false;
-        }
-
-        // If the length of the password is less than three characters -
-        if (password.length === 0) {
-            passwordErr.passwordEmpty = "You must enter a password.";
-        } else if (password.length < 4) {
-            passwordErr.passwordShort = "Password needs to be 4 or more characters.";
-            isValid = false;
-        }
 
         // Update error objects
         setUsernameErr(usernameErr);
@@ -107,7 +142,7 @@ const LoginForm = () => {
                     placeholder="Username"
                     value={username}
                     onChange={(e) => {setUsername(e.target.value)}}/>
-                    <ErrorMessage>{invalidLogin}</ErrorMessage>
+                    <ErrorMessage>{invalidUser}</ErrorMessage>
                     {Object.keys(usernameErr).map((key) => {
                        return <ErrorMessage>{usernameErr[key]}</ErrorMessage>
                    })}
@@ -116,6 +151,7 @@ const LoginForm = () => {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => {setPassword(e.target.value)}}/>
+                    <ErrorMessage>{invalidPass}</ErrorMessage>
                     {Object.keys(passwordErr).map((key) => {
                        return <ErrorMessage>{passwordErr[key]}</ErrorMessage>
                    })}
