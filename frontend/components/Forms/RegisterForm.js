@@ -3,6 +3,7 @@ import SubmitBtn from './SubmitBtn'
 import Input from './FormInput'
 import ErrorMessage from '../Common/ErrorMessage'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 const Form = styled.form`
     display: flex;
@@ -11,6 +12,8 @@ const Form = styled.form`
 `
 
 const RegisterForm = () => {
+
+    const router = useRouter()
 
 
     // Setting the state
@@ -42,20 +45,20 @@ const RegisterForm = () => {
                 },
                 body: JSON.stringify({ email, fullname, username, password }),
               })
-              .then(res => res.json()) // parse the response as JSON
-              .then(data => {
-                // Request sent.
-                console.log(data.msg);
-                alert(data.msg);
-                setEmail('');
-                setFullname('');
-                setUsername('');
-                setPassword('');
-              })
-              .catch(err => {
-                // Fetch couldn't send the request.
-                console.log('fetch failed');
-              })
+              .then((res) => {
+                switch(res.status) {
+                    case 400:
+                        console.log('This is a 400 error.');
+                        break;
+                    case 429:
+                        console.log('This is a 429 error. Rate limit exceeded');
+                        break;
+                    case 201:
+                        res.json().then((data) => {
+                            // request sent
+                            router.push('/');
+                        })
+              }})
         } else {
             e.preventDefault();
         }

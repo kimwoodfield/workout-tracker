@@ -13,7 +13,7 @@ const Form = styled.form`
 
 const LoginForm = () => {
 
-    const router = useRouter()
+    const router = useRouter();
 
     // Setting the state
     const [username, setUsername] = useState('');
@@ -42,13 +42,17 @@ const LoginForm = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({ username, password })
-                // credentials: "include"
             })
             .then((res) => {
                 switch(res.status) {
                     case 400:
                         console.log('400 works');
+                        setInvalidPass('There was an error. Please try again later.');
+                        break;
+                    case 401:
+                        console.log('401 works');
                         setInvalidPass('Invalid username and password.');
                         break;
                     case 429:
@@ -58,60 +62,8 @@ const LoginForm = () => {
                     case 201:
                         router.push('/log');
                         break;
-            //             res.json().then((data) => {
-            //             // Request sent.
-        
-            //             console.log(data);
-        
-            //             console.log(data.status);
-        
-            //             if (data.status == 400) {
-            //                 console.log(data);
-            //                 setInvalidUser(errors.msg);
-            //                 setUsername('');
-            //                 setPassword('');
-            //                 e.preventDefault();
-            //             }
-        
-            //             // If username issue
-            //             if (data.status === 401 && data.issue === 'Username') {
-            //                 setInvalidUser(data.msg);
-            //                 setUsername('');
-            //                 setPassword('');
-            //                 e.preventDefault();
-            //             }
-            //             // If password issue
-            //             if (data.status === 401 && data.issue === 'Password') {
-            //                 setInvalidPass(data.msg);
-            //                 setUsername('');
-            //                 setPassword('');
-            //                 e.preventDefault();
-            //             }
-            //             if (data.ok === false && data.issue === 'doesnt exist') {
-            //                 // if the response is a 401, block the submission..
-            //                 console.log(data);
-            //                 console.log(data.msg);
-            //                 setInvalidUser(data.msg);
-            //                 setUsername('');
-            //                 setPassword('');
-            //                 e.preventDefault();
-            //             } else if (data.ok === false) {
-            //                 // if the response is a 401, block the submission..
-            //                 console.log(data);
-            //                 console.log(data.msg);
-            //                 setUsername('');
-            //                 setPassword('');
-            //                 e.preventDefault();
-            //             } else {
-            //                 // if the response is not a 401, allow the submission.
-            //                 console.log(data.msg);
-            //                 alert(data.msg);
-            //                 setUsername('');
-            //                 setPassword('');
-            //                 router.push('/log');
-            //             }
-            // })
-        }})
+                }
+        })
             .catch(err => {
                 // Fetch couldn't send the request.
                 // 500 Error
