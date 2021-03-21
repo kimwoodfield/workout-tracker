@@ -5,12 +5,94 @@ import NewWorkoutLink from '../components/NewWorkoutLink'
 import PageTitle from '../components/PageTitle'
 import SettingsButton from '../components/Common/SettingsButton'
 
+import { useRouter } from 'next/router'
+
 const Padding = styled.div`
   height: 4rem;
 `
 
+const LogoutButton = styled.button`
+border: 1px solid lightgray;
+border-radius: 5px;
+background-color: white;
+font-size: 1.15em;
+height: 2.75rem;
+width: 90%;
+box-sizing: border-box;
+padding: 0;
+margin: 0;
+text-align: left;
+padding-left: 0.75rem;
+`
 
-export default function Log() {
+
+export default function Settings() {
+
+  const router = useRouter();
+
+  const isAuthenticated = () => {
+    fetch('http://localhost:3000/log', {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+    .then((res) => {
+      switch(res.status) {
+        case 400:
+            console.log('400 error');
+            break;
+        case 403:
+            console.log('403 error');
+            router.push('/');
+            break;
+        case 201:
+            console.log(res.status.msg);
+            router.push('/log');
+            break;
+    }
+    })
+    .catch(err => {
+      console.log('fetch failed');
+    })
+  }
+
+  isAuthenticated();
+
+  const Logout = () => {
+    console.log('function fired');
+    fetch('http://localhost:3000/logout', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    })
+    .then((res) => {
+      switch(res.status) {
+        case 400:
+            console.log('400 error');
+            break;
+        case 403:
+            console.log('403 error');
+            router.push('/');
+            break;
+        case 200:
+            console.log('we got a 200 back from the server')
+            console.log(res.status.msg);
+            alert('You have been logged out.');
+            router.push('/');
+            break;
+    }
+    })
+    .catch(err => {
+      console.log('fetch failed');
+    })
+  }
+
+
+
   return (
     <div className="container">
       <Head>
@@ -23,7 +105,7 @@ export default function Log() {
 
       <SettingsButton route="/" Name="Change theme" />
       <SettingsButton route="/" Name="Send feedback" />
-      <SettingsButton route="/" Name="Sign out" />
+      <LogoutButton onClick={Logout}>Logout</LogoutButton>
 
       <main>
         <div>

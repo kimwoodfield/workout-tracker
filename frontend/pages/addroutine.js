@@ -1,12 +1,9 @@
 import Head from 'next/head'
 import styled from 'styled-components';
-// import IconNavBar from '../components/Navigation/IconNavBar';
-// import AddWorkoutHeader from '../components/Common/AddWorkoutHeader'
+import RoutineForm from '../components/Forms/RoutineForm'
 import PageTitle from '../components/PageTitle'
-// import TextButton from '../components/Common/TextButton'
 import BackButton from '../components/Common/BackButton'
-// import Input from '../components/Common/Input'
-import RegisterForm from '../components/Common/RegisterForm'
+
 
 const Container = styled.div`
     min-height: 100vh;
@@ -51,7 +48,7 @@ export default function AddRoutine() {
       </Head>
 
       <Padding>
-        {/* <BackButton route="routines" text="Routines"/> */}
+        <BackButton route="routines" text="Routines"/>
       </Padding>
 
       <PageTitle name="Unnamed routine" />
@@ -61,10 +58,8 @@ export default function AddRoutine() {
 
       <main>
         <div>
-        
-        <p className="description">
-          {/* You create a routine here */}
-        </p>
+
+        <RoutineForm />
 
         </div>
       </main>
