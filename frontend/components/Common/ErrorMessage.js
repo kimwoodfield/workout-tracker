@@ -9,7 +9,8 @@ const ErrorMessage = styled.p`
     // padding: 5px;
     width: 100%;
     // text-align: center;
-    margin: 0px 0 16px 0;
+    // margin: 0px 0 16px 0;
+    margin: 0;
 `
 
 export default ErrorMessage;

@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 import Input from './FormInput'
+import SubmitBtn from './SubmitBtn'
+import React, { useState, useEffect } from 'react'
+import { useForm,  } from "react-hook-form";
+import ErrorMessage from '../Common/ErrorMessage'
 
 const Form = styled.form`
     display: flex;
@@ -16,43 +20,45 @@ const Group = styled.div`
 
 export default function Routine() {
 
-    // Handles the form submission
-    const onSubmit = (e) => {
-        e.preventDefault();
-        setSubmitting(true);
+    const { register, handleSubmit, errors } = useForm();
 
-            fetch('http://localhost:3000/addroutine', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, fullname, username, password }),
-              })
-              .then((res) => {
-                switch(res.status) {
-                    case 400:
-                        console.log('This is a 400 error.');
-                        break;
-                    case 429:
-                        console.log('This is a 429 error. Rate limit exceeded');
-                        break;
-                    case 201:
-                        res.json().then((data) => {
-                            // request sent
-                            alert('Your routine has been added.');
-                            router.push('/routines');
-                        })
-              }})
+    // Handles the form submission
+    const onSubmit = (data) => {
+        // If the input data is valid - 
+        // Make a POST request to our api route with the input data
+        fetch('http://localhost:3000/addroutine', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+            credentials: 'include',
+            })
+            .then((res) => {
+            switch(res.status) {
+                case 400:
+                    console.log('This is a 400 error.');
+                    break;
+                case 429:
+                    console.log('This is a 429 error. Rate limit exceeded');
+                    break;
+                case 201:
+                    res.json().then((data) => {
+                        // request sent
+                        console.log('this worked');
+                    })
+            }})
     }
 
     return (
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
             <div>
             <label> Routine Name : </label>
             <Input
                 type="text"
                 placeholder="Routine name..."
                 name="routine_name"
+                ref={register}
             />
 
             </div>
@@ -62,9 +68,13 @@ export default function Routine() {
                 <Input
                     type="text"
                     placeholder="Exercise name..."
-                    name="exercise_name"
+                    name="firstExerciseName"
+                    ref={register({ required: true, minLength: 5, maxLength: 15 })}
                 />
-                <select name="exercise_type" id="exercise_type" form="#">
+                <ErrorMessage>
+                    {errors.firstExerciseName && 'This is incorrect'}
+                </ErrorMessage>
+                <select name="firstExerciseType" id="exercise_type" ref={register}>
                     <option selected="selected" disabled>Exercise Type</option>
                     <option value="Chest">Chest</option>
                     <option value="Shoulders">Shoulders</option>
@@ -79,9 +89,10 @@ export default function Routine() {
                 <Input
                     type="text"
                     placeholder="Exercise name..."
-                    name="exercise_name"
+                    name="secondExerciseName"
+                    ref={register}
                 />
-                <select name="exercise_type" id="exercise_type" form="#">
+                <select name="secondExerciseType" id="exercise_type" ref={register}>
                     <option selected="selected" disabled>Exercise Type</option>
                     <option value="Chest">Chest</option>
                     <option value="Shoulders">Shoulders</option>
@@ -96,9 +107,10 @@ export default function Routine() {
                 <Input
                     type="text"
                     placeholder="Exercise name..."
-                    name="exercise_name"
+                    name="thirdExerciseName"
+                    ref={register}
                 />
-                <select name="exercise_type" id="exercise_type" form="#">
+                <select name="thirdExerciseType" id="exercise_type" ref={register}>
                     <option selected="selected" disabled>Exercise Type</option>
                     <option value="Chest">Chest</option>
                     <option value="Shoulders">Shoulders</option>
@@ -113,9 +125,10 @@ export default function Routine() {
                 <Input
                     type="text"
                     placeholder="Exercise name..."
-                    name="exercise_name"
+                    name="fourthExerciseName"
+                    ref={register}
                 />
-                <select name="exercise_type" id="exercise_type" form="#">
+                <select name="fourthExerciseType" id="exercise_type" ref={register}>
                     <option selected="selected" disabled>Exercise Type</option>
                     <option value="Chest">Chest</option>
                     <option value="Shoulders">Shoulders</option>
@@ -130,9 +143,10 @@ export default function Routine() {
                 <Input
                     type="text"
                     placeholder="Exercise name..."
-                    name="exercise_name"
+                    name="fifthExerciseName"
+                    ref={register}
                 />
-                <select name="exercise_type" id="exercise_type" form="#">
+                <select name="fifthExerciseType" id="exercise_type" ref={register}>
                     <option selected="selected" disabled>Exercise Type</option>
                     <option value="Chest">Chest</option>
                     <option value="Shoulders">Shoulders</option>
@@ -143,7 +157,7 @@ export default function Routine() {
             </Group>
 
 
-            <button>Add routine</button>
+            <SubmitBtn type="submit">Add routine</SubmitBtn>
         </Form>
     )
 }
