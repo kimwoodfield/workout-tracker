@@ -7,6 +7,7 @@ import NewRoutineLink from '../components/NewRoutineLink'
 import { AiOutlinePlus } from "react-icons/ai";
 
 export default function Log() {
+
   return (
     <div className="container">
       <Head>

@@ -22,6 +22,8 @@ export default function Routine() {
 
     const { register, handleSubmit, errors } = useForm();
 
+    const [exercise, setExercise] = useState([]);
+
     // Handles the form submission
     const onSubmit = (data) => {
         // If the input data is valid - 
@@ -50,6 +52,24 @@ export default function Routine() {
             }})
     }
 
+    useEffect(() => {
+        async function doFetch() {
+          let url = 'http://localhost:3000/exercises';
+          const res = await fetch('http://localhost:3000/exercises', { 
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+          });
+          const body = await res.json();
+          console.log('body is ...', body);
+          setExercise(body.exercisesResults);
+        }
+    
+        doFetch();
+      }, []);
+
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <div>
@@ -65,94 +85,51 @@ export default function Routine() {
 
             <Group>
                 <label> Exercise 1 : </label>
-                <Input
-                    type="text"
-                    placeholder="Exercise name..."
-                    name="firstExerciseName"
-                    ref={register({ required: true, minLength: 5, maxLength: 15 })}
-                />
-                <ErrorMessage>
-                    {errors.firstExerciseName && 'This is incorrect'}
-                </ErrorMessage>
-                <select name="firstExerciseType" id="exercise_type" ref={register}>
-                    <option selected="selected" disabled>Exercise Type</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Shoulders">Shoulders</option>
-                    <option value="Back">Back</option>
-                    <option value="Legs">Legs</option>
-                    <option value="Arms">Arms</option>
+                <select name="first_exercise" id="exercise_type" ref={register}>
+                    <option selected="selected" disabled>Select an exercise</option>
+                        {exercise.map((exercise, idx) => {
+                            return <option key={idx}>{exercise.exercise_name}</option>
+                        })}
                 </select>
             </Group>
 
             <Group>
                 <label> Exercise 2 : </label>
-                <Input
-                    type="text"
-                    placeholder="Exercise name..."
-                    name="secondExerciseName"
-                    ref={register}
-                />
-                <select name="secondExerciseType" id="exercise_type" ref={register}>
-                    <option selected="selected" disabled>Exercise Type</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Shoulders">Shoulders</option>
-                    <option value="Back">Back</option>
-                    <option value="Legs">Legs</option>
-                    <option value="Arms">Arms</option>
+                <select name="second_exercise" id="exercise_type" ref={register}>
+                    <option selected="selected" disabled>Select an exercise</option>
+                        {exercise.map((exercise, idx) => {
+                            return <option key={idx}>{exercise.exercise_name}</option>
+                        })}
                 </select>
             </Group>
 
             <Group>
                 <label> Exercise 3 : </label>
-                <Input
-                    type="text"
-                    placeholder="Exercise name..."
-                    name="thirdExerciseName"
-                    ref={register}
-                />
-                <select name="thirdExerciseType" id="exercise_type" ref={register}>
-                    <option selected="selected" disabled>Exercise Type</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Shoulders">Shoulders</option>
-                    <option value="Back">Back</option>
-                    <option value="Legs">Legs</option>
-                    <option value="Arms">Arms</option>
+                <select name="third_exercise" id="exercise_type" ref={register}>
+                    <option selected="selected" disabled>Select an exercise</option>
+                        {exercise.map((exercise, idx) => {
+                            return <option key={idx}>{exercise.exercise_name}</option>
+                        })}
                 </select>
             </Group>
 
             <Group>
                 <label> Exercise 4 : </label>
-                <Input
-                    type="text"
-                    placeholder="Exercise name..."
-                    name="fourthExerciseName"
-                    ref={register}
-                />
-                <select name="fourthExerciseType" id="exercise_type" ref={register}>
-                    <option selected="selected" disabled>Exercise Type</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Shoulders">Shoulders</option>
-                    <option value="Back">Back</option>
-                    <option value="Legs">Legs</option>
-                    <option value="Arms">Arms</option>
+                <select name="fourth_exercise" id="exercise_type" ref={register}>
+                    <option selected="selected" disabled>Select an exercise</option>
+                        {exercise.map((exercise, idx) => {
+                            return <option key={idx}>{exercise.exercise_name}</option>
+                        })}
                 </select>
             </Group>
 
             <Group>
                 <label> Exercise 5 : </label>
-                <Input
-                    type="text"
-                    placeholder="Exercise name..."
-                    name="fifthExerciseName"
-                    ref={register}
-                />
-                <select name="fifthExerciseType" id="exercise_type" ref={register}>
-                    <option selected="selected" disabled>Exercise Type</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Shoulders">Shoulders</option>
-                    <option value="Back">Back</option>
-                    <option value="Legs">Legs</option>
-                    <option value="Arms">Arms</option>
+                <select name="fifth_exercise" id="exercise_type" ref={register}>
+                    <option selected="selected" disabled>Select an exercise</option>
+                        {exercise.map((exercise, idx) => {
+                            return <option key={idx}>{exercise.exercise_name}</option>
+                        })}
                 </select>
             </Group>
 

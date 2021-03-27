@@ -1,6 +1,6 @@
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { BiDumbbell } from 'react-icons/bi'
-import { CgProfile } from 'react-icons/cg'
+import { CgNotes } from "react-icons/cg";
 import { IoSettingsOutline } from 'react-icons/io5'
 
 import styled from 'styled-components'
@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 
 const Clock = <AiOutlineClockCircle />
 const Dumbbell = <BiDumbbell />
-const Profile = <CgProfile />
+const Exercises = <CgNotes />
 const Settings = <IoSettingsOutline />
 
 
@@ -44,8 +44,8 @@ export default function IconNavBar() {
             <NavIconWrapper active={router.pathname === "/routines"}>
                 <NavIcon route="routines" icon={Dumbbell} page="Routines" active={router.pathname === "/routines"}/>
             </NavIconWrapper>
-            <NavIconWrapper active={router.pathname === "/profile"}>
-                <NavIcon route="profile" icon={Profile} page="Profile" active={router.pathname === "/profile"} />
+            <NavIconWrapper active={router.pathname === "/exercises"}>
+                <NavIcon route="exercises" icon={Exercises} page="Exercises" active={router.pathname === "/exercises"} />
             </NavIconWrapper>
             <NavIconWrapper active={router.pathname === "/settings"}>
                 <NavIcon route="settings" icon={Settings} page="Settings" active={router.pathname === "/settings"} />
