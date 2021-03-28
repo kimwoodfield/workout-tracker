@@ -5,6 +5,7 @@ import NewRoutineLink from '../components/NewRoutineLink'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
+import Modal from 'react-modal'
 
 
 import { AiOutlinePlus } from "react-icons/ai";
@@ -32,6 +33,8 @@ export default function Routines() {
   const router = useRouter();
 
   const [routine, setRoutine] = useState([]);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     async function doFetch() {
@@ -70,7 +73,22 @@ export default function Routines() {
 
         <>
           {routine.map((routine, idx) => {
-            return <Routine key={idx}>{routine.routine_name}</Routine>
+            return (
+              <>
+                <Routine key={idx} onClick={() => setModalIsOpen(true)}>{routine.routine_name}</Routine>
+                <Modal isOpen={modalIsOpen} ariaHideApp={false}>
+                  <h1>{routine.routine_name}</h1>
+                  <p>Exercise 1</p>
+                  <p>Exercise 2</p>
+                  <p>Exercise 3</p>
+                  <p>Exercise 4</p>
+                  <p>Exercise 5</p>
+                  <div>
+                    <button onClick={() => setModalIsOpen(false)}>Close</button>
+                  </div>
+                </Modal>
+              </>
+            )
           })}
         </>
 
