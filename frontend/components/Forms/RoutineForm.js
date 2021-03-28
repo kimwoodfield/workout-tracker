@@ -4,6 +4,7 @@ import SubmitBtn from './SubmitBtn'
 import React, { useState, useEffect } from 'react'
 import { useForm,  } from "react-hook-form";
 import ErrorMessage from '../Common/ErrorMessage'
+import { useRouter } from 'next/router'
 
 const Form = styled.form`
     display: flex;
@@ -19,6 +20,8 @@ const Group = styled.div`
 `
 
 export default function Routine() {
+
+    const router = useRouter();
 
     const { register, handleSubmit, errors } = useForm();
 
@@ -48,6 +51,8 @@ export default function Routine() {
                     res.json().then((data) => {
                         // request sent
                         console.log('this worked');
+                        alert('Routine added!');
+                        router.push('/routines');
                     })
             }})
     }

@@ -2,11 +2,58 @@ import Head from 'next/head'
 import IconNavBar from '../components/Navigation/IconNavBar';
 import PageTitle from '../components/PageTitle'
 import NewRoutineLink from '../components/NewRoutineLink'
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 
 import { AiOutlinePlus } from "react-icons/ai";
 
-export default function Log() {
+const RoutinesContainer = styled.div`
+  // border: 1px dashed blue;
+  width: 100%;
+  padding-left: 1.25rem;
+  padding-bottom: 6.5rem;
+  overflow: scroll;
+  height: 80vh;
+`
+
+const Routine = styled.p`
+  font-size: 1.15rem;
+  // border-top: 0.5px solid lightgray;
+  border-bottom: 0.5px solid lightgray;
+  // padding: 0.85rem 0;
+  padding: 0.85rem 0;
+  margin: 0;
+`
+
+export default function Routines() {
+
+  const router = useRouter();
+
+  const [routine, setRoutine] = useState([]);
+
+  useEffect(() => {
+    async function doFetch() {
+      let url = 'http://localhost:3000/routines';
+      const res = await fetch('http://localhost:3000/routines', { 
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      });
+      if (res.status === 403) {
+        console.log('403 error');
+        router.push('/');
+      }
+      const body = await res.json();
+      console.log('body is ...', body);
+      setRoutine(body.routinesResults);
+    }
+
+    doFetch();
+  }, []);
 
   return (
     <div className="container">
@@ -19,13 +66,18 @@ export default function Log() {
       <PageTitle name="Routines"/>
 
       <main>
-        <div>
+        <RoutinesContainer>
 
-        <p className="description">
-          Routines are listed here.
-        </p>
+        <>
+          {routine.map((routine, idx) => {
+            return <Routine key={idx}>{routine.routine_name}</Routine>
+          })}
+        </>
 
-        </div>
+
+
+
+        </RoutinesContainer>
       </main>
 
       <IconNavBar />
@@ -41,11 +93,14 @@ export default function Log() {
         }
 
         main {
-          padding: 5rem 0;
+          // padding: 5rem 0;
+          // padding-bottom: 5rem;
+          // border: 1px solid red;
+          width: 100%;
           flex: 1;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          // justify-content: center;
           align-items: center;
         }
 

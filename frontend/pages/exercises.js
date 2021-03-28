@@ -30,34 +30,9 @@ const Exercise = styled.p`
 
 export default function Exercises() {
 
-  const [exercise, setExercise] = useState([]);
+  const router = useRouter();
 
-  fetch('http://localhost:3000/exercises', { 
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-  })
-  .then((res) => {
-    switch(res.status) {
-      case 403:
-          console.log('403 error');
-          router.push('/');
-          break;
-      case 200:
-          res.json()
-          .then(data => {
-            // console.log(data.exercisesResults);
-            // setExercise(data.exercisesResults[0].exercise_name);
-            // console.log(data.exercisesResults[0].exercise_name);
-          });
-          break;
-  }
-  })
-  .catch(err => {
-    console.log('fetch failed');
-  });
+  const [exercise, setExercise] = useState([]);
 
   useEffect(() => {
     async function doFetch() {
@@ -69,6 +44,10 @@ export default function Exercises() {
         },
         credentials: 'include',
       });
+      if (res.status === 403) {
+        console.log('403 error');
+        router.push('/');
+      }
       const body = await res.json();
       console.log('body is ...', body);
       setExercise(body.exercisesResults);
