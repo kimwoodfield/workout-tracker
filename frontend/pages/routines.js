@@ -6,8 +6,6 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import Modal from 'react-modal'
-
-
 import { AiOutlinePlus } from "react-icons/ai";
 
 const RoutinesContainer = styled.div`
@@ -35,6 +33,8 @@ export default function Routines() {
   const [routine, setRoutine] = useState([]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [modalData, setModalData] = useState('');
 
   useEffect(() => {
     async function doFetch() {
@@ -75,21 +75,24 @@ export default function Routines() {
           {routine.map((routine, idx) => {
             return (
               <>
-                <Routine key={idx} onClick={() => setModalIsOpen(true)}>{routine.routine_name}</Routine>
-                <Modal isOpen={modalIsOpen} ariaHideApp={false}>
-                  <h1>{routine.routine_name}</h1>
-                  <p>Exercise 1</p>
-                  <p>Exercise 2</p>
-                  <p>Exercise 3</p>
-                  <p>Exercise 4</p>
-                  <p>Exercise 5</p>
-                  <div>
-                    <button onClick={() => setModalIsOpen(false)}>Close</button>
-                  </div>
-                </Modal>
+                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(routine.routine_name);console.log()}}>
+                  {routine.routine_name}
+                </Routine>
+
               </>
             )
           })}
+          <Modal isOpen={modalIsOpen} ariaHideApp={false}>
+            <h1>{modalData}</h1>
+            <p>Exercise 1</p>
+            <p>Exercise 2</p>
+            <p>Exercise 3</p>
+            <p>Exercise 4</p>
+            <p>Exercise 5</p>
+            <div>
+              <button onClick={() => setModalIsOpen(false)}>Close</button>
+            </div>
+        </Modal>
         </>
 
 
