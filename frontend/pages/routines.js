@@ -28,18 +28,17 @@ const Routine = styled.p`
 
 export default function Routines() {
 
+  // Setting our state
   const router = useRouter();
-
   const [routine, setRoutine] = useState([]);
-
+  const [modalDataExercises, setModalDataExercises] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const [modalData, setModalData] = useState('');
 
+  // Make the call to our api
   useEffect(() => {
     async function doFetch() {
-      let url = 'http://localhost:3000/routines';
-      const res = await fetch('http://localhost:3000/routines', { 
+      const res = await fetch('http://localhost:3000/routineExercise', { 
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -47,16 +46,18 @@ export default function Routines() {
         credentials: 'include',
       });
       if (res.status === 403) {
-        console.log('403 error');
+        console.log('403 error');``
         router.push('/');
       }
       const body = await res.json();
-      console.log('body is ...', body);
-      setRoutine(body.routinesResults);
+      let routineList = body.routineList;
+
+      setRoutine(routineList);
     }
 
     doFetch();
   }, []);
+
 
   return (
     <div className="container">
@@ -75,7 +76,7 @@ export default function Routines() {
           {routine.map((routine, idx) => {
             return (
               <>
-                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(routine.routine_name);console.log()}}>
+                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(routine.routine_name); setModalDataExercises(routine.routine_exercises)}}>
                   {routine.routine_name}
                 </Routine>
 
@@ -84,19 +85,16 @@ export default function Routines() {
           })}
           <Modal isOpen={modalIsOpen} ariaHideApp={false}>
             <h1>{modalData}</h1>
-            <p>Exercise 1</p>
-            <p>Exercise 2</p>
-            <p>Exercise 3</p>
-            <p>Exercise 4</p>
-            <p>Exercise 5</p>
+            {modalDataExercises.map((exercise, idx) => {
+              return (
+                <p key={idx}>{exercise}</p>
+              )
+            })}
             <div>
               <button onClick={() => setModalIsOpen(false)}>Close</button>
             </div>
         </Modal>
         </>
-
-
-
 
         </RoutinesContainer>
       </main>
