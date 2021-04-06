@@ -18,7 +18,7 @@ const AddNewItemContainer = styled.div`
 export default function NewWorkoutLink(props) {
     return (
         <AddNewItemContainer>
-            <AddButton route="addworkout"/>
+            <AddButton route="AddWorkout"/>
         </AddNewItemContainer>
     )
 }

@@ -56,8 +56,8 @@ export default function Log() {
       <PageTitle name="Log"/>
 
       <main>
-        <PastWorkoutDate WorkoutDate="February 2021" WorkoutQty="2 Workouts"/>
-        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
+        <PastWorkoutDate WorkoutDate="2021 Workouts" WorkoutQty="2 Workouts"/>
+        {/* <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
         <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
@@ -69,7 +69,7 @@ export default function Log() {
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
         <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
+        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/> */}
       </main>
 
       <IconNavBar />

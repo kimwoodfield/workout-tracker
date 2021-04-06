@@ -4,13 +4,43 @@ import styled from 'styled-components'
 import AddWorkoutHeader from '../components/Common/AddWorkoutHeader'
 import Input from '../components/Common/Input'
 import TextButton from '../components/Common/TextButton'
+import React, { useState, useEffect } from 'react'
+import ChooseRoutineForm from '../components/Forms/ChooseRoutineForm'
+import BackButton from '../components/Common/BackButton'
 
 const Details = styled.section`
   width: 100%;
   padding: 1.85rem 0;
 `
 
+const Padding = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0.85rem;
+  height: 4rem;
+  width: 100%;
+  // border: 1px dashed salmon;
+  box-sizing: border-box;
+`
+
 export default function AddWorkout() {
+
+  useEffect(() => {
+    async function doFetch() {
+      const res = await fetch('http://localhost:3000/routines', { 
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+      });
+      const body = await res.json();
+      console.log('body is ...', body);
+    }
+
+    doFetch();
+  }, []);
+
   return (
     <div className="container">
       <Head>
@@ -18,15 +48,13 @@ export default function AddWorkout() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AddWorkoutHeader date="Mar 3" route="log" text="Finish"/>
+      <Padding>
+        <BackButton route="log" text="Log"/>
+      </Padding>
 
+      <PageTitle name="Start a workout"/>
 
-      <Details>
-        <Input placeholder="Name" />
-        <Input placeholder="Notes" />
-      </Details>
-
-      <TextButton text="Choose routine" />
+      <ChooseRoutineForm />
 
       <main>
         <div>
