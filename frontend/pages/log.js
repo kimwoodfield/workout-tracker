@@ -1,47 +1,45 @@
-import Head from 'next/head'
-import styled from 'styled-components';
-import IconNavBar from '../components/Navigation/IconNavBar';
-import NewWorkoutLink from '../components/NewWorkoutLink'
-import PageTitle from '../components/PageTitle'
-import PastWorkoutPreview from '../components/WorkoutOverview/PastWorkoutPreview'
-import PastWorkoutDate from '../components/WorkoutOverview/PastWorkoutDate'
-import { useRouter } from 'next/router'
+import Head from "next/head";
+import styled from "styled-components";
+import IconNavBar from "../components/Navigation/IconNavBar";
+import NewWorkoutLink from "../components/NewWorkoutLink";
+import PageTitle from "../components/PageTitle";
+import PastWorkoutPreview from "../components/WorkoutOverview/PastWorkoutPreview";
+import PastWorkoutDate from "../components/WorkoutOverview/PastWorkoutDate";
+import { useRouter } from "next/router";
 
 import { AiOutlinePlus } from "react-icons/ai";
 
-
 export default function Log() {
-
   // Enable router
   const router = useRouter();
 
   const isAuthenticated = () => {
-    fetch('http://localhost:3000/log', {
-      method: 'GET',
+    fetch("http://localhost:3000/workout", {
+      method: "GET",
       headers: {
-          'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
     })
-    .then((res) => {
-      switch(res.status) {
-        case 400:
-            console.log('400 error');
+      .then((res) => {
+        switch (res.status) {
+          case 400:
+            console.log("400 error");
             break;
-        case 403:
-            console.log('403 error');
-            router.push('/');
+          case 403:
+            console.log("403 error");
+            router.push("/");
             break;
-        case 201:
+          case 201:
             console.log(res.status.msg);
-            router.push('/log');
+            router.push("/log");
             break;
-    }
-    })
-    .catch(err => {
-      console.log('fetch failed');
-    })
-  }
+        }
+      })
+      .catch((err) => {
+        console.log("fetch failed");
+      });
+  };
 
   isAuthenticated();
 
@@ -53,10 +51,10 @@ export default function Log() {
       </Head>
 
       <NewWorkoutLink />
-      <PageTitle name="Log"/>
+      <PageTitle name="Log" />
 
       <main>
-        <PastWorkoutDate WorkoutDate="2021 Workouts" WorkoutQty="2 Workouts"/>
+        <PastWorkoutDate WorkoutDate="2021 Workouts" WorkoutQty="2 Workouts" />
         {/* <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
         <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
         <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
@@ -220,5 +218,5 @@ export default function Log() {
         }
       `}</style>
     </div>
-  )
+  );
 }

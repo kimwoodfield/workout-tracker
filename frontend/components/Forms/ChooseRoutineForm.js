@@ -61,8 +61,13 @@ export default function ChooseRoutineForm() {
                     res.json().then((data) => {
                         // request sent
                         console.log('this worked');
-                        alert('Workout added!');
-                        router.push('/CurrentWorkout');
+                        console.log(data);
+                        const workoutID = data.currentWorkoutID;
+                        alert('Workout started!');
+                        router.push({
+                            pathname: '/CurrentWorkout',
+                            query: { id: workoutID },
+                        })
                     })
             }})
     }

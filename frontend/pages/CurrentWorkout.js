@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import styled from 'styled-components';
-import WorkoutForm from '../components/Forms/RoutineForm'
+import WorkoutForm from '../components/Forms/WorkoutForm'
 import PageTitle from '../components/PageTitle'
 import BackButton from '../components/Common/BackButton'
+import { useRouter } from 'next/router'
+import React, { useState, useEffect } from 'react'
 
 
 const Container = styled.div`
@@ -22,20 +24,13 @@ const Padding = styled.div`
   // border: 1px dashed salmon;
   box-sizing: border-box;
 `
-const NewRoutineForm = styled.form`
-  width: 90%;
-  padding-bottom: 4rem;
-`
-const AddExerciseContainer = styled.div`
-  width: 91%;
-`
-const FormDivider = styled.div`
-  height: auto;
-  padding: 0.5rem 0;
-  margin: 0;
-`
 
 export default function CurrentWorkout() {
+
+    const router = useRouter();
+
+    const currentWorkoutID = router.query;
+
   return (
     <Container>
       <Head>
@@ -44,28 +39,28 @@ export default function CurrentWorkout() {
       </Head>
 
       <Padding>
-        <BackButton route="routines" text="Routines"/>
+        <BackButton route="AddWorkout" text="Workout"/>
       </Padding>
 
       <PageTitle name="Current Workout" />
       
 
       <main>
-        <div>
 
         <WorkoutForm />
 
-        </div>
       </main>
 
       <style jsx global>{`
         html,
-        body {
+        body, 
+        main {
           padding: 0;
           margin: 0;
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
+            width: 100%;
         }
 
         * {
