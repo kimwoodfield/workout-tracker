@@ -31,7 +31,7 @@ export default function PastWorkoutDate(props) {
     return (
         <Wrapper>
             <WorkoutDate>{props.WorkoutDate}</WorkoutDate>
-            <WorkoutQty>{props.WorkoutQty}</WorkoutQty>
+            <WorkoutQty>{props.WorkoutQty} Workouts</WorkoutQty>
         </Wrapper>
     )
 }

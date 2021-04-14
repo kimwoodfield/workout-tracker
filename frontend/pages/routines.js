@@ -24,6 +24,7 @@ const Routine = styled.p`
   // padding: 0.85rem 0;
   padding: 0.85rem 0;
   margin: 0;
+  cursor: default;
 `
 
 export default function Routines() {

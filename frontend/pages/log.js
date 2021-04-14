@@ -6,42 +6,60 @@ import PageTitle from "../components/PageTitle";
 import PastWorkoutPreview from "../components/WorkoutOverview/PastWorkoutPreview";
 import PastWorkoutDate from "../components/WorkoutOverview/PastWorkoutDate";
 import { useRouter } from "next/router";
-
+import React, { useState, useEffect } from 'react'
 import { AiOutlinePlus } from "react-icons/ai";
+import Modal from 'react-modal'
+
+const RoutinesContainer = styled.div`
+  // border: 1px dashed blue;
+  width: 100%;
+  padding-left: 1.25rem;
+  padding-bottom: 6.5rem;
+  // overflow: scroll;
+  height: 100%;
+`
+
+const Routine = styled.p`
+  font-size: 1.15rem;
+  border-bottom: 0.5px solid lightgray;
+  padding: 0.85rem 0;
+  padding-right: 0.85rem;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  cursor: default;
+`
 
 export default function Log() {
-  // Enable router
-  const router = useRouter();
+    const router = useRouter();
 
-  const isAuthenticated = () => {
-    fetch("http://localhost:3000/workout", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((res) => {
-        switch (res.status) {
-          case 400:
-            console.log("400 error");
-            break;
-          case 403:
-            console.log("403 error");
-            router.push("/");
-            break;
-          case 201:
-            console.log(res.status.msg);
-            router.push("/log");
-            break;
-        }
-      })
-      .catch((err) => {
-        console.log("fetch failed");
-      });
-  };
+    // Setting our state
+    const [workout, setWorkout] = useState([]);
+    const [modalDataExercises, setModalDataExercises] = useState([]);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalData, setModalData] = useState('');
+    const [workoutCount, setWorkoutCount] = useState('');
 
-  isAuthenticated();
+    // Make the call to our api
+    useEffect(() => {
+      async function doFetch() {
+        const res = await fetch('http://localhost:3000/workout', { 
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+        });
+        const body = await res.json();
+        const workouts = body.workouts.reverse();
+        // console.log(workouts);
+        console.log(workouts.length);
+        setWorkout(workouts);
+        setWorkoutCount(workouts.length);
+      }
+  
+      doFetch();
+    }, []);
 
   return (
     <div className="container">
@@ -53,21 +71,40 @@ export default function Log() {
       <NewWorkoutLink />
       <PageTitle name="Log" />
 
+      
+
       <main>
-        <PastWorkoutDate WorkoutDate="2021 Workouts" WorkoutQty="2 Workouts" />
-        {/* <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Wed 17" RoutineName="Shoulders"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/>
-        <PastWorkoutPreview date="Tues 17" RoutineName="Back"/> */}
+        <PastWorkoutDate WorkoutDate="2021 Workouts" WorkoutQty={workoutCount} />
+        {console.log(workoutCount)}
+        <RoutinesContainer>
+        <>
+          {workout.map((workout, idx) => {
+            return (
+              <>
+                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(workout.routine_name); setModalDataExercises(workout.exercises);}}>
+                  {console.log('the workout count is ', workoutCount)}
+                  <div>{workout.routine_name}</div>
+                  <div>{new Date(workout.workout_date).toLocaleString()}</div>
+                </Routine>
+              </>
+            )
+          })}
+          <Modal isOpen={modalIsOpen} ariaHideApp={false}>
+            <h1>{modalData}</h1>
+            <h4>current date</h4>
+            {modalDataExercises.map((exercise) => {
+              return (
+                <div key={exercise.exercise_id}>
+                  <div>{exercise.exercise_name}</div>
+                </div>
+              )
+            })}
+            <div>
+              <button onClick={() => setModalIsOpen(false)}>Close</button>
+            </div>
+        </Modal>
+        </>
+        </RoutinesContainer>
       </main>
 
       <IconNavBar />
