@@ -235,7 +235,6 @@ export default function Routines() {
           }
         }
       `}</style>
-
       <style jsx global>{`
         html,
         body {

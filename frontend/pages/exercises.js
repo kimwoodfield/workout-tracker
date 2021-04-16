@@ -36,7 +36,6 @@ export default function Exercises() {
 
   useEffect(() => {
     async function doFetch() {
-      let url = 'http://localhost:3000/exercises';
       const res = await fetch('http://localhost:3000/exercises', { 
         method: 'GET',
         headers: {

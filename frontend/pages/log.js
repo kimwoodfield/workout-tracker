@@ -3,11 +3,9 @@ import styled from "styled-components";
 import IconNavBar from "../components/Navigation/IconNavBar";
 import NewWorkoutLink from "../components/NewWorkoutLink";
 import PageTitle from "../components/PageTitle";
-import PastWorkoutPreview from "../components/WorkoutOverview/PastWorkoutPreview";
 import PastWorkoutDate from "../components/WorkoutOverview/PastWorkoutDate";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from 'react'
-import { AiOutlinePlus } from "react-icons/ai";
 import Modal from 'react-modal'
 
 const RoutinesContainer = styled.div`
@@ -30,11 +28,21 @@ const Routine = styled.p`
   cursor: default;
 `
 
+const Exercise = styled.div`
+  padding: 0.85rem 0;
+`
+
+const ExerciseName = styled.div`
+  font-weight: bold;
+`
+
 export default function Log() {
     const router = useRouter();
 
     // Setting our state
     const [workout, setWorkout] = useState([]);
+    const [workoutDate, setWorkoutDate] = useState('');
+    const [workoutID, setWorkoutID] = useState('');
     const [modalDataExercises, setModalDataExercises] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalData, setModalData] = useState('');
@@ -52,7 +60,7 @@ export default function Log() {
         });
         const body = await res.json();
         const workouts = body.workouts.reverse();
-        // console.log(workouts);
+        console.log(workouts);
         console.log(workouts.length);
         setWorkout(workouts);
         setWorkoutCount(workouts.length);
@@ -60,6 +68,25 @@ export default function Log() {
   
       doFetch();
     }, []);
+
+    const deleteEntry = () => {
+      let currentWorkoutID = urlValue.id;
+      async function doFetch() {
+        const res = await fetch('http://localhost:3000/workout/' + currentWorkoutID, { 
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+        });
+        const body = await res.json();
+        const workouts = body.workouts.reverse();
+        console.log(workouts);
+        console.log(workouts.length);
+        setWorkout(workouts);
+        setWorkoutCount(workouts.length);
+      }
+    }
 
   return (
     <div className="container">
@@ -74,33 +101,45 @@ export default function Log() {
       
 
       <main>
-        <PastWorkoutDate WorkoutDate="2021 Workouts" WorkoutQty={workoutCount} />
-        {console.log(workoutCount)}
+        <PastWorkoutDate WorkoutDate="Past Workouts" WorkoutQty={workoutCount} />
         <RoutinesContainer>
         <>
           {workout.map((workout, idx) => {
             return (
               <>
-                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(workout.routine_name); setModalDataExercises(workout.exercises);}}>
-                  {console.log('the workout count is ', workoutCount)}
+                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(workout.routine_name); setModalDataExercises(workout.exercises); setWorkoutDate(workout.workout_date); router.push({query:workout.workout_id})}}>
                   <div>{workout.routine_name}</div>
                   <div>{new Date(workout.workout_date).toLocaleString()}</div>
+                  {console.log(workout.workout_id)}
                 </Routine>
               </>
             )
           })}
+
           <Modal isOpen={modalIsOpen} ariaHideApp={false}>
             <h1>{modalData}</h1>
-            <h4>current date</h4>
+            <h4>{new Date(workoutDate).toLocaleString()}</h4>
             {modalDataExercises.map((exercise) => {
               return (
-                <div key={exercise.exercise_id}>
-                  <div>{exercise.exercise_name}</div>
-                </div>
+                <Exercise key={exercise.exercise_id}>
+                  <ExerciseName>
+                    {exercise.exercise_name}
+                  </ExerciseName>
+                  <div>
+                    Weight: {exercise.weight}kg
+                  </div>
+                  <div>
+                    Sets: {exercise.sets}
+                  </div>
+                  <div>
+                    Reps: {exercise.reps}
+                  </div>
+                </Exercise>
               )
             })}
             <div>
-              <button onClick={() => setModalIsOpen(false)}>Close</button>
+              <button onClick={() => {setModalIsOpen(false); router.push({query:null}) }}>Close</button>
+              <button>Delete</button>
             </div>
         </Modal>
         </>
