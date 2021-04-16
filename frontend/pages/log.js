@@ -4,9 +4,9 @@ import IconNavBar from "../components/Navigation/IconNavBar";
 import NewWorkoutLink from "../components/NewWorkoutLink";
 import PageTitle from "../components/PageTitle";
 import PastWorkoutDate from "../components/WorkoutOverview/PastWorkoutDate";
-import { useRouter } from "next/router";
-import React, { useState, useEffect } from 'react'
-import Modal from 'react-modal'
+import { Router, useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 
 const RoutinesContainer = styled.div`
   // border: 1px dashed blue;
@@ -15,7 +15,7 @@ const RoutinesContainer = styled.div`
   padding-bottom: 6.5rem;
   // overflow: scroll;
   height: 100%;
-`
+`;
 
 const Routine = styled.p`
   font-size: 1.15rem;
@@ -26,67 +26,78 @@ const Routine = styled.p`
   display: flex;
   justify-content: space-between;
   cursor: default;
-`
+`;
 
 const Exercise = styled.div`
   padding: 0.85rem 0;
-`
+`;
 
 const ExerciseName = styled.div`
   font-weight: bold;
-`
+`;
 
 export default function Log() {
-    const router = useRouter();
+  const router = useRouter();
 
-    // Setting our state
-    const [workout, setWorkout] = useState([]);
-    const [workoutDate, setWorkoutDate] = useState('');
-    const [workoutID, setWorkoutID] = useState('');
-    const [modalDataExercises, setModalDataExercises] = useState([]);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [modalData, setModalData] = useState('');
-    const [workoutCount, setWorkoutCount] = useState('');
+  // Setting our state
+  const [workout, setWorkout] = useState([]);
+  const [workoutDate, setWorkoutDate] = useState("");
+  const [workoutID, setWorkoutID] = useState("");
+  const [modalDataExercises, setModalDataExercises] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalData, setModalData] = useState("");
+  const [workoutCount, setWorkoutCount] = useState("");
 
-    // Make the call to our api
-    useEffect(() => {
-      async function doFetch() {
-        const res = await fetch('http://localhost:3000/workout', { 
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-        });
-        const body = await res.json();
-        const workouts = body.workouts.reverse();
-        console.log(workouts);
-        console.log(workouts.length);
-        setWorkout(workouts);
-        setWorkoutCount(workouts.length);
-      }
-  
-      doFetch();
-    }, []);
-
-    const deleteEntry = () => {
-      let currentWorkoutID = urlValue.id;
-      async function doFetch() {
-        const res = await fetch('http://localhost:3000/workout/' + currentWorkoutID, { 
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-        });
-        const body = await res.json();
-        const workouts = body.workouts.reverse();
-        console.log(workouts);
-        console.log(workouts.length);
-        setWorkout(workouts);
-        setWorkoutCount(workouts.length);
-      }
+  // Make the call to our api
+  useEffect(() => {
+    async function doFetch() {
+      const res = await fetch("http://localhost:3000/workout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const body = await res.json();
+      const workouts = body.workouts;
+      setWorkout(workouts);
+      setWorkoutCount(workouts.length);
     }
+
+    doFetch();
+  }, []);
+
+  const deleteEntry = () => {
+    let urlValue = router.query; // { id: 34 }
+    let currentWorkoutID = urlValue.workoutId; // 34
+    let decision = prompt("Are you sure you want to delete this workout?");
+    if (decision == null) {
+      return "Workout not deleted";
+    }
+    fetch("http://localhost:3000/workout/" + currentWorkoutID, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((res) => {
+      switch (res.status) {
+        case 400:
+          console.log("This is a 400 error.");
+          break;
+        case 429:
+          console.log("This is a 429 error. Rate limit exceeded");
+          break;
+        case 201:
+          res.json().then((data) => {
+            // request sent
+            console.log("this worked");
+            alert("Workout deleted!");
+            router.reload();
+          });
+      }
+    });
+  };
 
   return (
     <div className="container">
@@ -98,51 +109,59 @@ export default function Log() {
       <NewWorkoutLink />
       <PageTitle name="Log" />
 
-      
-
       <main>
-        <PastWorkoutDate WorkoutDate="Past Workouts" WorkoutQty={workoutCount} />
+        <PastWorkoutDate
+          WorkoutDate="Past Workouts"
+          WorkoutQty={workoutCount}
+        />
         <RoutinesContainer>
-        <>
-          {workout.map((workout, idx) => {
-            return (
-              <>
-                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(workout.routine_name); setModalDataExercises(workout.exercises); setWorkoutDate(workout.workout_date); router.push({query:workout.workout_id})}}>
-                  <div>{workout.routine_name}</div>
-                  <div>{new Date(workout.workout_date).toLocaleString()}</div>
-                  {console.log(workout.workout_id)}
-                </Routine>
-              </>
-            )
-          })}
-
-          <Modal isOpen={modalIsOpen} ariaHideApp={false}>
-            <h1>{modalData}</h1>
-            <h4>{new Date(workoutDate).toLocaleString()}</h4>
-            {modalDataExercises.map((exercise) => {
+          <>
+            {workout.map((workout, idx) => {
               return (
-                <Exercise key={exercise.exercise_id}>
-                  <ExerciseName>
-                    {exercise.exercise_name}
-                  </ExerciseName>
-                  <div>
-                    Weight: {exercise.weight}kg
-                  </div>
-                  <div>
-                    Sets: {exercise.sets}
-                  </div>
-                  <div>
-                    Reps: {exercise.reps}
-                  </div>
-                </Exercise>
-              )
+                <>
+                  <Routine
+                    key={idx}
+                    onClick={() => {
+                      setModalIsOpen(true);
+                      setModalData(workout.routine_name);
+                      setModalDataExercises(workout.exercises);
+                      setWorkoutDate(workout.workout_date);
+                      router.push({ query: { workoutId: workout.workout_id } });
+                    }}
+                  >
+                    <div>{workout.routine_name}</div>
+                    <div>{new Date(workout.workout_date).toLocaleString()}</div>
+                  </Routine>
+                </>
+              );
             })}
-            <div>
-              <button onClick={() => {setModalIsOpen(false); router.push({query:null}) }}>Close</button>
-              <button>Delete</button>
-            </div>
-        </Modal>
-        </>
+
+            <Modal isOpen={modalIsOpen} ariaHideApp={false}>
+              <h1>{modalData}</h1>
+              <h4>{new Date(workoutDate).toLocaleString()}</h4>
+              {modalDataExercises.map((exercise) => {
+                return (
+                  <Exercise key={exercise.exercise_id}>
+                    <ExerciseName>{exercise.exercise_name}</ExerciseName>
+                    <div>Weight: {exercise.weight}kg</div>
+                    <div>Sets: {exercise.sets}</div>
+                    <div>Reps: {exercise.reps}</div>
+                  </Exercise>
+                );
+              })}
+              <div>
+                <button
+                  onClick={() => {
+                    setModalIsOpen(false);
+                    router.push({ query: null });
+                  }}
+                >
+                  Close
+                </button>
+                <button onClick={deleteEntry}>Delete</button>
+              </div>
+            </Modal>
+          </>
         </RoutinesContainer>
       </main>
 
