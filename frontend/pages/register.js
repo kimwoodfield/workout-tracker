@@ -1,10 +1,10 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import RegisterForm from '../components/Forms/RegisterForm'
-import styled from 'styled-components'
+import Head from "next/head";
+import Link from "next/link";
+import RegisterForm from "../components/Forms/RegisterForm";
+import styled from "styled-components";
 
 const RegisterLink = styled.a`
-  color: #6200EE;
+  color: #3abed8;
   font-weight: bold;
   cursor: pointer;
 `;
@@ -18,9 +18,7 @@ export default function Register() {
       </Head>
 
       <main>
-        <h1 className="title">
-          Workout Tracker
-        </h1>
+        <h1 className="title">Workout Tracker</h1>
 
         <h2 className="description">
           Sign up to start tracking your workouts today.
@@ -30,9 +28,9 @@ export default function Register() {
 
         <div>
           <p>
-            Already have an account? {' '}
+            Already have an account?{" "}
             <Link href="/">
-              <RegisterLink>Login</RegisterLink>
+              <RegisterLink> Log in</RegisterLink>
             </Link>
           </p>
         </div>
@@ -194,5 +192,5 @@ export default function Register() {
         }
       `}</style>
     </div>
-  )
+  );
 }

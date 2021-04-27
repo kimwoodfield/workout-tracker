@@ -1,10 +1,10 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import LoginForm from '../components/Forms/LoginForm'
-import styled from 'styled-components';
+import Head from "next/head";
+import Link from "next/link";
+import LoginForm from "../components/Forms/LoginForm";
+import styled from "styled-components";
 
 const LoginLink = styled.a`
-  color: #6200EE;
+  color: #3abed8;
   font-weight: bold;
   cursor: pointer;
 `;
@@ -18,19 +18,15 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className="title">
-          Workout Tracker
-        </h1>
+        <h1 className="title">Workout Tracker</h1>
 
-        <p className="description">
-          Start getting in shape today.
-        </p>
+        <p className="description">Start getting in shape today.</p>
 
         <LoginForm />
 
         <div>
           <p>
-            Don't have an account? {' '}
+            Don't have an account?{" "}
             <Link href="/register">
               <LoginLink>Register</LoginLink>
             </Link>
@@ -194,5 +190,5 @@ export default function Home() {
         }
       `}</style>
     </div>
-  )
+  );
 }

@@ -1,97 +1,107 @@
-import Head from 'next/head'
-import styled from 'styled-components';
-import IconNavBar from '../components/Navigation/IconNavBar';
-import NewWorkoutLink from '../components/NewWorkoutLink'
-import PageTitle from '../components/PageTitle'
-import SettingsButton from '../components/Common/SettingsButton'
+import Head from "next/head";
+import styled from "styled-components";
+import IconNavBar from "../components/Navigation/IconNavBar";
+import PageTitle from "../components/PageTitle";
+import SettingsButton from "../components/Common/SettingsButton";
+import { useState, useEffect } from "react";
+import useDarkMode from "use-dark-mode";
+import {
+  lightTheme,
+  darkTheme,
+  GlobalStyles,
+} from "../components/Themes/ThemeConfig";
 
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 const Padding = styled.div`
   height: 4rem;
-`
+`;
 
 const LogoutButton = styled.button`
-border: 1px solid lightgray;
-border-radius: 5px;
-background-color: white;
-font-size: 1.15em;
-height: 2.75rem;
-width: 90%;
-box-sizing: border-box;
-padding: 0;
-margin: 0;
-text-align: left;
-padding-left: 0.75rem;
-`
-
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 1.15em;
+  height: 2.75rem;
+  width: 90%;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  padding-left: 0.75rem;
+`;
 
 export default function Settings() {
+  const [isMounted, setIsMounted] = useState(false);
+  const darkmode = useDarkMode(true);
+  const theme = darkmode.value ? darkTheme : lightTheme;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const router = useRouter();
 
   const isAuthenticated = () => {
-    fetch('http://localhost:3000/log', {
-      method: 'GET',
+    fetch("http://localhost:3000/log", {
+      method: "GET",
       headers: {
-          'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
     })
-    .then((res) => {
-      switch(res.status) {
-        case 400:
-            console.log('400 error');
+      .then((res) => {
+        switch (res.status) {
+          case 400:
+            console.log("400 error");
             break;
-        case 403:
-            console.log('403 error');
-            router.push('/');
+          case 403:
+            console.log("403 error");
+            router.push("/");
             break;
-        case 201:
+          case 201:
             console.log(res.status.msg);
-            router.push('/log');
+            router.push("/log");
             break;
-    }
-    })
-    .catch(err => {
-      console.log('fetch failed');
-    })
-  }
+        }
+      })
+      .catch((err) => {
+        console.log("fetch failed");
+      });
+  };
 
   isAuthenticated();
 
   const Logout = () => {
-    console.log('function fired');
-    fetch('http://localhost:3000/logout', {
-      method: 'POST',
+    console.log("function fired");
+    fetch("http://localhost:3000/logout", {
+      method: "POST",
       headers: {
-          'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
     })
-    .then((res) => {
-      switch(res.status) {
-        case 400:
-            console.log('400 error');
+      .then((res) => {
+        switch (res.status) {
+          case 400:
+            console.log("400 error");
             break;
-        case 403:
-            console.log('403 error');
-            router.push('/');
+          case 403:
+            console.log("403 error");
+            router.push("/");
             break;
-        case 200:
-            console.log('we got a 200 back from the server')
+          case 200:
+            console.log("we got a 200 back from the server");
             console.log(res.status.msg);
-            alert('You have been logged out.');
-            router.push('/');
+            alert("You have been logged out.");
+            router.push("/");
             break;
-    }
-    })
-    .catch(err => {
-      console.log('fetch failed');
-    })
-  }
-
-
+        }
+      })
+      .catch((err) => {
+        console.log("fetch failed");
+      });
+  };
 
   return (
     <div className="container">
@@ -101,23 +111,21 @@ export default function Settings() {
       </Head>
 
       <Padding />
-      <PageTitle name="Settings"/>
+      <PageTitle name="Settings" />
 
-      <SettingsButton route="/" Name="Change theme" />
+      <button onClick={darkmode.toggle}>Switch Mode</button>
       <SettingsButton route="/" Name="Send feedback" />
       <LogoutButton onClick={Logout}>Logout</LogoutButton>
 
       <main>
-        <div>
-
-        </div>
+        <div></div>
       </main>
 
       <IconNavBar />
 
       <style jsx>{`
         .container {
-          background-color: #fafafa;
+          // background-color: #fafafa;
           min-height: 100vh;
           // padding: 0 0.5rem;
           display: flex;
@@ -262,5 +270,5 @@ export default function Settings() {
         }
       `}</style>
     </div>
-  )
+  );
 }
