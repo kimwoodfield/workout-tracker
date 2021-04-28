@@ -113,8 +113,8 @@ export default function Settings() {
       <Padding />
       <PageTitle name="Settings" />
 
-      <button onClick={darkmode.toggle}>Switch Mode</button>
-      <SettingsButton route="/" Name="Send feedback" />
+      <LogoutButton onClick={darkmode.toggle}>Switch Mode</LogoutButton>
+      <LogoutButton>Send feedback</LogoutButton>
       <LogoutButton onClick={Logout}>Logout</LogoutButton>
 
       <main>

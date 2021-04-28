@@ -1,11 +1,11 @@
-import Head from 'next/head'
-import IconNavBar from '../components/Navigation/IconNavBar';
-import PageTitle from '../components/PageTitle'
-import NewRoutineLink from '../components/NewRoutineLink'
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { useRouter } from 'next/router'
-import Modal from 'react-modal'
+import Head from "next/head";
+import IconNavBar from "../components/Navigation/IconNavBar";
+import PageTitle from "../components/PageTitle";
+import NewRoutineLink from "../components/NewRoutineLink";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useRouter } from "next/router";
+import Modal from "react-modal";
 import { AiOutlinePlus } from "react-icons/ai";
 
 const RoutinesContainer = styled.div`
@@ -15,8 +15,7 @@ const RoutinesContainer = styled.div`
   padding-bottom: 6.5rem;
   overflow: scroll;
   height: 80vh;
-`
-
+`;
 const Routine = styled.p`
   font-size: 1.15rem;
   // border-top: 0.5px solid lightgray;
@@ -25,30 +24,40 @@ const Routine = styled.p`
   padding: 0.85rem 0;
   margin: 0;
   cursor: default;
-`
+`;
+const StyledModal = styled(Modal)`
+  background: ${({ theme }) => theme.body};
+  position: absolute;
+  inset: 40px;
+  border: 1px solid rgb(204, 204, 204);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+`;
 
 export default function Routines() {
-
   // Setting our state
   const router = useRouter();
   const [routine, setRoutine] = useState([]);
   const [modalDataExercises, setModalDataExercises] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalData, setModalData] = useState('');
+  const [modalData, setModalData] = useState("");
 
   // Make the call to our api
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch('http://localhost:3000/routineExercise', { 
-        method: 'GET',
+      const res = await fetch("http://localhost:3000/routineExercise", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
       if (res.status === 403) {
-        console.log('403 error');``
-        router.push('/');
+        console.log("403 error");
+        ``;
+        router.push("/");
       }
       const body = await res.json();
       let routineList = body.routineList;
@@ -59,7 +68,6 @@ export default function Routines() {
     doFetch();
   }, []);
 
-
   return (
     <div className="container">
       <Head>
@@ -68,35 +76,37 @@ export default function Routines() {
       </Head>
 
       <NewRoutineLink />
-      <PageTitle name="Routines"/>
+      <PageTitle name="Routines" />
 
       <main>
         <RoutinesContainer>
-
-        <>
-          {routine.map((routine, idx) => {
-            return (
-              <>
-                <Routine key={idx} onClick={() => {setModalIsOpen(true); setModalData(routine.routine_name); setModalDataExercises(routine.routine_exercises)}}>
-                  {routine.routine_name}
-                </Routine>
-
-              </>
-            )
-          })}
-          <Modal isOpen={modalIsOpen} ariaHideApp={false}>
-            <h1>{modalData}</h1>
-            {modalDataExercises.map((exercise, idx) => {
+          <>
+            {routine.map((routine, idx) => {
               return (
-                <p key={idx}>{exercise}</p>
-              )
+                <>
+                  <Routine
+                    key={idx}
+                    onClick={() => {
+                      setModalIsOpen(true);
+                      setModalData(routine.routine_name);
+                      setModalDataExercises(routine.routine_exercises);
+                    }}
+                  >
+                    {routine.routine_name}
+                  </Routine>
+                </>
+              );
             })}
-            <div>
-              <button onClick={() => setModalIsOpen(false)}>Close</button>
-            </div>
-        </Modal>
-        </>
-
+            <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
+              <h1>{modalData}</h1>
+              {modalDataExercises.map((exercise, idx) => {
+                return <p key={idx}>{exercise}</p>;
+              })}
+              <div>
+                <button onClick={() => setModalIsOpen(false)}>Close</button>
+              </div>
+            </StyledModal>
+          </>
         </RoutinesContainer>
       </main>
 
@@ -105,7 +115,7 @@ export default function Routines() {
       <style jsx>{`
         .container {
           min-height: 100vh;
-        //   padding: 0 0.5rem;
+          //   padding: 0 0.5rem;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -250,5 +260,5 @@ export default function Routines() {
         }
       `}</style>
     </div>
-  )
+  );
 }

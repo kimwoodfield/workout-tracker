@@ -1,17 +1,17 @@
-import Head from 'next/head'
-import PageTitle from '../components/PageTitle'
-import styled from 'styled-components'
-import AddWorkoutHeader from '../components/Common/AddWorkoutHeader'
-import Input from '../components/Common/Input'
-import TextButton from '../components/Common/TextButton'
-import React, { useState, useEffect } from 'react'
-import ChooseRoutineForm from '../components/Forms/ChooseRoutineForm'
-import BackButton from '../components/Common/BackButton'
+import Head from "next/head";
+import PageTitle from "../components/PageTitle";
+import styled from "styled-components";
+import AddWorkoutHeader from "../components/Common/AddWorkoutHeader";
+import Input from "../components/Common/Input";
+import TextButton from "../components/Common/TextButton";
+import React, { useState, useEffect } from "react";
+import ChooseRoutineForm from "../components/Forms/ChooseRoutineForm";
+import BackButton from "../components/Common/BackButton";
 
 const Details = styled.section`
   width: 100%;
   padding: 1.85rem 0;
-`
+`;
 
 const Padding = styled.div`
   display: flex;
@@ -21,21 +21,20 @@ const Padding = styled.div`
   width: 100%;
   // border: 1px dashed salmon;
   box-sizing: border-box;
-`
+`;
 
 export default function AddWorkout() {
-
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch('http://localhost:3000/routines', { 
-        method: 'GET',
+      const res = await fetch("http://localhost:3000/routines", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
       const body = await res.json();
-      console.log('body is ...', body);
+      console.log("body is ...", body);
     }
 
     doFetch();
@@ -49,26 +48,19 @@ export default function AddWorkout() {
       </Head>
 
       <Padding>
-        <BackButton route="log" text="Log"/>
+        <BackButton route="log" text="Log" />
       </Padding>
 
-      <PageTitle name="Start a workout"/>
+      <PageTitle name="Start a workout" />
 
       <ChooseRoutineForm />
 
       <main>
-        <div>
-        
-        </div>
-        
+        <div></div>
       </main>
-
-      
-
 
       <style jsx>{`
         .container {
-          background-color: lightgray;
           min-height: 100vh;
           // padding: 0 0.5rem;
           display: flex;
@@ -213,5 +205,5 @@ export default function AddWorkout() {
         }
       `}</style>
     </div>
-  )
+  );
 }

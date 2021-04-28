@@ -1,20 +1,19 @@
-import Head from 'next/head'
-import styled from 'styled-components';
-import WorkoutForm from '../components/Forms/WorkoutForm'
-import PageTitle from '../components/PageTitle'
-import BackButton from '../components/Common/BackButton'
-import { useRouter } from 'next/router'
-import React, { useState, useEffect } from 'react'
-
+import Head from "next/head";
+import styled from "styled-components";
+import WorkoutForm from "../components/Forms/WorkoutForm";
+import PageTitle from "../components/PageTitle";
+import BackButton from "../components/Common/BackButton";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 
 const Container = styled.div`
-    min-height: 100vh;
-    background-color: #E0E0E0;
-    // padding: 0 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
+  min-height: 100vh;
+  // background-color: #E0E0E0;
+  // padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const Padding = styled.div`
   display: flex;
   align-items: center;
@@ -23,13 +22,12 @@ const Padding = styled.div`
   width: 100%;
   // border: 1px dashed salmon;
   box-sizing: border-box;
-`
+`;
 
 export default function CurrentWorkout() {
+  const router = useRouter();
 
-    const router = useRouter();
-
-    const currentWorkoutID = router.query;
+  const currentWorkoutID = router.query;
 
   return (
     <Container>
@@ -39,28 +37,25 @@ export default function CurrentWorkout() {
       </Head>
 
       <Padding>
-        <BackButton route="AddWorkout" text="Workout"/>
+        <BackButton route="AddWorkout" text="Workout" />
       </Padding>
 
       <PageTitle name="Current Workout" />
-      
 
       <main>
-
         <WorkoutForm />
-
       </main>
 
       <style jsx global>{`
         html,
-        body, 
+        body,
         main {
           padding: 0;
           margin: 0;
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
-            width: 100%;
+          width: 100%;
         }
 
         * {
@@ -68,5 +63,5 @@ export default function CurrentWorkout() {
         }
       `}</style>
     </Container>
-  )
+  );
 }

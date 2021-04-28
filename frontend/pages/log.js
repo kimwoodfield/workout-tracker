@@ -16,7 +16,6 @@ const RoutinesContainer = styled.div`
   // overflow: scroll;
   height: 100%;
 `;
-
 const Routine = styled.p`
   font-size: 1.15rem;
   border-bottom: 0.5px solid lightgray;
@@ -27,14 +26,23 @@ const Routine = styled.p`
   justify-content: space-between;
   cursor: default;
 `;
-
 const Exercise = styled.div`
   padding: 0.85rem 0;
 `;
-
 const ExerciseName = styled.div`
   font-weight: bold;
 `;
+const StyledModal = styled(Modal)`
+  background: ${({ theme }) => theme.body};
+  position: absolute; 
+  inset: 40px; 
+  border: 1px solid rgb(204, 204, 204); 
+  overflow: auto; 
+  border-radius: 4px; 
+  outline: none; 
+  padding: 20px;
+`;
+
 
 export default function Log() {
   const router = useRouter();
@@ -136,7 +144,7 @@ export default function Log() {
               );
             })}
 
-            <Modal isOpen={modalIsOpen} ariaHideApp={false}>
+            <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
               <h1>{modalData}</h1>
               <h4>{new Date(workoutDate).toLocaleString()}</h4>
               {modalDataExercises.map((exercise) => {
@@ -160,7 +168,7 @@ export default function Log() {
                 </button>
                 <button onClick={deleteEntry}>Delete</button>
               </div>
-            </Modal>
+            </StyledModal>
           </>
         </RoutinesContainer>
       </main>

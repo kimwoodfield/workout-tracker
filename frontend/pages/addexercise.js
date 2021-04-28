@@ -1,18 +1,15 @@
-import Head from 'next/head'
-import styled from 'styled-components';
-import ExerciseForm from '../components/Forms/ExerciseForm';
-import PageTitle from '../components/PageTitle'
-import BackButton from '../components/Common/BackButton'
-
+import Head from "next/head";
+import styled from "styled-components";
+import ExerciseForm from "../components/Forms/ExerciseForm";
+import PageTitle from "../components/PageTitle";
+import BackButton from "../components/Common/BackButton";
 
 const Container = styled.div`
-    min-height: 100vh;
-    background-color: #E0E0E0;
-    // padding: 0 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Padding = styled.div`
   display: flex;
@@ -22,22 +19,22 @@ const Padding = styled.div`
   width: 100%;
   // border: 1px dashed salmon;
   box-sizing: border-box;
-`
+`;
 
 const NewRoutineForm = styled.form`
   width: 90%;
   padding-bottom: 4rem;
-`
+`;
 
 const AddExerciseContainer = styled.div`
   width: 91%;
-`
+`;
 
 const FormDivider = styled.div`
   height: auto;
   padding: 0.5rem 0;
   margin: 0;
-`
+`;
 
 export default function AddRoutine() {
   return (
@@ -48,19 +45,16 @@ export default function AddRoutine() {
       </Head>
 
       <Padding>
-        <BackButton route="exercises" text="Exercises"/>
+        <BackButton route="exercises" text="Exercises" />
       </Padding>
 
       <PageTitle name="Add Exercise" />
-        
+
       {/* <RegisterForm /> */}
-      
 
       <main>
         <div>
-
-        <ExerciseForm />
-
+          <ExerciseForm />
         </div>
       </main>
 
@@ -79,5 +73,5 @@ export default function AddRoutine() {
         }
       `}</style>
     </Container>
-  )
+  );
 }
