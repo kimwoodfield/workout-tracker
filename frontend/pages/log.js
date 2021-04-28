@@ -7,6 +7,9 @@ import PastWorkoutDate from "../components/WorkoutOverview/PastWorkoutDate";
 import { Router, useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { useAlert } from "react-alert";
 
 const RoutinesContainer = styled.div`
   // border: 1px dashed blue;
@@ -34,18 +37,19 @@ const ExerciseName = styled.div`
 `;
 const StyledModal = styled(Modal)`
   background: ${({ theme }) => theme.body};
-  position: absolute; 
-  inset: 40px; 
-  border: 1px solid rgb(204, 204, 204); 
-  overflow: auto; 
-  border-radius: 4px; 
-  outline: none; 
+  position: absolute;
+  inset: 40px;
+  border: 1px solid rgb(204, 204, 204);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
   padding: 20px;
 `;
 
-
 export default function Log() {
   const router = useRouter();
+
+  const alert = useAlert();
 
   // Setting our state
   const [workout, setWorkout] = useState([]);
@@ -75,13 +79,26 @@ export default function Log() {
     doFetch();
   }, []);
 
+  const updatedWorkouts = () => {
+    async function doFetch() {
+      const res = await fetch("http://localhost:3000/workout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const body = await res.json();
+      const workouts = body.workouts;
+      setWorkout(workouts);
+      setWorkoutCount(workouts.length);
+    }
+    doFetch();
+  };
+
   const deleteEntry = () => {
     let urlValue = router.query; // { id: 34 }
     let currentWorkoutID = urlValue.workoutId; // 34
-    let decision = prompt("Are you sure you want to delete this workout?");
-    if (decision == null) {
-      return "Workout not deleted";
-    }
     fetch("http://localhost:3000/workout/" + currentWorkoutID, {
       method: "DELETE",
       headers: {
@@ -100,10 +117,28 @@ export default function Log() {
           res.json().then((data) => {
             // request sent
             console.log("this worked");
-            alert("Workout deleted!");
-            router.reload();
+            alert.show("Entry deleted!");
+            setModalIsOpen(false);
+            updatedWorkouts();
           });
       }
+    });
+  };
+
+  const prompt = () => {
+    confirmAlert({
+      title: "Are you sure?",
+      message: "Are you sure you want to delete this workout?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => deleteEntry(),
+        },
+        {
+          label: "No",
+          // onClick: () => alert("Click No"),
+        },
+      ],
     });
   };
 
@@ -166,7 +201,7 @@ export default function Log() {
                 >
                   Close
                 </button>
-                <button onClick={deleteEntry}>Delete</button>
+                <button onClick={prompt}>Delete</button>
               </div>
             </StyledModal>
           </>

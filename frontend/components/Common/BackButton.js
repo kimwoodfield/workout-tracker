@@ -9,7 +9,7 @@ const ButtonWrap = styled.span`
     align-items: center;
     padding: 0;
     margin: 0;
-    color: #6200EE;
+    color: #3abed8;
     width: auto;
     // font-size: 1.25rem;
 `

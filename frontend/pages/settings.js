@@ -10,6 +10,8 @@ import {
   darkTheme,
   GlobalStyles,
 } from "../components/Themes/ThemeConfig";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 import { useRouter } from "next/router";
 
@@ -93,7 +95,6 @@ export default function Settings() {
           case 200:
             console.log("we got a 200 back from the server");
             console.log(res.status.msg);
-            alert("You have been logged out.");
             router.push("/");
             break;
         }
@@ -101,6 +102,23 @@ export default function Settings() {
       .catch((err) => {
         console.log("fetch failed");
       });
+  };
+
+  const prompt = () => {
+    confirmAlert({
+      title: "Sad to see you go :(",
+      message: "Are you sure you want to logout?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => Logout(),
+        },
+        {
+          label: "No",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
   };
 
   return (
@@ -115,7 +133,7 @@ export default function Settings() {
 
       <LogoutButton onClick={darkmode.toggle}>Switch Mode</LogoutButton>
       <LogoutButton>Send feedback</LogoutButton>
-      <LogoutButton onClick={Logout}>Logout</LogoutButton>
+      <LogoutButton onClick={prompt}>Logout</LogoutButton>
 
       <main>
         <div></div>

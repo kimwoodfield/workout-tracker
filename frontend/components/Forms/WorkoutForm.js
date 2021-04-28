@@ -3,6 +3,7 @@ import SubmitBtn from "./SubmitBtn";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { useAlert } from "react-alert";
 
 const Form = styled.form`
   display: flex;
@@ -23,6 +24,8 @@ const Group = styled.div`
 
 export default function WorkoutForm() {
   const router = useRouter();
+
+  const alert = useAlert();
 
   const { register, handleSubmit, errors } = useForm();
 
@@ -52,7 +55,7 @@ export default function WorkoutForm() {
           res.json().then((data) => {
             // request sent
             console.log("this worked");
-            alert("Workout complete!");
+            alert.show("Workout complete!");
             router.push("/log");
           });
       }
