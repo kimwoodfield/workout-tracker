@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
 import { AiOutlinePlus } from "react-icons/ai";
+import Spinner from "../components/Common/Spinner";
 
 const RoutinesContainer = styled.div`
   // border: 1px dashed blue;
@@ -24,6 +25,14 @@ const Routine = styled.p`
   padding: 0.85rem 0;
   margin: 0;
   cursor: default;
+`;
+const SpinnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
 `;
 const StyledModal = styled(Modal)`
   background: ${({ theme }) => theme.body};
@@ -43,6 +52,7 @@ export default function Routines() {
   const [modalDataExercises, setModalDataExercises] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalData, setModalData] = useState("");
+  const [spinLoading, setSpinLoading] = useState(true);
 
   // Make the call to our api
   useEffect(() => {
@@ -59,6 +69,7 @@ export default function Routines() {
         ``;
         router.push("/");
       }
+      setSpinLoading(false);
       const body = await res.json();
       let routineList = body.routineList;
 
@@ -80,33 +91,39 @@ export default function Routines() {
 
       <main>
         <RoutinesContainer>
-          <>
-            {routine.map((routine, idx) => {
-              return (
-                <>
-                  <Routine
-                    key={idx}
-                    onClick={() => {
-                      setModalIsOpen(true);
-                      setModalData(routine.routine_name);
-                      setModalDataExercises(routine.routine_exercises);
-                    }}
-                  >
-                    {routine.routine_name}
-                  </Routine>
-                </>
-              );
-            })}
-            <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
-              <h1>{modalData}</h1>
-              {modalDataExercises.map((exercise, idx) => {
-                return <p key={idx}>{exercise}</p>;
+          {spinLoading ? (
+            <SpinnerContainer>
+              <Spinner loading={spinLoading} />
+            </SpinnerContainer>
+          ) : (
+            <>
+              {routine.map((routine, idx) => {
+                return (
+                  <>
+                    <Routine
+                      key={idx}
+                      onClick={() => {
+                        setModalIsOpen(true);
+                        setModalData(routine.routine_name);
+                        setModalDataExercises(routine.routine_exercises);
+                      }}
+                    >
+                      {routine.routine_name}
+                    </Routine>
+                  </>
+                );
               })}
-              <div>
-                <button onClick={() => setModalIsOpen(false)}>Close</button>
-              </div>
-            </StyledModal>
-          </>
+              <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
+                <h1>{modalData}</h1>
+                {modalDataExercises.map((exercise, idx) => {
+                  return <p key={idx}>{exercise}</p>;
+                })}
+                <div>
+                  <button onClick={() => setModalIsOpen(false)}>Close</button>
+                </div>
+              </StyledModal>
+            </>
+          )}
         </RoutinesContainer>
       </main>
 

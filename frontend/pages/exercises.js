@@ -1,14 +1,15 @@
-import Head from 'next/head'
-import styled from 'styled-components';
-import IconNavBar from '../components/Navigation/IconNavBar';
-import NewExerciseLink from '../components/NewExerciseLink';
-import PageTitle from '../components/PageTitle'
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Head from "next/head";
+import styled from "styled-components";
+import IconNavBar from "../components/Navigation/IconNavBar";
+import NewExerciseLink from "../components/NewExerciseLink";
+import PageTitle from "../components/PageTitle";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import Spinner from "../components/Common/Spinner";
 
 const Padding = styled.div`
   height: 4rem;
-`
+`;
 
 const ExercisesContainer = styled.div`
   // border: 1px dashed blue;
@@ -17,7 +18,16 @@ const ExercisesContainer = styled.div`
   padding-bottom: 6.5rem;
   overflow: scroll;
   height: 80vh;
-`
+`;
+
+const SpinnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Exercise = styled.p`
   font-size: 1.15rem;
@@ -26,35 +36,35 @@ const Exercise = styled.p`
   // padding: 0.85rem 0;
   padding: 0.85rem 0;
   margin: 0;
-`
+`;
 
 export default function Exercises() {
-
   const router = useRouter();
 
   const [exercise, setExercise] = useState([]);
+  const [spinLoading, setSpinLoading] = useState(true);
 
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch('http://localhost:3000/exercises', { 
-        method: 'GET',
+      const res = await fetch("http://localhost:3000/exercises", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
       if (res.status === 403) {
-        console.log('403 error');
-        router.push('/');
+        console.log("403 error");
+        router.push("/");
       }
+      setSpinLoading(false);
       const body = await res.json();
-      console.log('body is ...', body);
+      console.log("body is ...", body);
       setExercise(body.exercisesResults);
     }
 
     doFetch();
   }, []);
-
 
   return (
     <div className="container">
@@ -64,20 +74,21 @@ export default function Exercises() {
       </Head>
 
       <NewExerciseLink />
-      <PageTitle name="Exercises"/>
+      <PageTitle name="Exercises" />
 
       <main>
         <ExercisesContainer>
-
-        <>
-          {exercise.map((exercise, idx) => {
-            return <Exercise key={idx}>{exercise.exercise_name}</Exercise>
-          })}
-        </>
-
-
-
-
+          {spinLoading ? (
+            <SpinnerContainer>
+              <Spinner loading={spinLoading} />
+            </SpinnerContainer>
+          ) : (
+            <>
+              {exercise.map((exercise, idx) => {
+                return <Exercise key={idx}>{exercise.exercise_name}</Exercise>;
+              })}
+            </>
+          )}
         </ExercisesContainer>
       </main>
 
@@ -232,5 +243,5 @@ export default function Exercises() {
         }
       `}</style>
     </div>
-  )
+  );
 }

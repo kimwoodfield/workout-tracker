@@ -10,14 +10,26 @@ import Modal from "react-modal";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useAlert } from "react-alert";
+import Spinner from "../components/Common/Spinner";
 
 const RoutinesContainer = styled.div`
-  // border: 1px dashed blue;
+  // border: 5px dashed blue;
   width: 100%;
   padding-left: 1.25rem;
-  padding-bottom: 6.5rem;
+  // padding-bottom: 6.5rem;
   // overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   height: 100%;
+`;
+const SpinnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
 `;
 const Routine = styled.p`
   font-size: 1.15rem;
@@ -59,6 +71,7 @@ export default function Log() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalData, setModalData] = useState("");
   const [workoutCount, setWorkoutCount] = useState("");
+  const [spinLoading, setSpinLoading] = useState(true);
 
   // Make the call to our api
   useEffect(() => {
@@ -72,6 +85,7 @@ export default function Log() {
       });
       const body = await res.json();
       const workouts = body.workouts;
+      setSpinLoading(false);
       setWorkout(workouts);
       setWorkoutCount(workouts.length);
     }
@@ -90,6 +104,7 @@ export default function Log() {
       });
       const body = await res.json();
       const workouts = body.workouts;
+      setSpinLoading(false);
       setWorkout(workouts);
       setWorkoutCount(workouts.length);
     }
@@ -158,53 +173,63 @@ export default function Log() {
           WorkoutQty={workoutCount}
         />
         <RoutinesContainer>
-          <>
-            {workout.map((workout, idx) => {
-              return (
-                <>
-                  <Routine
-                    key={idx}
-                    onClick={() => {
-                      setModalIsOpen(true);
-                      setModalData(workout.routine_name);
-                      setModalDataExercises(workout.exercises);
-                      setWorkoutDate(workout.workout_date);
-                      router.push({ query: { workoutId: workout.workout_id } });
-                    }}
-                  >
-                    <div>{workout.routine_name}</div>
-                    <div>{new Date(workout.workout_date).toLocaleString()}</div>
-                  </Routine>
-                </>
-              );
-            })}
-
-            <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
-              <h1>{modalData}</h1>
-              <h4>{new Date(workoutDate).toLocaleString()}</h4>
-              {modalDataExercises.map((exercise) => {
+          {spinLoading ? (
+            <SpinnerContainer>
+              <Spinner loading={spinLoading} />
+            </SpinnerContainer>
+          ) : (
+            <>
+              {workout.map((workout, idx) => {
                 return (
-                  <Exercise key={exercise.exercise_id}>
-                    <ExerciseName>{exercise.exercise_name}</ExerciseName>
-                    <div>Weight: {exercise.weight}kg</div>
-                    <div>Sets: {exercise.sets}</div>
-                    <div>Reps: {exercise.reps}</div>
-                  </Exercise>
+                  <>
+                    <Routine
+                      key={idx}
+                      onClick={() => {
+                        setModalIsOpen(true);
+                        setModalData(workout.routine_name);
+                        setModalDataExercises(workout.exercises);
+                        setWorkoutDate(workout.workout_date);
+                        router.push({
+                          query: { workoutId: workout.workout_id },
+                        });
+                      }}
+                    >
+                      <div>{workout.routine_name}</div>
+                      <div>
+                        {new Date(workout.workout_date).toLocaleString()}
+                      </div>
+                    </Routine>
+                  </>
                 );
               })}
-              <div>
-                <button
-                  onClick={() => {
-                    setModalIsOpen(false);
-                    router.push({ query: null });
-                  }}
-                >
-                  Close
-                </button>
-                <button onClick={prompt}>Delete</button>
-              </div>
-            </StyledModal>
-          </>
+
+              <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
+                <h1>{modalData}</h1>
+                <h4>{new Date(workoutDate).toLocaleString()}</h4>
+                {modalDataExercises.map((exercise) => {
+                  return (
+                    <Exercise key={exercise.exercise_id}>
+                      <ExerciseName>{exercise.exercise_name}</ExerciseName>
+                      <div>Weight: {exercise.weight}kg</div>
+                      <div>Sets: {exercise.sets}</div>
+                      <div>Reps: {exercise.reps}</div>
+                    </Exercise>
+                  );
+                })}
+                <div>
+                  <button
+                    onClick={() => {
+                      setModalIsOpen(false);
+                      router.push({ query: null });
+                    }}
+                  >
+                    Close
+                  </button>
+                  <button onClick={prompt}>Delete</button>
+                </div>
+              </StyledModal>
+            </>
+          )}
         </RoutinesContainer>
       </main>
 
@@ -227,6 +252,7 @@ export default function Log() {
           flex-direction: column;
           width: 100%;
           padding-bottom: 7rem;
+          height: 100%;
         }
 
         footer {
