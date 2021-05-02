@@ -9,6 +9,8 @@ import {
 import { render } from "react-dom";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+import Head from "next/head";
+import React from 'react';
 
 // optional configuration for react-alert
 const options = {
@@ -30,12 +32,17 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <AlertProvider template={AlertTemplate} {...options}>
-        <GlobalStyles />
-        {isMounted && <Component {...pageProps} />}
-      </AlertProvider>
-    </ThemeProvider>
+    <React.Fragment>
+      <Head>
+        <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover' />
+     </Head>
+      <ThemeProvider theme={theme}>
+        <AlertProvider template={AlertTemplate} {...options}>
+          <GlobalStyles />
+          {isMounted && <Component {...pageProps} />}
+        </AlertProvider>
+      </ThemeProvider>
+    </React.Fragment>
   );
 }
 
