@@ -13,11 +13,8 @@ import { useAlert } from "react-alert";
 import Spinner from "../components/Common/Spinner";
 
 const RoutinesContainer = styled.div`
-  // border: 5px dashed blue;
   width: 100%;
   padding-left: 1.25rem;
-  // padding-bottom: 6.5rem;
-  // overflow: scroll;
   display: flex;
   flex-direction: column;
   flex-grow: 1;

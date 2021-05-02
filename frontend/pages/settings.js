@@ -12,13 +12,11 @@ import {
 } from "../components/Themes/ThemeConfig";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-
 import { useRouter } from "next/router";
 
 const Padding = styled.div`
   height: 4rem;
 `;
-
 const LogoutButton = styled.button`
   border: 1px solid lightgray;
   border-radius: 5px;
@@ -53,6 +51,7 @@ export default function Settings() {
       credentials: "include",
     })
       .then((res) => {
+        console.log(res.status);
         switch (res.status) {
           case 400:
             console.log("400 error");
@@ -62,8 +61,9 @@ export default function Settings() {
             router.push("/");
             break;
           case 201:
+            console.log('the response code was ', res.status);
             console.log(res.status.msg);
-            router.push("/log");
+            router.push("/");
             break;
         }
       })
@@ -92,7 +92,9 @@ export default function Settings() {
             console.log("403 error");
             router.push("/");
             break;
-          case 200:
+          case 201:
+            localStorage.removeItem('lastLoggedIn');
+            localStorage.setItem('loggedIn', false);
             console.log("we got a 200 back from the server");
             console.log(res.status.msg);
             router.push("/");

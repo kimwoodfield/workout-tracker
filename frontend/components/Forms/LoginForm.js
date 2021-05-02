@@ -60,6 +60,10 @@ const LoginForm = () => {
                         setInvalidPass('Login limit exceeded. Please try again later');
                         break;
                     case 201:
+                        // localStorage.setItem
+                        console.log('the response code was ', res.status);
+                        localStorage.setItem('lastLoggedIn', username);
+                        localStorage.setItem('loggedIn', true);
                         router.push('/log');
                         break;
                 }
