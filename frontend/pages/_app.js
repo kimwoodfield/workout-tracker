@@ -6,7 +6,6 @@ import {
   darkTheme,
   GlobalStyles,
 } from "../components/Themes/ThemeConfig";
-import { render } from "react-dom";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import Head from "next/head";
