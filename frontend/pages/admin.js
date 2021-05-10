@@ -1,128 +1,77 @@
 import Head from "next/head";
+import styled from "styled-components";
 import IconNavBar from "../components/Navigation/IconNavBar";
 import PageTitle from "../components/PageTitle";
-import NewRoutineLink from "../components/NewRoutineLink";
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
-import Modal from "react-modal";
-import { AiOutlinePlus } from "react-icons/ai";
+import { useState, useEffect } from "react";
 import Spinner from "../components/Common/Spinner";
 
-const RoutinesContainer = styled.div`
-  // border: 1px dashed blue;
-  width: 100%;
-  padding-left: 1.25rem;
-  padding-bottom: 6.5rem;
-  overflow: scroll;
-  height: 80vh;
-`;
-const Routine = styled.p`
-  font-size: 1.15rem;
-  border-bottom: 0.5px solid lightgray;
-  padding: 0.85rem 0;
-  margin: 0;
-  cursor: default;
-`;
-const SpinnerContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
-`;
-const StyledModal = styled(Modal)`
-  background: ${({ theme }) => theme.body};
-  position: absolute;
-  inset: 40px;
-  border: 1px solid rgb(204, 204, 204);
-  overflow: auto;
-  border-radius: 4px;
-  outline: none;
-  padding: 20px;
+const EmptyPage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+`
+const Padding = styled.div`
+  height: 4rem;
 `;
 
-export default function Routines() {
-  // Setting our state
+export default function Admin() {
   const router = useRouter();
-  const [routine, setRoutine] = useState([]);
-  const [modalDataExercises, setModalDataExercises] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [modalData, setModalData] = useState("");
-  const [spinLoading, setSpinLoading] = useState(true);
 
-  // Make the call to our api
-  useEffect(() => {
-    async function doFetch() {
-      const res = await fetch("http://localhost:3000/routineExercise", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
+  const [ isAdmin, setIsAdmin ] = useState(false);
+
+  const isAuthenticated = () => {
+    fetch("http://localhost:3000/admin", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((res) => {
+        console.log(res.status);
+        switch (res.status) {
+          case 400:
+            console.log("400 error");
+            break;
+          case 403:
+            console.log("403 error");
+            router.push("/");
+            break;
+          case 500:
+            console.log("500 error");
+            router.push("/");
+            break;
+          case 200:
+            setIsAdmin(true);
+            console.log("the response code was ", res.status);
+            console.log(res.status.msg);
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log("fetch failed");
+        console.log(err);
       });
-      if (res.status === 403) {
-        console.log("403 error");
-        ``;
-        router.push("/");
-      }
-      setSpinLoading(false);
-      const body = await res.json();
-      let routineList = body.routineList;
+  };
+  isAuthenticated();
 
-      setRoutine(routineList);
-    }
-
-    doFetch();
-  }, []);
-
+  {console.log(isAdmin)}
   return (
+    isAdmin ? (
     <div className="container">
       <Head>
-        <title>Routines</title>
+        <title>Admin Panel</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NewRoutineLink />
-      <PageTitle name="Routines" />
+      <Padding />
+      <PageTitle name="Admin Panel" />
 
       <main>
-        <RoutinesContainer>
-          {spinLoading ? (
-            <SpinnerContainer>
-              <Spinner loading={spinLoading} />
-            </SpinnerContainer>
-          ) : (
-            <>
-              {routine.map((routine, idx) => {
-                return (
-                  <>
-                    <Routine
-                      key={idx}
-                      onClick={() => {
-                        setModalIsOpen(true);
-                        setModalData(routine.routine_name);
-                        setModalDataExercises(routine.routine_exercises);
-                      }}
-                    >
-                      {routine.routine_name}
-                    </Routine>
-                  </>
-                );
-              })}
-              <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
-                <h1>{modalData}</h1>
-                {modalDataExercises.map((exercise, idx) => {
-                  return <p key={idx}>{exercise}</p>;
-                })}
-                <div>
-                  <button onClick={() => setModalIsOpen(false)}>Close</button>
-                </div>
-              </StyledModal>
-            </>
-          )}
-        </RoutinesContainer>
       </main>
 
       <IconNavBar />
@@ -130,23 +79,16 @@ export default function Routines() {
       <style jsx>{`
         .container {
           min-height: 100vh;
-          //   padding: 0 0.5rem;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          //   justify-content: center;
           align-items: center;
         }
 
         main {
-          // padding: 5rem 0;
-          // padding-bottom: 5rem;
-          // border: 1px solid red;
-          width: 100%;
           flex: 1;
           display: flex;
           flex-direction: column;
-          // justify-content: center;
-          align-items: center;
         }
 
         footer {
@@ -260,6 +202,7 @@ export default function Routines() {
           }
         }
       `}</style>
+
       <style jsx global>{`
         html,
         body {
@@ -275,5 +218,10 @@ export default function Routines() {
         }
       `}</style>
     </div>
+      ) : (
+        <EmptyPage>
+            <Spinner />
+        </EmptyPage>
+      )
   );
 }
