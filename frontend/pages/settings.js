@@ -13,6 +13,7 @@ import {
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Padding = styled.div`
   height: 4rem;
@@ -33,6 +34,7 @@ const LogoutButton = styled.button`
 
 export default function Settings() {
   const [isMounted, setIsMounted] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const darkmode = useDarkMode(true);
   const theme = darkmode.value ? darkTheme : lightTheme;
 
@@ -61,7 +63,7 @@ export default function Settings() {
             router.push("/");
             break;
           case 201:
-            console.log('the response code was ', res.status);
+            console.log("the response code was ", res.status);
             console.log(res.status.msg);
             router.push("/");
             break;
@@ -71,8 +73,44 @@ export default function Settings() {
         console.log("fetch failed");
       });
   };
-
   isAuthenticated();
+
+  const adminCheck = () => {
+    fetch("http://localhost:3000/isAdmin", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((res) => {
+        console.log(res.status);
+        switch (res.status) {
+          case 400:
+            console.log("400 error");
+            setIsAdmin(false);
+            break;
+          case 403:
+            console.log("403 error");
+            setIsAdmin(false);
+            break;
+          case 500:
+            console.log("500 error");
+            setIsAdmin(false);
+            break;
+          case 200:
+            setIsAdmin(true);
+            console.log("the response code was ", res.status);
+            console.log(res.status.msg);
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log("fetch failed");
+        console.log(err);
+      });
+  };
+  adminCheck();
 
   const Logout = () => {
     console.log("function fired");
@@ -93,8 +131,8 @@ export default function Settings() {
             router.push("/");
             break;
           case 201:
-            localStorage.removeItem('lastLoggedIn');
-            localStorage.setItem('loggedIn', false);
+            localStorage.removeItem("lastLoggedIn");
+            localStorage.setItem("loggedIn", false);
             console.log("we got a 200 back from the server");
             console.log(res.status.msg);
             router.push("/");
@@ -123,6 +161,7 @@ export default function Settings() {
     });
   };
 
+
   return (
     <div className="container">
       <Head>
@@ -136,6 +175,17 @@ export default function Settings() {
       <LogoutButton onClick={darkmode.toggle}>Switch Mode</LogoutButton>
       <LogoutButton>Send feedback</LogoutButton>
       <LogoutButton onClick={prompt}>Logout</LogoutButton>
+
+      {
+        // If a userType of "Admin" has not been set, the user cannot access this button.
+        isAdmin ? (
+          <Link href="/admin">
+            <button>Admin Panel</button>
+          </Link>
+        ) : (
+          <></>
+        )
+      }
 
       <main>
         <div></div>

@@ -8,12 +8,12 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/Common/Spinner";
 
 const EmptyPage = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+`;
 const Padding = styled.div`
   height: 4rem;
 `;
@@ -21,10 +21,10 @@ const Padding = styled.div`
 export default function Admin() {
   const router = useRouter();
 
-  const [ isAdmin, setIsAdmin ] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const isAuthenticated = () => {
-    fetch("http://localhost:3000/admin", {
+  const adminCheck = () => {
+    fetch("http://localhost:3000/isAdmin", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export default function Admin() {
             break;
           case 403:
             console.log("403 error");
-            router.push("/");
+            router.back();
             break;
           case 500:
             console.log("500 error");
@@ -48,7 +48,6 @@ export default function Admin() {
           case 200:
             setIsAdmin(true);
             console.log("the response code was ", res.status);
-            console.log(res.status.msg);
             break;
         }
       })
@@ -57,11 +56,12 @@ export default function Admin() {
         console.log(err);
       });
   };
-  isAuthenticated();
+  adminCheck();
 
-  {console.log(isAdmin)}
-  return (
-    isAdmin ? (
+  {
+    console.log(isAdmin);
+  }
+  return isAdmin ? (
     <div className="container">
       <Head>
         <title>Admin Panel</title>
@@ -71,8 +71,7 @@ export default function Admin() {
       <Padding />
       <PageTitle name="Admin Panel" />
 
-      <main>
-      </main>
+      <main></main>
 
       <IconNavBar />
 
@@ -218,10 +217,9 @@ export default function Admin() {
         }
       `}</style>
     </div>
-      ) : (
-        <EmptyPage>
-            <Spinner />
-        </EmptyPage>
-      )
+  ) : (
+    <EmptyPage>
+      <Spinner />
+    </EmptyPage>
   );
 }
