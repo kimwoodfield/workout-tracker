@@ -18,7 +18,20 @@ import Link from "next/link";
 const Padding = styled.div`
   height: 4rem;
 `;
-const LogoutButton = styled.button`
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  color: grey;
+
+  ButtonContainer:nth-child(2) {
+    background: red;
+  }
+`;
+
+const Button = styled.button`
   border: 1px solid lightgray;
   border-radius: 5px;
   background-color: white;
@@ -27,9 +40,18 @@ const LogoutButton = styled.button`
   width: 90%;
   box-sizing: border-box;
   padding: 0;
-  margin: 0;
   text-align: left;
   padding-left: 0.75rem;
+
+  &:nth-of-type(1) {
+    border-bottom: none;
+  }
+  &:nth-of-type(2) {
+    border-bottom: none;
+  }
+  &:nth-of-type(4) {
+    border-top: none;
+  }
 `;
 
 export default function Settings() {
@@ -161,7 +183,6 @@ export default function Settings() {
     });
   };
 
-
   return (
     <div className="container">
       <Head>
@@ -172,20 +193,21 @@ export default function Settings() {
       <Padding />
       <PageTitle name="Settings" />
 
-      <LogoutButton onClick={darkmode.toggle}>Switch Mode</LogoutButton>
-      <LogoutButton>Send feedback</LogoutButton>
-      <LogoutButton onClick={prompt}>Logout</LogoutButton>
-
-      {
-        // If a userType of "Admin" has not been set, the user cannot access this button.
-        isAdmin ? (
-          <Link href="/admin">
-            <button>Admin Panel</button>
-          </Link>
-        ) : (
-          <></>
-        )
-      }
+      <ButtonContainer>
+        <Button onClick={darkmode.toggle}>Switch Mode</Button>
+        <Button>Send feedback</Button>
+        {
+          // If a userType of "Admin" has not been set, the user cannot access this button.
+          isAdmin ? (
+            <Link href="/admin">
+              <Button>Admin Panel</Button>
+            </Link>
+          ) : (
+            <></>
+          )
+        }
+        <Button onClick={prompt}>Logout</Button>
+      </ButtonContainer>
 
       <main>
         <div></div>
@@ -202,6 +224,7 @@ export default function Settings() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          max-width: 100%;
         }
 
         main {

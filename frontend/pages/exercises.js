@@ -102,6 +102,7 @@ export default function Exercises() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          max-width: 100%;
         }
 
         main {

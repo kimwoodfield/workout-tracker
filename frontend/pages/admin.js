@@ -6,6 +6,9 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Spinner from "../components/Common/Spinner";
+import { ImBin } from "react-icons/im";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const EmptyPage = styled.div`
   display: flex;
@@ -17,11 +20,20 @@ const EmptyPage = styled.div`
 const Padding = styled.div`
   height: 4rem;
 `;
+const MenuItems = styled.div`
+  width: 100%;
+  padding-bottom: 6.5rem;
+  overflow: scroll;
+  height: 80vh;
+`;
 
 export default function Admin() {
   const router = useRouter();
 
   const [isAdmin, setIsAdmin] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [viewUsers, setViewUsers] = useState("View all users");
+  const [displayUsers, setDisplayUsers] = useState(false);
 
   const adminCheck = () => {
     fetch("http://localhost:3000/isAdmin", {
@@ -58,11 +70,110 @@ export default function Admin() {
   };
   adminCheck();
 
-  {
-    console.log(isAdmin);
-  }
+  const fetchUsers = async () => {
+    console.log("before the fetch");
+    const res = await fetch("http://localhost:3000/users", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    console.log("after the fetch");
+    if (!res.ok) {
+      const message = `An error has occured: ${res.status}`;
+      throw new Error(message);
+    }
+
+    const body = await res.json();
+
+    console.log(body);
+
+    console.log(body.users);
+    let allUsers = body.users;
+    setUsers(allUsers);
+    setViewUsers("Hide all users");
+    setDisplayUsers(true);
+  };
+
+  const toggleUsers = () => {
+    if (displayUsers === true) {
+      setViewUsers("View all users");
+      setDisplayUsers(false);
+    } else {
+      fetchUsers();
+      setViewUsers("Hide all users");
+      setDisplayUsers(true);
+    }
+  };
+
+  const deleteUser = (username) => {
+    async function doDelete() {
+      const res = await fetch("http://localhost:3000/users", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const message = `An error has occured: ${response.data}`;
+        throw new Error(message);
+      }
+
+      const body = await res.json();
+      console.log(body);
+      fetchUsers();
+    }
+    doDelete();
+  };
+
+  const changeRole = (username) => {
+    console.log("before the PATCH fetch");
+    async function doChangeRole() {
+      const res = await fetch("http://localhost:3000/users", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username }),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const message = `An error has occured: ${response.data}`;
+        throw new Error(message);
+      }
+
+      const body = await res.json();
+      console.log(body);
+      fetchUsers();
+    }
+    doChangeRole();
+  };
+
+  const prompt = (username) => {
+    confirmAlert({
+      title: "Are you sure?",
+      message: "Are you sure you want to delete this user?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => deleteUser(username),
+        },
+        {
+          label: "No",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+
   return isAdmin ? (
-    <div className="container">
+    <div className="max-w-full">
       <Head>
         <title>Admin Panel</title>
         <link rel="icon" href="/favicon.ico" />
@@ -71,151 +182,59 @@ export default function Admin() {
       <Padding />
       <PageTitle name="Admin Panel" />
 
-      <main></main>
+      <MenuItems>
+        <div className="flex flex-col self-auto p-5">
+          <button
+            className="rounded-sm text-white bg-blue-400 p-2 hover:bg-blue-700 hover:text-white"
+            onClick={() => {
+              toggleUsers();
+            }}
+          >
+            {viewUsers}
+          </button>
 
+          {displayUsers ? (
+            <div className="grid lg:grid-cols-4 grid-cols-3 mt-5 border border-gray-300">
+              <div className="font-bold p-2">Name</div>
+              <div className="font-bold p-2 text-center">Username</div>
+              <div className="font-bold p-2 text-center">Role</div>
+              <div className="font-bold hidden lg:block p-2 lg:text-center">
+                Actions
+              </div>
+              {users.map((user, index) => (
+                <>
+                  <div className="p-2 border-t-2 ">{user.full_name}</div>
+                  <div className="p-2 border-t-2 text-center">
+                    {user.username}
+                  </div>
+                  <div className="p-2 border-t-2 text-center">{user.role}</div>
+                  <div className="col-span-3 lg:col-span-1 col-start-1 lg:col-start-4 text-center mb-5 py-2 lg:border-t-2 lg:text-center">
+                    <button
+                      className="rounded-md text-white bg-red-400 p-2 hover:bg-red-700 hover:text-white mr-2"
+                      onClick={() => changeRole(user.username)}
+                    >
+                      {user.role === "Admin" ? "Demote" : "Promote"}
+                    </button>
+                    {user.role === "Admin" ? (
+                      <></>
+                    ) : (
+                      <button
+                        className="rounded-md text-white bg-blue-400 p-2 hover:bg-blue-700 hover:text-white ml-2"
+                        onClick={() => prompt(user.username)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                </>
+              ))}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+      </MenuItems>
       <IconNavBar />
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          //   justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
     </div>
   ) : (
     <EmptyPage>

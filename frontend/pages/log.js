@@ -240,6 +240,7 @@ export default function Log() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          max-width: 100%;
         }
 
         main {
@@ -372,6 +373,9 @@ export default function Log() {
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
+        }
+        .container {
+          max-width: 100%;
         }
 
         * {

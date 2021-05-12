@@ -54,6 +54,7 @@ export default function Register() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          max-width: 100%;
         }
 
         main {
@@ -63,6 +64,7 @@ export default function Register() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          max-width: 100%;
         }
 
         footer {
