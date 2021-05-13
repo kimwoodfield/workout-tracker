@@ -24,6 +24,7 @@
     "react-modal": "^3.12.1",
     "react-spinners-kit": "^1.9.1",
     "styled-components": "^5.2.1",
+    "tailwindcss": "^2.1.2",
     "use-dark-mode": "^2.3.1",
     "webpack": "^5.36.2"
   },

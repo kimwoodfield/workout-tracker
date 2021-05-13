@@ -1,159 +1,195 @@
-import React, { useState } from 'react'
-import SubmitBtn from './SubmitBtn'
-import Input from './FormInput'
-import ErrorMessage from '../Common/ErrorMessage'
-import styled from 'styled-components'
-import { useRouter } from 'next/router'
+import React from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
+import { Router, useRouter } from "next/router";
 
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-    width: 18rem;
-`
+const Button = styled.input`
+  width: 100%;
+  height: 35px;
+  background-color: #3abed8;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border: none;
+  letter-spacing: 0.9px;
+  margin: 4px 0;
+  cursor: pointer;
+`;
 
-const RegisterForm = () => {
+const Input = styled.input`
+  color: #212121;
+  background-color: white;
+  font-size: 0.9rem;
+  padding: 0 0 0 0.85rem;
+  width: 90%;
+  outline: none;
+  border: none;
 
-    const router = useRouter()
+  &::placeholder {
+    color: #bdbdbd;
+  }
+`;
 
+export default function LoginForm() {
+  const router = useRouter();
 
-    // Setting the state
-    const [email, setEmail] = useState('');
-    const [fullname, setFullname] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    const [emailErr, setEmailErr] = useState({});
-    const [fullnameErr, setFullnameErr] = useState({});
-    const [usernameErr, setUsernameErr] = useState({});
-    const [passwordErr, setPasswordErr] = useState({});
-
-    const [ submitting, setSubmitting ] = useState(false);
-
-
-    // Handles the form submission
-    const onSubmit = (e) => {
-        e.preventDefault();
-        setSubmitting(true);
-        const isValid = formValidation();
-        // If the input data is valid - 
-        if (isValid) {
-            // Make a POST request to our api route with the input data
-            fetch('http://localhost:3000/register', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, fullname, username, password }),
-              })
-              .then((res) => {
-                switch(res.status) {
-                    case 400:
-                        console.log('This is a 400 error.');
-                        break;
-                    case 429:
-                        console.log('This is a 429 error. Rate limit exceeded');
-                        break;
-                    case 201:
-                        res.json().then((data) => {
-                            // request sent
-                            router.push('/');
-                        })
-              }})
-        } else {
-            e.preventDefault();
+  const onSubmit = (data) => {
+    console.log(data);
+    let username = data.username;
+    let password = data.password;
+    let fullname = data.fullname;
+    let email = data.email;
+    fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ email, fullname, username, password }),
+    })
+      .then((res) => {
+        switch (res.status) {
+          case 400:
+            console.log("400 works");
+            // setInvalidPass("There was an error. Please try again later.");
+            break;
+          case 401:
+            console.log("401 works");
+            // setInvalidPass("Invalid username and password.");
+            break;
+          case 429:
+            console.log("429 error");
+            // setInvalidPass("Login limit exceeded. Please try again later");
+            break;
+          case 201:
+            console.log("the response code was ", res.status);
+            localStorage.setItem("lastLoggedIn", username);
+            localStorage.setItem("loggedIn", true);
+            router.push("/");
+            break;
         }
-    }
+      })
+      .catch((err) => {
+        // Fetch couldn't send the request.
+        // 500 Error
+        console.log("fetch failed");
+      });
+  };
+  console.log(errors);
 
-    /* Frontend form validation is handled here */
-    const formValidation = () => {
-        const emailErr = {};
-        const fullnameErr = {};
-        const usernameErr = {};
-        const passwordErr = {};
-        let isValid = true;
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="w-3/4 pt-5">
+        <input
+        type="email"
+        placeholder="Enter email..."
+        name="email"
+            ref={register({
+            required: "Email is required.",
+            pattern: {
+            value: /^\S+@\S+$/i,
+            message: "Email must contain letters or numbers.",
+            },
+            minLength: {
+            value: 8,
+            message: "This input must exceed 8 characters",
+            },
+            maxLength: {
+            value: 20,
+            message: "This input must not exceed 20 characters",
+            },
+        })}
+        className="text-black w-full w-11/12 p-2 h9 border border-gray-300 rounded-md"
+        />
+        <br />
+        <p className="text-red-500 mb-2">
+            {errors.email ? errors.email.message : <></>}
+      </p>
+        <input
+            type="text"
+            placeholder="Enter full name..."
+            name="fullname"
+            ref={register({
+            required: "Full name is required.",
+            pattern: {
+            value: /^[a-zA-Z\s]*$/,
+            message: "Full name can only contian letters.",
+            },
+            minLength: {
+            value: 5,
+            message: "This input must exceed 5 characters",
+            },
+            maxLength: {
+            value: 20,
+            message: "This input must not exceed 20 characters",
+            },
+        })}
+        className="text-black w-full w-11/12 p-2 h9 border border-gray-300 rounded-md"
+        />
+        <br />
+        <p className="text-red-500 mb-2">
+            {errors.fullname ? errors.fullname.message : <></>}
+      </p>
+      <input
+        type="text"
+        placeholder="Enter username..."
+        name="username"
+        ref={register({
+          required: "Username is required.",
+          pattern: {
+            value: /^[A-Za-z0-9]+$/i,
+            message: "Input must be letters or numbers.",
+          },
+          minLength: {
+            value: 8,
+            message: "This input must exceed 8 characters",
+          },
+          maxLength: {
+            value: 13,
+            message: "This input must not exceed 13 characters",
+          },
+        })}
+        className="text-black w-full w-11/12 p-2 h9 border border-gray-300 rounded-md"
+      />
+      <br />
+      <p className="text-red-500 mb-2">
+        {errors.username ? errors.username.message : <></>}
+      </p>
+      <input
+        type="password"
+        placeholder="Enter password..."
+        name="password"
+        ref={register({
+          required: "Password is required.",
+          pattern: {
+            value: /^[A-Za-z0-9]+$/i,
+            message: "Input must be letters or numbers.",
+          },
+          minLength: {
+            value: 8,
+            message: "This input must exceed 8 characters",
+          },
+          maxLength: {
+            value: 13,
+            message: "This input must not exceed 13 characters",
+          },
+        })}
+        className="text-black w-full w-11/12 p-2 h9 border border-gray-300 rounded-md"
+      />
+      <br />
+      <p className="text-red-500 mb-2">
+        {errors.password ? errors.password.message : <></>}
+      </p>
 
-        // Regex to test email against
-        let regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-        // If email is left empty or does not match the regex -
-        if (email.length === 0) {
-            emailErr.emailEmpty = "You must enter an email address.";
-        } else if (!email.includes('@')) {
-            emailErr.emailMissingSymb = "Invalid email. Email must have @";
-        } else if (regexp.test(email) === false) {
-            emailErr.emailWrongChars = "This is not a valid email address.";
-            isValid = false;
-        }
-
-        // If full name is left empty or first letter of the full name isn't capitalized -
-        if (fullname.length === 0) {
-            fullnameErr.fullnameEmpty = "You must enter a full name.";
-        } else if (fullname[0] !== fullname[0].toUpperCase()) {
-            fullnameErr.startsLowercase = "First letter of full name needs to be capitalized.";
-            isValid = false;
-        } 
-
-        // If username is left empty or length of the username is less than five characters -
-        if (username.length === 0) {
-            usernameErr.usernameEmpty = "You must enter a username.";
-        } else if (username.length < 5) {
-            usernameErr.usernameShort = "Username needs to be 5 or more characters.";
-            isValid = false;
-        }
-
-        // If the length of the password is less than three characters -
-        if (password.length === 0) {
-            passwordErr.passwordEmpty = "You must enter a password.";
-        } else if (password.length < 4) {
-            passwordErr.passwordShort = "Password needs to be 4 or more characters.";
-            isValid = false;
-        }
-
-        // Update error objects
-        setEmailErr(emailErr);
-        setFullnameErr(fullnameErr);
-        setUsernameErr(usernameErr);
-        setPasswordErr(passwordErr);
-        return isValid;
-    }
-
-    return (
-        <Form onSubmit={onSubmit}>
-            {/* <label for="email">Email : </label> */}
-            <Input type="text" 
-                   placeholder="Email"
-                   value={email}
-                   onChange={(e) => {setEmail(e.target.value)}}/>
-                   {Object.keys(emailErr).map((key) => {
-                       return <ErrorMessage>{emailErr[key]}</ErrorMessage>
-                   })}
-            {/* <label for="fullname">Full name : </label> */}
-            <Input type="text" 
-                   placeholder="Full name"
-                   value={fullname}
-                   onChange={(e) => {setFullname(e.target.value)}}/>
-                   {Object.keys(fullnameErr).map((key) => {
-                       return <ErrorMessage>{fullnameErr[key]}</ErrorMessage>
-                   })}
-            {/* <label for="username">Username : </label> */}
-            <Input type="text" 
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => {setUsername(e.target.value)}}/>
-                    {Object.keys(usernameErr).map((key) => {
-                       return <ErrorMessage>{usernameErr[key]}</ErrorMessage>
-                   })}
-            {/* <label for="password">Password : </label> */}
-            <Input type="password" 
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => {setPassword(e.target.value)}}/>
-                    {Object.keys(passwordErr).map((key) => {
-                       return <ErrorMessage>{passwordErr[key]}</ErrorMessage>
-                   })}
-            <SubmitBtn type="submit">Sign up</SubmitBtn>
-        </Form>
-    )
+      <button
+        type="submit"
+        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold"
+      >Sign up</button>
+    </form>
+  );
 }
-
-export default RegisterForm;

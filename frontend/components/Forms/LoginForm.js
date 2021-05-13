@@ -66,7 +66,6 @@ export default function LoginForm() {
             setInvalidPass("Login limit exceeded. Please try again later");
             break;
           case 201:
-            // localStorage.setItem
             console.log("the response code was ", res.status);
             localStorage.setItem("lastLoggedIn", username);
             localStorage.setItem("loggedIn", true);
@@ -89,7 +88,7 @@ export default function LoginForm() {
         placeholder="Enter username..."
         name="username"
         ref={register({
-          required: "This input is required.",
+          required: "Username is required.",
           pattern: {
             value: /^[A-Za-z0-9]+$/i,
             message: "Input must be letters or numbers.",
@@ -99,7 +98,7 @@ export default function LoginForm() {
             message: "This input must exceed 8 characters",
           },
           maxLength: {
-            value: 8,
+            value: 13,
             message: "This input must not exceed 13 characters",
           },
         })}
@@ -114,7 +113,7 @@ export default function LoginForm() {
         placeholder="Enter password..."
         name="password"
         ref={register({
-          required: "This input is required.",
+          required: "Password is required.",
           pattern: {
             value: /^[A-Za-z0-9]+$/i,
             message: "Input must be letters or numbers.",
@@ -124,7 +123,7 @@ export default function LoginForm() {
             message: "This input must exceed 8 characters",
           },
           maxLength: {
-            value: 8,
+            value: 13,
             message: "This input must not exceed 13 characters",
           },
         })}
@@ -135,10 +134,10 @@ export default function LoginForm() {
         {errors.password ? errors.password.message : <></>}
       </p>
 
-      <input
+      <button
         type="submit"
-        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2"
-      />
+        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold"
+      >Login</button>
     </form>
   );
 }

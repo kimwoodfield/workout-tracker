@@ -30,7 +30,7 @@ export default function Register() {
           <p>
             Already have an account?{" "}
             <Link href="/">
-              <RegisterLink> Log in</RegisterLink>
+              <a className="text-blue-400 font-bold">Login</a>
             </Link>
           </p>
         </div>
@@ -84,16 +84,6 @@ export default function Register() {
           display: flex;
           justify-content: center;
           align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
         }
 
         .title a:hover,
