@@ -4,17 +4,20 @@ import IconNavBar from "../components/Navigation/IconNavBar";
 import NewWorkoutLink from "../components/NewWorkoutLink";
 import PageTitle from "../components/PageTitle";
 import PastWorkoutDate from "../components/WorkoutOverview/PastWorkoutDate";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useAlert } from "react-alert";
 import Spinner from "../components/Common/Spinner";
+import { AiOutlineClose } from "react-icons/ai";
 
+const PageWrapper = styled.div`
+  font-family: Roboto, sans-serif;
+`;
 const RoutinesContainer = styled.div`
   width: 100%;
-  padding-left: 1.25rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -28,18 +31,19 @@ const SpinnerContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const Routine = styled.p`
+const Routine = styled.div`
   font-size: 1.15rem;
-  border-bottom: 0.5px solid lightgray;
-  padding: 0.85rem 0;
-  padding-right: 0.85rem;
-  margin: 0;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   cursor: default;
+  color: ${({ theme }) => theme.workoutLogText};
+  padding: 0.75rem 1.25rem;
+  border-bottom: 0.1px solid lightgray;
 `;
 const Exercise = styled.div`
   padding: 0.85rem 0;
+  border-bottom: 0.1px solid lightgray;
 `;
 const ExerciseName = styled.div`
   font-weight: bold;
@@ -47,12 +51,23 @@ const ExerciseName = styled.div`
 const StyledModal = styled(Modal)`
   background: ${({ theme }) => theme.body};
   position: absolute;
-  inset: 40px;
-  border: 1px solid rgb(204, 204, 204);
+  // inset: 20px;
+  inset: 0px;
+  // border: 1px solid rgb(204, 204, 204);
   overflow: auto;
   border-radius: 4px;
   outline: none;
   padding: 20px;
+  padding-top: 3rem;
+`;
+const CloseButton = styled.div`
+  color: #60a5fa;
+  font-size: 2rem;
+  position: absolute;
+  right: 0;
+  padding-right: 1rem;
+  top: 0;
+  padding-top: 1rem;
 `;
 
 export default function Log() {
@@ -63,7 +78,6 @@ export default function Log() {
   // Setting our state
   const [workout, setWorkout] = useState([]);
   const [workoutDate, setWorkoutDate] = useState("");
-  const [workoutID, setWorkoutID] = useState("");
   const [modalDataExercises, setModalDataExercises] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalData, setModalData] = useState("");
@@ -82,11 +96,11 @@ export default function Log() {
       });
       const body = await res.json();
       const workouts = body.workouts;
+      workouts.reverse();
       setSpinLoading(false);
       setWorkout(workouts);
       setWorkoutCount(workouts.length);
     }
-
     doFetch();
   }, []);
 
@@ -101,6 +115,7 @@ export default function Log() {
       });
       const body = await res.json();
       const workouts = body.workouts;
+      workouts.reverse();
       setSpinLoading(false);
       setWorkout(workouts);
       setWorkoutCount(workouts.length);
@@ -154,15 +169,17 @@ export default function Log() {
     });
   };
 
+  const intl = new Intl.DateTimeFormat("en-AU", {});
+
   return (
-    <div className="container">
+    <PageWrapper>
       <Head>
-        <title>Log</title>
+        <title>Workout Tracker - Workout Log</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <NewWorkoutLink />
-      <PageTitle name="Log" />
+      <PageTitle name="Workout Tracker" />
 
       <main>
         <PastWorkoutDate
@@ -187,13 +204,24 @@ export default function Log() {
                         setModalDataExercises(workout.exercises);
                         setWorkoutDate(workout.workout_date);
                         router.push({
-                          query: { workoutId: workout.workout_id },
+                          query: { workoutId: workout.workout_date },
                         });
                       }}
                     >
                       <div>{workout.routine_name}</div>
-                      <div>
-                        {new Date(workout.workout_date).toLocaleString()}
+                      <div className="text-xs text-center opacity-50">
+                        <p className="font-bold">
+                          {new Intl.DateTimeFormat("en-AU", {
+                            weekday: "short",
+                          }).format(new Date(workout.workout_date))}
+                        </p>
+                        <p>
+                          {new Intl.DateTimeFormat("en-AU", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          }).format(new Date(workout.workout_date))}
+                        </p>
                       </div>
                     </Routine>
                   </>
@@ -201,8 +229,25 @@ export default function Log() {
               })}
 
               <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
-                <h1>{modalData}</h1>
+                <div>
+                  <CloseButton
+                    onClick={() => {
+                      setModalIsOpen(false);
+                      router.push({ query: null });
+                    }}
+                  >
+                    <AiOutlineClose />
+                  </CloseButton>
+                </div>
+                <h1 className="text-3xl font-bold pb-3">{modalData}</h1>
                 <h4>{new Date(workoutDate).toLocaleString()}</h4>
+                {/* <h4>
+                  {new Intl.DateTimeFormat("en-AU", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  }).format(new Date(workoutDate))}
+                </h4> */}
                 {modalDataExercises.map((exercise) => {
                   return (
                     <Exercise key={exercise.exercise_id}>
@@ -231,157 +276,6 @@ export default function Log() {
       </main>
 
       <IconNavBar />
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          // padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          max-width: 100%;
-        }
-
-        main {
-          // padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          padding-bottom: 7rem;
-          height: 100%;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          // background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        .container {
-          max-width: 100%;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+    </PageWrapper>
   );
 }

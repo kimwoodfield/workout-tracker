@@ -12,7 +12,7 @@ const IconButton = styled.button`
   height: 100%;
   width: 100%;
   background-color: ${({ theme }) => theme.navbar};
-  color: ${(props) => (props.active ? "#3ABED8;" : "grey")};
+  color: ${(props) => (props.active ? "#60A5FA" : "grey")};
   outline: none;
   border: none;
   font-size: 2.25rem;

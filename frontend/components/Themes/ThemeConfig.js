@@ -5,18 +5,20 @@ export const lightTheme = {
   text: "#363537",
   toggleBorder: "#FFF",
   background: "#363537",
-  navbar: "#eceaea",
-  pastWorkoutBar: "#ededed",
+  navbar: "#E5E7EB",
+  pastWorkoutBar: "#E5E7EB",
   modalBackground: "#363537",
 };
 
 export const darkTheme = {
-  body: "black",
+  body: "#111827",
   text: "#FAFAFA",
+  workoutLogText: "#FFFFFF",
+  workoutLogDivider: "#FFFFFF",
   toggleBorder: "#6B8096",
   background: "#999",
-  navbar: "#444444",
-  pastWorkoutBar: "#444444",
+  navbar: "#4B5563",
+  pastWorkoutBar: "#4B5563",
   modalBackground: "rgb(59 58 58)",
 };
 
@@ -24,7 +26,7 @@ export const GlobalStyles = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    font-family: Tahoma, Helvetica, Arial, Roboto, sans-serif;
+    font-family: Roboto, Helvetica, Arial, Roboto, sans-serif;
     transition: all 0.50s linear;
   },
 `;

@@ -16,7 +16,7 @@ const Settings = <IoSettingsOutline />;
 
 const BottomNavBar = styled.div`
   background-color: ${({ theme }) => theme.navbar};
-  height: 7rem;
+  height: 6rem;
   width: 100vw;
   box-sizing: border-box;
   display: flex;

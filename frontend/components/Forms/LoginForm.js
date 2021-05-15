@@ -136,8 +136,10 @@ export default function LoginForm() {
 
       <button
         type="submit"
-        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold"
-      >Login</button>
+        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+      >
+        Login
+      </button>
     </form>
   );
 }

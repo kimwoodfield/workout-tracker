@@ -7,7 +7,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 const ButtonWrap = styled.span`
   padding: 0;
   margin: 0;
-  color: #3abed8;
+  color: #60a5fa;
   width: auto;
   font-size: 1.75rem;
 `;
