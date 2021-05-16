@@ -10,6 +10,12 @@ const ButtonWrap = styled.span`
   color: #60a5fa;
   width: auto;
   font-size: 1.75rem;
+  transition: transform 250ms;
+  transition-timing-function: linear;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 export default function AddButton(props) {

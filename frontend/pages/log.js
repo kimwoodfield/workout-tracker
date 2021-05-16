@@ -40,10 +40,18 @@ const Routine = styled.div`
   color: ${({ theme }) => theme.workoutLogText};
   padding: 0.75rem 1.25rem;
   border-bottom: 0.1px solid lightgray;
+  transition: background-color 250ms;
+  transition-timing-function: linear;
+
+  &:hover {
+    background-color: #60a5fa;
+    color: #FFFFFF;
+  }
 `;
 const Exercise = styled.div`
   padding: 0.85rem 0;
   border-bottom: 0.1px solid lightgray;
+  border-top: 0.1px solid lightgray;
 `;
 const ExerciseName = styled.div`
   font-weight: bold;
@@ -55,7 +63,7 @@ const StyledModal = styled(Modal)`
   inset: 0px;
   // border: 1px solid rgb(204, 204, 204);
   overflow: auto;
-  border-radius: 4px;
+  // border-radius: 4px;
   outline: none;
   padding: 20px;
   padding-top: 3rem;
@@ -68,6 +76,13 @@ const CloseButton = styled.div`
   padding-right: 1rem;
   top: 0;
   padding-top: 1rem;
+  cursor: pointer;
+  transition: transform 250ms;
+  transition-timing-function: linear;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 export default function Log() {
@@ -179,7 +194,7 @@ export default function Log() {
       </Head>
 
       <NewWorkoutLink />
-      <PageTitle name="Workout Tracker" />
+      <PageTitle name="Workout Log" />
 
       <main>
         <PastWorkoutDate
@@ -210,9 +225,9 @@ export default function Log() {
                     >
                       <div>{workout.routine_name}</div>
                       <div className="text-xs text-center opacity-50">
-                        <p className="font-bold">
+                        <p className="font-bold  text-right">
                           {new Intl.DateTimeFormat("en-AU", {
-                            weekday: "short",
+                            weekday: "long",
                           }).format(new Date(workout.workout_date))}
                         </p>
                         <p>
@@ -240,15 +255,28 @@ export default function Log() {
                   </CloseButton>
                 </div>
                 <h1 className="text-3xl font-bold pb-3">{modalData}</h1>
-                <h4>{new Date(workoutDate).toLocaleString()}</h4>
-                {console.log(workoutDate)}
-                {/* <h4>
-                  {new Intl.DateTimeFormat("en-AU", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  }).format(new Date(workoutDate))}
-                </h4> */}
+                {
+                  workoutDate && (
+                    <h4>
+                      { new Intl.DateTimeFormat('en-AU', {
+                      weekday: 'long',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                    }).format(new Date(workoutDate)) }
+                    </h4>
+                  )
+                }
+                {
+                  workoutDate && (
+                    <h4 className="pb-4">
+                      { new Intl.DateTimeFormat('en-AU', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    }).format(new Date(workoutDate)) }
+                    </h4>
+                  )
+                }
                 {modalDataExercises.map((exercise) => {
                   return (
                     <Exercise key={exercise.exercise_id}>
@@ -261,15 +289,14 @@ export default function Log() {
                 })}
                 <div>
                   <button
-                    onClick={() => {
-                      setModalIsOpen(false);
-                      router.push({ query: null });
-                    }}
-                  >
-                    Close
-                  </button>
-                  <button onClick={prompt}>Delete</button>
+                  type="submit"
+                  className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+                  onClick={prompt}
+                >
+                  Delete
+                </button>
                 </div>
+
               </StyledModal>
             </>
           )}
