@@ -25,7 +25,7 @@ const RoutinesContainer = styled.div`
 `;
 const SpinnerContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: 50vh;
   display: flex;
   flex-grow: 1;
   justify-content: center;
@@ -59,11 +59,8 @@ const ExerciseName = styled.div`
 const StyledModal = styled(Modal)`
   background: ${({ theme }) => theme.body};
   position: absolute;
-  // inset: 20px;
   inset: 0px;
-  // border: 1px solid rgb(204, 204, 204);
   overflow: auto;
-  // border-radius: 4px;
   outline: none;
   padding: 20px;
   padding-top: 3rem;
@@ -293,7 +290,7 @@ export default function Log() {
                   className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
                   onClick={prompt}
                 >
-                  Delete
+                  Delete Workout
                 </button>
                 </div>
 

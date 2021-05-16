@@ -22,7 +22,7 @@ const Padding = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   align-items: center;
   color: grey;
 
@@ -32,16 +32,18 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  background-color: white;
+  // border: 1px solid lightgray;
+  // border-radius: 5px;
+  background-color: ${({ theme }) => theme.navbar};
+  color: ${({ theme }) => theme.text};
   font-size: 1.15em;
   height: 2.75rem;
-  width: 90%;
+  width: 100%;
   box-sizing: border-box;
   padding: 0;
   text-align: left;
   padding-left: 0.75rem;
+  // margin: 0.25rem 0;
 
   &:nth-of-type(1) {
     border-bottom: none;
@@ -194,19 +196,41 @@ export default function Settings() {
       <PageTitle name="Settings" />
 
       <ButtonContainer>
-        <Button onClick={darkmode.toggle}>Switch Mode</Button>
-        <Button>Send feedback</Button>
-        {
+        <button
+        type="submit"
+        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+        onClick={darkmode.toggle}
+      >
+        Switch Mode
+      </button>
+      <button
+        type="submit"
+        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+      >
+        Send Feedback
+      </button>
+      {
           // If a userType of "Admin" has not been set, the user cannot access this button.
           isAdmin ? (
             <Link href="/admin">
-              <Button>Admin Panel</Button>
+              <button
+                type="submit"
+                className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+              >
+                Admin Panel
+              </button>
             </Link>
           ) : (
             <></>
           )
         }
-        <Button onClick={prompt}>Logout</Button>
+        <button
+          type="submit"
+          className="rounded-md text-white my-1 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+          onClick={prompt}
+        >
+          Logout
+        </button>
       </ButtonContainer>
 
       <main>

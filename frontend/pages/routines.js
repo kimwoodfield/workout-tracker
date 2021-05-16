@@ -8,6 +8,13 @@ import { useRouter } from "next/router";
 import Modal from "react-modal";
 import { AiOutlinePlus } from "react-icons/ai";
 import Spinner from "../components/Common/Spinner";
+import { AiOutlineClose } from "react-icons/ai";
+import { useAlert } from "react-alert";
+import { confirmAlert } from "react-confirm-alert";
+
+const PageWrapper = styled.div`
+  font-family: Roboto, sans-serif;
+`;
 
 const RoutinesContainer = styled.div`
   // border: 1px dashed blue;
@@ -33,15 +40,45 @@ const SpinnerContainer = styled.div`
   align-items: center;
 `;
 const StyledModal = styled(Modal)`
-  background: ${({ theme }) => theme.body};
-  position: absolute;
-  inset: 40px;
-  border: 1px solid rgb(204, 204, 204);
-  overflow: auto;
-  border-radius: 4px;
-  outline: none;
-  padding: 20px;
+background: ${({ theme }) => theme.body};
+position: absolute;
+// inset: 20px;
+inset: 0px;
+// border: 1px solid rgb(204, 204, 204);
+overflow: auto;
+// border-radius: 4px;
+outline: none;
+padding: 20px;
+padding-top: 3rem;
 `;
+
+const CloseButton = styled.div`
+  color: #60a5fa;
+  font-size: 2rem;
+  position: absolute;
+  right: 0;
+  padding-right: 1rem;
+  top: 0;
+  padding-top: 1rem;
+  cursor: pointer;
+  transition: transform 250ms;
+  transition-timing-function: linear;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const ExerciseLinkSpace = styled.div`
+// border: 1px dashed black;
+height: 4rem;
+width: 100%;
+display: flex;
+justify-content: flex-end;
+padding-right: 0.75rem;
+padding-top: 1rem;
+box-sizing: border-box;
+`
 
 export default function Routines() {
   // Setting our state
@@ -51,6 +88,46 @@ export default function Routines() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalData, setModalData] = useState("");
   const [spinLoading, setSpinLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const alert = useAlert();
+
+  const adminCheck = () => {
+    fetch("http://localhost:3000/isAdmin", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    })
+      .then((res) => {
+        console.log(res.status);
+        switch (res.status) {
+          case 400:
+            console.log("400 error");
+            setIsAdmin(false);
+            break;
+          case 403:
+            console.log("403 error");
+            setIsAdmin(false);
+            break;
+          case 500:
+            console.log("500 error");
+            setIsAdmin(false);
+            break;
+          case 200:
+            setIsAdmin(true);
+            console.log("the response code was ", res.status);
+            console.log(res.status.msg);
+            break;
+        }
+      })
+      .catch((err) => {
+        console.log("fetch failed");
+        console.log(err);
+      });
+  };
+  adminCheck();
 
   // Make the call to our api
   useEffect(() => {
@@ -69,7 +146,9 @@ export default function Routines() {
       }
       setSpinLoading(false);
       const body = await res.json();
+      console.log(body);
       let routineList = body.routineList;
+      console.log('this is routineList ', routineList);
 
       setRoutine(routineList);
     }
@@ -77,14 +156,88 @@ export default function Routines() {
     doFetch();
   }, []);
 
+  const updatedRoutines = () => {
+    async function doFetch() {
+      const res = await fetch("http://localhost:3000/routines", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      setSpinLoading(false);
+      const body = await res.json();
+      console.log(body);
+      let routineList = body.routineList;
+      console.log('this is routineList ', routineList);
+
+      setRoutine(routineList);
+    }
+    doFetch();
+  };
+
+  const deleteEntry = () => {
+    let urlValue = router.query; // { id: 34 }
+    let currentWorkoutID = urlValue.routineId; // 34
+    fetch("http://localhost:3000/routines/" + currentWorkoutID, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((res) => {
+      switch (res.status) {
+        case 400:
+          console.log("This is a 400 error.");
+          break;
+        case 429:
+          console.log("This is a 429 error. Rate limit exceeded");
+          break;
+        case 201:
+          res.json().then((data) => {
+            // request sent
+            console.log("this worked");
+            alert.show("Entry deleted!");
+            setModalIsOpen(false);
+            updatedRoutines();
+          });
+      }
+    });
+  };
+
+  const prompt = () => {
+    confirmAlert({
+      title: "Are you sure?",
+      message: "Are you sure you want to delete this routine?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => deleteEntry(),
+        },
+        {
+          label: "No",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+
   return (
-    <div className="container">
+    <PageWrapper>
       <Head>
         <title>Routines</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NewRoutineLink />
+      {
+        // If a userType of "Admin" has not been set, the user cannot access this button.
+        isAdmin ? (
+          <NewRoutineLink />
+        ) : (
+          <ExerciseLinkSpace />
+        )
+      }
+
       <PageTitle name="Routines" />
 
       <main>
@@ -104,6 +257,9 @@ export default function Routines() {
                         setModalIsOpen(true);
                         setModalData(routine.routine_name);
                         setModalDataExercises(routine.routine_exercises);
+                        router.push({
+                          query: { routineId: routine.routine_id },
+                        });
                       }}
                     >
                       {routine.routine_name}
@@ -112,13 +268,46 @@ export default function Routines() {
                 );
               })}
               <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
-                <h1>{modalData}</h1>
-                {modalDataExercises.map((exercise, idx) => {
-                  return <p key={idx}>{exercise}</p>;
-                })}
                 <div>
-                  <button onClick={() => setModalIsOpen(false)}>Close</button>
+                  <CloseButton
+                    onClick={() => {
+                      setModalIsOpen(false);
+                      router.push({ query: null });
+                    }}
+                  >
+                    <AiOutlineClose />
+                  </CloseButton>
                 </div>
+                <h1 className="text-3xl font-bold pb-3 border-b-2 mb-4">{modalData}</h1>
+                {modalDataExercises.map((exercise, idx) => {
+                  return <p key={idx} className="py-2"><span className="font-bold">Exercise {idx + 1}.</span> <span className="pl-3">{exercise}</span></p>;
+                })}
+                      {
+                  // If a userType of "Admin" has not been set, the user cannot access this button.
+                  isAdmin ? (
+                    <>
+                      <div className="border-t-2 mt-4">
+                      {/* <button
+                        type="submit"
+                        className="rounded-md text-white my-3 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+                        onClick={prompt}
+                      >
+                        Edit
+                      </button> */}
+                        <button
+                        type="submit"
+                        className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+                        onClick={prompt}
+                      >
+                        Delete Routine
+                      </button>
+                    </div>
+                  </>
+                  ) : (
+                    <ExerciseLinkSpace />
+                  )
+                }
+
               </StyledModal>
             </>
           )}
@@ -127,154 +316,7 @@ export default function Routines() {
 
       <IconNavBar />
 
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          //   padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          max-width: 100%;  
-        }
 
-        main {
-          // padding: 5rem 0;
-          // padding-bottom: 5rem;
-          // border: 1px solid red;
-          width: 100%;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          // justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+    </PageWrapper>
   );
 }
