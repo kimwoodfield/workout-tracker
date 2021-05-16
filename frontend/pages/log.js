@@ -241,6 +241,7 @@ export default function Log() {
                 </div>
                 <h1 className="text-3xl font-bold pb-3">{modalData}</h1>
                 <h4>{new Date(workoutDate).toLocaleString()}</h4>
+                {console.log(workoutDate)}
                 {/* <h4>
                   {new Intl.DateTimeFormat("en-AU", {
                     day: "numeric",
