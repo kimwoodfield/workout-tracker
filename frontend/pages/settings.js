@@ -86,10 +86,9 @@ export default function Settings() {
             console.log("403 error");
             router.push("/");
             break;
-          case 201:
+          case 200:
             console.log("the response code was ", res.status);
-            console.log(res.status.msg);
-            router.push("/");
+            console.log(res.status);
             break;
         }
       })
@@ -197,19 +196,19 @@ export default function Settings() {
 
       <ButtonContainer>
         <button
-        type="submit"
-        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
-        onClick={darkmode.toggle}
-      >
-        Switch Mode
-      </button>
-      <button
-        type="submit"
-        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
-      >
-        Send Feedback
-      </button>
-      {
+          type="submit"
+          className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+          onClick={darkmode.toggle}
+        >
+          Switch Mode
+        </button>
+        <button
+          type="submit"
+          className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+        >
+          Send Feedback
+        </button>
+        {
           // If a userType of "Admin" has not been set, the user cannot access this button.
           isAdmin ? (
             <Link href="/admin">
