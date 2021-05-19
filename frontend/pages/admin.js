@@ -9,6 +9,7 @@ import Spinner from "../components/Common/Spinner";
 import { ImBin } from "react-icons/im";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { config } from "../components/Constants/Constants";
 
 const EmptyPage = styled.div`
   display: flex;
@@ -36,7 +37,7 @@ export default function Admin() {
   const [displayUsers, setDisplayUsers] = useState(false);
 
   const adminCheck = () => {
-    fetch("http://localhost:3000/isAdmin", {
+    fetch(config.url.API_ISADMIN, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +73,7 @@ export default function Admin() {
 
   const fetchUsers = async () => {
     console.log("before the fetch");
-    const res = await fetch("http://localhost:3000/users", {
+    const res = await fetch(config.url.API_USERS, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -110,7 +111,7 @@ export default function Admin() {
 
   const deleteUser = (username) => {
     async function doDelete() {
-      const res = await fetch("http://localhost:3000/users", {
+      const res = await fetch(config.url.API_USERS, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -134,7 +135,7 @@ export default function Admin() {
   const changeRole = (username) => {
     console.log("before the PATCH fetch");
     async function doChangeRole() {
-      const res = await fetch("http://localhost:3000/users", {
+      const res = await fetch(config.url.API_USERS, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

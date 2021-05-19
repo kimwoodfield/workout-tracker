@@ -31,7 +31,7 @@ export default function Routine() {
   const onSubmit = (data) => {
     // If the input data is valid -
     // Make a POST request to our api route with the input data
-    fetch("http://localhost:3000/exercises", {
+    fetch(API_EXERCISES, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

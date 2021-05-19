@@ -11,6 +11,7 @@ import Spinner from "../components/Common/Spinner";
 import { AiOutlineClose } from "react-icons/ai";
 import { useAlert } from "react-alert";
 import { confirmAlert } from "react-confirm-alert";
+import { config } from "../components/Constants/Constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;
@@ -40,16 +41,16 @@ const SpinnerContainer = styled.div`
   align-items: center;
 `;
 const StyledModal = styled(Modal)`
-background: ${({ theme }) => theme.body};
-position: absolute;
-// inset: 20px;
-inset: 0px;
-// border: 1px solid rgb(204, 204, 204);
-overflow: auto;
-// border-radius: 4px;
-outline: none;
-padding: 20px;
-padding-top: 3rem;
+  background: ${({ theme }) => theme.body};
+  position: absolute;
+  // inset: 20px;
+  inset: 0px;
+  // border: 1px solid rgb(204, 204, 204);
+  overflow: auto;
+  // border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  padding-top: 3rem;
 `;
 
 const CloseButton = styled.div`
@@ -70,15 +71,15 @@ const CloseButton = styled.div`
 `;
 
 const ExerciseLinkSpace = styled.div`
-// border: 1px dashed black;
-height: 4rem;
-width: 100%;
-display: flex;
-justify-content: flex-end;
-padding-right: 0.75rem;
-padding-top: 1rem;
-box-sizing: border-box;
-`
+  // border: 1px dashed black;
+  height: 4rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0.75rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
+`;
 
 export default function Routines() {
   // Setting our state
@@ -93,7 +94,7 @@ export default function Routines() {
   const alert = useAlert();
 
   const adminCheck = () => {
-    fetch("http://localhost:3000/isAdmin", {
+    fetch(config.url.API_ISADMIN, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -132,7 +133,7 @@ export default function Routines() {
   // Make the call to our api
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/routineExercise", {
+      const res = await fetch(config.url.API_ROUTINEEXERCISE, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +149,7 @@ export default function Routines() {
       const body = await res.json();
       console.log(body);
       let routineList = body.routineList;
-      console.log('this is routineList ', routineList);
+      console.log("this is routineList ", routineList);
 
       setRoutine(routineList);
     }
@@ -158,7 +159,7 @@ export default function Routines() {
 
   const updatedRoutines = () => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/routines", {
+      const res = await fetch(config.url.API_ROUTINES, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -169,7 +170,7 @@ export default function Routines() {
       const body = await res.json();
       console.log(body);
       let routineList = body.routineList;
-      console.log('this is routineList ', routineList);
+      console.log("this is routineList ", routineList);
 
       setRoutine(routineList);
     }
@@ -179,7 +180,7 @@ export default function Routines() {
   const deleteEntry = () => {
     let urlValue = router.query; // { id: 34 }
     let currentWorkoutID = urlValue.routineId; // 34
-    fetch("http://localhost:3000/routines/" + currentWorkoutID, {
+    fetch(config.url.API_ROUTINES + "/" + currentWorkoutID, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -231,11 +232,7 @@ export default function Routines() {
 
       {
         // If a userType of "Admin" has not been set, the user cannot access this button.
-        isAdmin ? (
-          <NewRoutineLink />
-        ) : (
-          <ExerciseLinkSpace />
-        )
+        isAdmin ? <NewRoutineLink /> : <ExerciseLinkSpace />
       }
 
       <PageTitle name="Routines" />
@@ -278,16 +275,23 @@ export default function Routines() {
                     <AiOutlineClose />
                   </CloseButton>
                 </div>
-                <h1 className="text-3xl font-bold pb-3 border-b-2 mb-4">{modalData}</h1>
+                <h1 className="text-3xl font-bold pb-3 border-b-2 mb-4">
+                  {modalData}
+                </h1>
                 {modalDataExercises.map((exercise, idx) => {
-                  return <p key={idx} className="py-2"><span className="font-bold">Exercise {idx + 1}.</span> <span className="pl-3">{exercise}</span></p>;
+                  return (
+                    <p key={idx} className="py-2">
+                      <span className="font-bold">Exercise {idx + 1}.</span>{" "}
+                      <span className="pl-3">{exercise}</span>
+                    </p>
+                  );
                 })}
-                      {
+                {
                   // If a userType of "Admin" has not been set, the user cannot access this button.
                   isAdmin ? (
                     <>
                       <div className="border-t-2 mt-4">
-                      {/* <button
+                        {/* <button
                         type="submit"
                         className="rounded-md text-white my-3 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
                         onClick={prompt}
@@ -295,19 +299,18 @@ export default function Routines() {
                         Edit
                       </button> */}
                         <button
-                        type="submit"
-                        className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
-                        onClick={prompt}
-                      >
-                        Delete Routine
-                      </button>
-                    </div>
-                  </>
+                          type="submit"
+                          className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+                          onClick={prompt}
+                        >
+                          Delete Routine
+                        </button>
+                      </div>
+                    </>
                   ) : (
                     <ExerciseLinkSpace />
                   )
                 }
-
               </StyledModal>
             </>
           )}
@@ -315,8 +318,6 @@ export default function Routines() {
       </main>
 
       <IconNavBar />
-
-
     </PageWrapper>
   );
 }

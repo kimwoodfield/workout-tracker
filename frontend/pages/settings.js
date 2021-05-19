@@ -14,6 +14,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { config } from "../components/Constants/Constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;
@@ -71,7 +72,7 @@ export default function Settings() {
   const router = useRouter();
 
   const isAuthenticated = () => {
-    fetch("http://localhost:3000/log", {
+    fetch(config.url.API_LOG, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +102,7 @@ export default function Settings() {
   isAuthenticated();
 
   const adminCheck = () => {
-    fetch("http://localhost:3000/isAdmin", {
+    fetch(config.url.API_ISADMIN, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -139,7 +140,7 @@ export default function Settings() {
 
   const Logout = () => {
     console.log("function fired");
-    fetch("http://localhost:3000/logout", {
+    fetch(config.url.API_LOGOUT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

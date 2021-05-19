@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import ErrorMessage from "../Common/ErrorMessage";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
+import { config } from "../Constants/Constants";
 
 const Form = styled.form`
   display: flex;
@@ -43,7 +44,7 @@ export default function ChooseRoutineForm() {
   const onSubmit = (data) => {
     // If the input data is valid -
     // Make a POST request to our api route with the input data
-    fetch("http://localhost:3000/workout", {
+    fetch(config.url.API_WORKOUT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,8 +77,8 @@ export default function ChooseRoutineForm() {
 
   useEffect(() => {
     async function doFetch() {
-      let url = "http://localhost:3000/routines";
-      const res = await fetch("http://localhost:3000/routines", {
+      let url = API_ROUTINES;
+      const res = await fetch(config.url.API_ROUTINES, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

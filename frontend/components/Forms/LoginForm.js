@@ -1,34 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
-import { Router, useRouter } from "next/router";
-
-const Button = styled.input`
-  width: 100%;
-  height: 35px;
-  background-color: #3abed8;
-  color: white;
-  font-weight: bold;
-  font-size: 1rem;
-  border: none;
-  letter-spacing: 0.9px;
-  margin: 4px 0;
-  cursor: pointer;
-`;
-
-const Input = styled.input`
-  color: #212121;
-  background-color: white;
-  font-size: 0.9rem;
-  padding: 0 0 0 0.85rem;
-  width: 90%;
-  outline: none;
-  border: none;
-
-  &::placeholder {
-    color: #bdbdbd;
-  }
-`;
+import { useRouter } from "next/router";
+import { config } from "../Constants/Constants";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -43,7 +16,7 @@ export default function LoginForm() {
     console.log(data);
     let username = data.username;
     let password = data.password;
-    fetch("http://localhost:3000/login", {
+    fetch(config.url.API_LOGIN, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

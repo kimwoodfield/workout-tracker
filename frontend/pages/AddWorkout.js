@@ -7,7 +7,7 @@ import TextButton from "../components/Common/TextButton";
 import React, { useState, useEffect } from "react";
 import ChooseRoutineForm from "../components/Forms/ChooseRoutineForm";
 import BackButton from "../components/Common/BackButton";
-
+import { config } from "../Constants/Constants";
 
 const Details = styled.section`
   width: 100%;
@@ -27,7 +27,7 @@ const Padding = styled.div`
 export default function AddWorkout() {
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/routines", {
+      const res = await fetch(config.url.API_ROUTINES, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

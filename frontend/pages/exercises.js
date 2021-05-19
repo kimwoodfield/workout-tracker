@@ -9,6 +9,7 @@ import Spinner from "../components/Common/Spinner";
 import { TiDelete } from "react-icons/ti";
 import { confirmAlert } from "react-confirm-alert";
 import { useAlert } from "react-alert";
+import { config } from "../components/Constants/Constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;
@@ -37,7 +38,7 @@ const Exercise = styled.div`
   align-items: center;
   justify-content: space-between;
   border-bottom: 0.5px solid lightgray;
-`
+`;
 
 const ExerciseName = styled.p`
   font-size: 1.15rem;
@@ -46,15 +47,15 @@ const ExerciseName = styled.p`
 `;
 
 const ExerciseLinkSpace = styled.div`
-// border: 1px dashed black;
-height: 4rem;
-width: 100%;
-display: flex;
-justify-content: flex-end;
-padding-right: 0.75rem;
-padding-top: 1rem;
-box-sizing: border-box;
-`
+  // border: 1px dashed black;
+  height: 4rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0.75rem;
+  padding-top: 1rem;
+  box-sizing: border-box;
+`;
 
 export default function Exercises() {
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function Exercises() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const adminCheck = () => {
-    fetch("http://localhost:3000/isAdmin", {
+    fetch(config.url.API_ISADMIN, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +105,7 @@ export default function Exercises() {
 
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/exercises", {
+      const res = await fetch(config.url.API_EXERCISES, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -124,17 +125,16 @@ export default function Exercises() {
     doFetch();
   }, []);
 
-  useEffect(()=>{
-    if(!router.isReady) return;
+  useEffect(() => {
+    if (!router.isReady) return;
 
     // codes using router.query
-    console.log('inside router is ready hook ',router.query);
-
-}, [router.isReady]);
+    console.log("inside router is ready hook ", router.query);
+  }, [router.isReady]);
 
   const deleteEntry = (id) => {
     let currentExerciseID = id; // 34
-    fetch("http://localhost:3000/exercises/" + id, {
+    fetch(config.url.API_EXERCISES + "/" + id, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -170,7 +170,7 @@ export default function Exercises() {
         },
         {
           label: "No",
-          onClick: () => router.push({ query: null })
+          onClick: () => router.push({ query: null }),
         },
       ],
     });
@@ -178,7 +178,7 @@ export default function Exercises() {
 
   const updatedExercises = () => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/exercises", {
+      const res = await fetch(config.url.API_EXERCISES, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -202,15 +202,10 @@ export default function Exercises() {
 
       {
         // If a userType of "Admin" has not been set, the user cannot access this button.
-        isAdmin ? (
-          <NewExerciseLink />
-        ) : (
-          <ExerciseLinkSpace />
-        )
+        isAdmin ? <NewExerciseLink /> : <ExerciseLinkSpace />
       }
 
       <PageTitle name="Exercises" />
-
 
       <ExercisesContainer>
         {spinLoading ? (
@@ -221,19 +216,25 @@ export default function Exercises() {
           <>
             {exercise.map((exercise, idx) => {
               return (
-              <Exercise>
-                <ExerciseName key={idx}>{exercise.exercise_name}</ExerciseName>
-                {
-                  // If a userType of "Admin" has not been set, the user cannot access this button.
-                  isAdmin ? (
-                    <span className="pr-4 text-2xl text-red-500" onClick={() => prompt(exercise.id)}>
-                    <TiDelete />
-                  </span>
-                  ) : (
-                    <></>
-                  )
-                }
-              </Exercise> )
+                <Exercise>
+                  <ExerciseName key={idx}>
+                    {exercise.exercise_name}
+                  </ExerciseName>
+                  {
+                    // If a userType of "Admin" has not been set, the user cannot access this button.
+                    isAdmin ? (
+                      <span
+                        className="pr-4 text-2xl text-red-500"
+                        onClick={() => prompt(exercise.id)}
+                      >
+                        <TiDelete />
+                      </span>
+                    ) : (
+                      <></>
+                    )
+                  }
+                </Exercise>
+              );
             })}
           </>
         )}

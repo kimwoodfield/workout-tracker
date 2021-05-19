@@ -12,6 +12,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useAlert } from "react-alert";
 import Spinner from "../components/Common/Spinner";
 import { AiOutlineClose } from "react-icons/ai";
+import { config } from "../components/Constants/Constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;
@@ -45,7 +46,7 @@ const Routine = styled.div`
 
   &:hover {
     background-color: #60a5fa;
-    color: #FFFFFF;
+    color: #ffffff;
   }
 `;
 const Exercise = styled.div`
@@ -99,7 +100,7 @@ export default function Log() {
   // Make the call to our api
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/workout", {
+      const res = await fetch(config.url.API_WORKOUT, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +119,7 @@ export default function Log() {
 
   const updatedWorkouts = () => {
     async function doFetch() {
-      const res = await fetch("http://localhost:3000/workout", {
+      const res = await fetch(config.url.API_WORKOUT, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -138,7 +139,7 @@ export default function Log() {
   const deleteEntry = () => {
     let urlValue = router.query; // { id: 34 }
     let currentWorkoutID = urlValue.workoutId; // 34
-    fetch("http://localhost:3000/workout/" + currentWorkoutID, {
+    fetch(config.url.API_WORKOUT + "/" + currentWorkoutID, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -252,28 +253,24 @@ export default function Log() {
                   </CloseButton>
                 </div>
                 <h1 className="text-3xl font-bold pb-3">{modalData}</h1>
-                {
-                  workoutDate && (
-                    <h4>
-                      { new Intl.DateTimeFormat('en-AU', {
-                      weekday: 'long',
-                      hour: 'numeric',
-                      minute: 'numeric',
-                    }).format(new Date(workoutDate)) }
-                    </h4>
-                  )
-                }
-                {
-                  workoutDate && (
-                    <h4 className="pb-4">
-                      { new Intl.DateTimeFormat('en-AU', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    }).format(new Date(workoutDate)) }
-                    </h4>
-                  )
-                }
+                {workoutDate && (
+                  <h4>
+                    {new Intl.DateTimeFormat("en-AU", {
+                      weekday: "long",
+                      hour: "numeric",
+                      minute: "numeric",
+                    }).format(new Date(workoutDate))}
+                  </h4>
+                )}
+                {workoutDate && (
+                  <h4 className="pb-4">
+                    {new Intl.DateTimeFormat("en-AU", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    }).format(new Date(workoutDate))}
+                  </h4>
+                )}
                 {modalDataExercises.map((exercise) => {
                   return (
                     <Exercise key={exercise.exercise_id}>
@@ -286,14 +283,13 @@ export default function Log() {
                 })}
                 <div>
                   <button
-                  type="submit"
-                  className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
-                  onClick={prompt}
-                >
-                  Delete Workout
-                </button>
+                    type="submit"
+                    className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+                    onClick={prompt}
+                  >
+                    Delete Workout
+                  </button>
                 </div>
-
               </StyledModal>
             </>
           )}

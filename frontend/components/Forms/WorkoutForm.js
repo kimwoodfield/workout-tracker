@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
+import { config } from "../Constants/Constants";
 
 const Form = styled.form`
   display: flex;
@@ -36,7 +37,7 @@ export default function WorkoutForm() {
   let currentWorkoutID = urlValue.id; // 34
 
   const onSubmit = (data) => {
-    fetch("http://localhost:3000/currentWorkout/" + currentWorkoutID, {
+    fetch(config.url.API_CURRENTWORKOUT + "/" + currentWorkoutID, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export default function WorkoutForm() {
   useEffect(() => {
     async function doFetch() {
       const res = await fetch(
-        "http://localhost:3000/currentWorkout/" + currentWorkoutID,
+        config.url.API_CURRENTWORKOUT + "/" + currentWorkoutID,
         {
           method: "GET",
           headers: {

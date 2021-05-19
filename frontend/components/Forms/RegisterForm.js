@@ -1,8 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { config } from "../Constants/Constants";
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const router = useRouter();
 
   const {
@@ -16,7 +17,7 @@ export default function LoginForm() {
     let password = data.password;
     let fullname = data.fullname;
     let email = data.email;
-    fetch("http://localhost:3000/register", {
+    fetch(config.url.API_REGISTER, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
