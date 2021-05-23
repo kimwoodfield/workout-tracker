@@ -2,7 +2,7 @@
 <p>The frontend for Workout Tracker. An app written in Next.js!</p>
 
 <h3>
-    <a href="https://github.com/kimwoodfield/workout-tracker-api">For the api</a>
+    <a href="https://github.com/kimwoodfield/workout-tracker-api">Click here to view the API</a>
 </h3>
 
 ## What is Workout Tracker?
