@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import ErrorMessage from "../Common/ErrorMessage";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
+import { config } from "../Common/constants";
 
 const Form = styled.form`
   display: flex;

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
-import { config } from "../Constants/Constants";
+import { config } from "../Common/constants";
 
 const Form = styled.form`
   display: flex;

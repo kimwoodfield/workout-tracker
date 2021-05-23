@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { config } from "../Constants/Constants";
+import { config } from "../Common/constants";
 
 export default function LoginForm() {
   const router = useRouter();

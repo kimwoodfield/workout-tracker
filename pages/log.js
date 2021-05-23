@@ -12,7 +12,7 @@ import "react-confirm-alert/src/react-confirm-alert.css";
 import { useAlert } from "react-alert";
 import Spinner from "../components/Common/Spinner";
 import { AiOutlineClose } from "react-icons/ai";
-import { config } from "../components/Constants/Constants";
+import { config } from "../components/Common/constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;

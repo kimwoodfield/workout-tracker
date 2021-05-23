@@ -11,7 +11,7 @@ import Spinner from "../components/Common/Spinner";
 import { AiOutlineClose } from "react-icons/ai";
 import { useAlert } from "react-alert";
 import { confirmAlert } from "react-confirm-alert";
-import { config } from "../components/Constants/Constants";
+import { config } from "../components/Common/constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;

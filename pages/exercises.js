@@ -9,7 +9,7 @@ import Spinner from "../components/Common/Spinner";
 import { TiDelete } from "react-icons/ti";
 import { confirmAlert } from "react-confirm-alert";
 import { useAlert } from "react-alert";
-import { config } from "../components/Constants/Constants";
+import { config } from "../components/Common/constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;

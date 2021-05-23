@@ -7,7 +7,7 @@ import TextButton from "../components/Common/TextButton";
 import React, { useState, useEffect } from "react";
 import ChooseRoutineForm from "../components/Forms/ChooseRoutineForm";
 import BackButton from "../components/Common/BackButton";
-import { config } from "../Constants/Constants";
+import { config } from "../components/Common/constants";
 
 const Details = styled.section`
   width: 100%;

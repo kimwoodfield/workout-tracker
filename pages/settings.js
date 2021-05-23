@@ -14,7 +14,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { config } from "../components/Constants/Constants";
+import { config } from "../components/Common/constants";
 
 const PageWrapper = styled.div`
   font-family: Roboto, sans-serif;

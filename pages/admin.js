@@ -9,7 +9,7 @@ import Spinner from "../components/Common/Spinner";
 import { ImBin } from "react-icons/im";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { config } from "../components/Constants/Constants";
+import { config } from "../components/Common/constants"
 
 const EmptyPage = styled.div`
   display: flex;
