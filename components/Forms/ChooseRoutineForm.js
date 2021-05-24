@@ -77,7 +77,6 @@ export default function ChooseRoutineForm() {
 
   useEffect(() => {
     async function doFetch() {
-      let url = API_ROUTINES;
       const res = await fetch(config.url.API_ROUTINES, {
         method: "GET",
         headers: {
@@ -89,7 +88,6 @@ export default function ChooseRoutineForm() {
       console.log("body is ...", body);
       setRoutines(body.routinesResults);
     }
-
     doFetch();
   }, []);
 
