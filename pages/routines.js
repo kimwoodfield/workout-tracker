@@ -245,8 +245,6 @@ export default function Routines() {
           ) : (
             <>
               {routine ? (
-                <></>
-              ) : (
                 <>
                 {routine.map((routine, idx) => {
                 return (
@@ -316,6 +314,8 @@ export default function Routines() {
                 }
               </StyledModal>
                 </>
+              ) : (
+                <></>
               )}
             </>
           )}
