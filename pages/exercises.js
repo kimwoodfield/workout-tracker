@@ -81,6 +81,11 @@ export default function Exercises() {
             console.log("400 error");
             setIsAdmin(false);
             break;
+          case 401:
+            console.log("401 error, user is unauthorized");
+            setIsAdmin(false);
+            router.push("/");
+            break;
           case 403:
             console.log("403 error");
             setIsAdmin(false);

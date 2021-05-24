@@ -85,6 +85,11 @@ export default function Settings() {
           case 400:
             console.log("400 error");
             break;
+          case 401:
+            console.log("401 error, user is unauthorized");
+            setIsAdmin(false);
+            router.push("/");
+            break;
           case 403:
             console.log("403 error");
             router.push("/");
