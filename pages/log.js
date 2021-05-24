@@ -100,25 +100,21 @@ export default function Log() {
   // Make the call to our api
   useEffect(() => {
     async function doFetch() {
-      try {
-        const res = await fetch(config.url.API_WORKOUT, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-        const body = await res.json();
-        console.log(body);
-        const workouts = body.workouts;
-        workouts.reverse();
-        setSpinLoading(false);
-        setWorkout(workouts);
-        setWorkoutCount(workouts.length);
-      }
-      catch(error) {
-        console.log(error);
-      }
+      const res = await fetch(config.url.API_WORKOUT, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const body = await res.json();
+      console.log(body);
+      const workouts = body.workouts;
+      console.log(workouts);
+      workouts.reverse();
+      setSpinLoading(false);
+      setWorkout(workouts);
+      setWorkoutCount(workouts.length);
     }
     doFetch();
   }, []);
@@ -144,6 +140,7 @@ export default function Log() {
 
   const deleteEntry = () => {
     let urlValue = router.query; // { id: 34 }
+    console.log('the query is ', router.query);
     let currentWorkoutID = urlValue.workoutId; // 34
     fetch(config.url.API_WORKOUT + "/" + currentWorkoutID, {
       method: "DELETE",
@@ -223,7 +220,7 @@ export default function Log() {
                         setModalDataExercises(workout.exercises);
                         setWorkoutDate(workout.workout_date);
                         router.push({
-                          query: { workoutId: workout.workout_date },
+                          query: { workoutId: workout.workout_id },
                         });
                       }}
                     >
