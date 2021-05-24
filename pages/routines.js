@@ -142,7 +142,6 @@ export default function Routines() {
       });
       if (res.status === 403) {
         console.log("403 error");
-        ``;
         router.push("/");
       }
       setSpinLoading(false);
@@ -245,7 +244,11 @@ export default function Routines() {
             </SpinnerContainer>
           ) : (
             <>
-              {routine.map((routine, idx) => {
+              {routine ? (
+                <></>
+              ) : (
+                <>
+                {routine.map((routine, idx) => {
                 return (
                   <>
                     <Routine
@@ -312,6 +315,8 @@ export default function Routines() {
                   )
                 }
               </StyledModal>
+                </>
+              )}
             </>
           )}
         </RoutinesContainer>
