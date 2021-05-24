@@ -46,10 +46,11 @@ export default function LoginForm() {
             break;
         }
       })
-      .catch((err) => {
+      .catch((error) => {
         // Fetch couldn't send the request.
         // 500 Error
         console.log("fetch failed");
+        console.log(error);
       });
   };
   console.log(errors);

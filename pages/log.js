@@ -109,6 +109,7 @@ export default function Log() {
           credentials: "include",
         });
         const body = await res.json();
+        console.log(body);
         const workouts = body.workouts;
         workouts.reverse();
         setSpinLoading(false);
