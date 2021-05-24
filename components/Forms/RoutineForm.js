@@ -3,7 +3,6 @@ import Input from "./FormInput";
 import SubmitBtn from "./SubmitBtn";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import ErrorMessage from "../Common/ErrorMessage";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
 import { config } from "../Common/constants";
@@ -33,7 +32,6 @@ export default function Routine() {
   // Handles the form submission
   const onSubmit = (data) => {
     // If the input data is valid -
-    // Make a POST request to our api route with the input data
     fetch(config.url.API_ROUTINES, {
       method: "POST",
       headers: {
@@ -62,7 +60,6 @@ export default function Routine() {
 
   useEffect(() => {
     async function doFetch() {
-      let url = API_EXERCISES;
       const res = await fetch(config.url.API_EXERCISES, {
         method: "GET",
         headers: {
