@@ -144,6 +144,10 @@ export default function Routines() {
         console.log("403 error");
         router.push("/");
       }
+      if (res.status === 204) {
+        let emptyResults = [];
+        setRoutine(emptyResults);
+      }
       setSpinLoading(false);
       const body = await res.json();
       console.log(body);
