@@ -100,19 +100,24 @@ export default function Log() {
   // Make the call to our api
   useEffect(() => {
     async function doFetch() {
-      const res = await fetch(config.url.API_WORKOUT, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const body = await res.json();
-      const workouts = body.workouts;
-      workouts.reverse();
-      setSpinLoading(false);
-      setWorkout(workouts);
-      setWorkoutCount(workouts.length);
+      try {
+        const res = await fetch(config.url.API_WORKOUT, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        const body = await res.json();
+        const workouts = body.workouts;
+        workouts.reverse();
+        setSpinLoading(false);
+        setWorkout(workouts);
+        setWorkoutCount(workouts.length);
+      }
+      catch(error) {
+        console.log(error);
+      }
     }
     doFetch();
   }, []);
