@@ -231,6 +231,14 @@ export default function Settings() {
             <></>
           )
         }
+        <Link href="/help">
+          <button
+            type="submit"
+            className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+          >
+            Need help?
+          </button>
+        </Link>
         <button
           type="submit"
           className="rounded-md text-white my-1 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
