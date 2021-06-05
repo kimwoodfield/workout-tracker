@@ -2,9 +2,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { config } from "../Common/constants";
+import { useState } from "react";
 
 export default function LoginForm() {
   const router = useRouter();
+
+  const [invalidUsername, setInvalidUsername] = useState("");
+  const [invalidPassword, setInvalidPassword] = useState("");
 
   const {
     register,
@@ -24,15 +28,20 @@ export default function LoginForm() {
       credentials: "include",
       body: JSON.stringify({ username: username, password: password }),
     })
+      .then((response) => response.json())
       .then((res) => {
+        console.log(res);
+
         switch (res.status) {
           case 400:
             console.log("400 works");
             setInvalidPass("There was an error. Please try again later.");
             break;
           case 401:
+            console.log("The issue is: ", res.issue);
             console.log("401 works");
-            setInvalidPass("Invalid username and password.");
+            let feedback = res.msg;
+            setInvalidPassword(feedback);
             break;
           case 429:
             console.log("429 error");
@@ -61,6 +70,7 @@ export default function LoginForm() {
         type="text"
         placeholder="Enter username..."
         name="username"
+        // onclick={setInvalidUsername("")}
         ref={register({
           required: "Username is required.",
           pattern: {
@@ -85,6 +95,7 @@ export default function LoginForm() {
       <input
         type="password"
         placeholder="Enter password..."
+        onClick={() => setInvalidPassword("")}
         name="password"
         ref={register({
           required: "Password is required.",
@@ -106,6 +117,8 @@ export default function LoginForm() {
       <br />
       <p className="text-red-500 mb-2">
         {errors.password ? errors.password.message : <></>}
+        {invalidPassword ? invalidPassword : <></>}
+        {console.log(invalidPassword)}
       </p>
 
       <button
