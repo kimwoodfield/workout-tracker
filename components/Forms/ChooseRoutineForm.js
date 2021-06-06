@@ -17,19 +17,17 @@ const Form = styled.form`
 
 const Group = styled.div`
   padding: 0.5rem 0;
-  margin: 0.5rem 0;
-  // border: 1px dashed grey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
-const Padding = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 0.85rem;
-  height: 4rem;
-  width: 100%;
-  // border: 1px dashed salmon;
-  box-sizing: border-box;
-`;
+const Select = styled.select`
+  border: 1px solid ${({ theme }) => theme.navbar};
+  height: 40px;
+  padding-left: 0.25rem;
+  color: gray;
+`
 
 export default function ChooseRoutineForm() {
   const router = useRouter();
@@ -94,15 +92,15 @@ export default function ChooseRoutineForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Group>
-        <label> Choose a routine : </label>
-        <select name="routine_name" id="exercise_type" ref={register}>
+        <label className="font-bold"> Choose a routine : </label><br />
+        <Select name="routine_name" id="exercise_type" ref={register}>
           <option selected="selected" disabled>
             Select a routine
           </option>
           {routines.map((routine, idx) => {
             return <option key={idx}>{routine.routine_name}</option>;
           })}
-        </select>
+        </Select>
       </Group>
 
       <SubmitBtn type="submit">Begin Workout</SubmitBtn>

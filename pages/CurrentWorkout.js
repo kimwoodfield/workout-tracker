@@ -8,8 +8,6 @@ import React, { useState, useEffect } from "react";
 
 const Container = styled.div`
   min-height: 100vh;
-  // background-color: #E0E0E0;
-  // padding: 0 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,9 +18,12 @@ const Padding = styled.div`
   padding: 0.75rem 0.85rem;
   height: 4rem;
   width: 100%;
-  // border: 1px dashed salmon;
   box-sizing: border-box;
 `;
+
+const WorkoutFormWrapper = styled.main`
+  width: 90%;
+`
 
 export default function CurrentWorkout() {
   const router = useRouter();
@@ -42,26 +43,9 @@ export default function CurrentWorkout() {
 
       <PageTitle name="Current Workout" />
 
-      <main>
+      <WorkoutFormWrapper>
         <WorkoutForm />
-      </main>
-
-      <style jsx global>{`
-        html,
-        body,
-        main {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-          width: 100%;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
+      </WorkoutFormWrapper>
     </Container>
   );
 }

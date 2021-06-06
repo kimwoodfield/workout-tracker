@@ -6,19 +6,49 @@ import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
 import { config } from "../Common/constants";
 
+
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
-  width: 90%;
+  // width: 90%;
   box-sizing: border-box;
-  border: 2px dashed salmon;
   margin: 0 auto;
   align-items: center;
 `;
 
+const HeaderInfo = styled.div`
+  background-color: ${({ theme }) => theme.navbar};
+  border-radius: 7px;
+  padding: 25px;
+  align-self: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
+`
+
+const SetInfo = styled.div`
+  display: flex;
+  width: 100%;
+  // border: 1px solid blue;
+  justify-content: space-between;
+  margin: 0.25rem 0;
+  align-items: center;
+`
+
+const ExerciseInput = styled.input`
+  color: gray;
+  margin-right: 50px;
+  padding-left: 7px;
+  border-radius: 7px;
+  height: 30px;
+`
+
 const Group = styled.div`
+  background-color: ${({ theme }) => theme.navbar};
+  border-radius: 7px;
   padding: 0.5rem 0;
+  padding-left: 10px;
   margin: 0.5rem 0;
   width: 100%;
 `;
@@ -88,174 +118,8 @@ export default function WorkoutForm() {
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      {/* <Group>
-        <p>{routine}</p>
-        <p>{currentDate}</p>
-      </Group>
-
-      <Group>
-        <label>{exercise[0]}</label>
-        <br />
-        <input
-          ref={register({
-            required: true,
-            maxLength: 6,
-            pattern: /^\d+$/,
-          })}
-          type="number"
-          name="firstExercise_weight"
-          placeholder="Enter weight in KG..."
-        />
-        {errors.firstExercise_weight && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 4 })}
-          type="number"
-          name="firstExercise_sets"
-          placeholder="Enter sets..."
-        />
-        {errors.firstExercise_sets && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 40 })}
-          type="number"
-          name="firstExercise_reps"
-          placeholder="Enter reps..."
-        />
-        {errors.firstExercise_reps && <span>Invalid input</span>}
-        <br />
-      </Group>
-      <Group>
-        <label>{exercise[1]}</label>
-        <br />
-        <input
-          ref={register({
-            required: true,
-            maxLength: 6,
-            pattern: /^\d+$/,
-          })}
-          type="number"
-          name="secondExercise_weight"
-          placeholder="Enter weight in KG..."
-        />
-        {errors.secondExercise_weight && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 4 })}
-          type="number"
-          name="secondExercise_sets"
-          placeholder="Enter sets..."
-        />
-        {errors.secondExercise_sets && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 40 })}
-          type="number"
-          name="secondExercise_reps"
-          placeholder="Enter reps..."
-        />
-        {errors.secondExercise_reps && <span>Invalid input</span>}
-        <br />
-      </Group>
-      <Group>
-        <label>{exercise[2]}</label>
-        <br />
-        <input
-          ref={register({
-            required: true,
-            maxLength: 6,
-            pattern: /^\d+$/,
-          })}
-          type="number"
-          name="thirdExercise_weight"
-          placeholder="Enter weight in KG..."
-        />
-        {errors.thirdExercise_weight && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 4 })}
-          type="number"
-          name="thirdExercise_sets"
-          placeholder="Enter sets..."
-        />
-        {errors.thirdExercise_sets && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 40 })}
-          type="number"
-          name="thirdExercise_reps"
-          placeholder="Enter reps..."
-        />
-        {errors.thirdExercise_reps && <span>Invalid input</span>}
-        <br />
-      </Group>
-      <Group>
-        <label>{exercise[3]}</label>
-        <br />
-        <input
-          ref={register({
-            required: true,
-            maxLength: 6,
-            pattern: /^\d+$/,
-          })}
-          type="number"
-          name="fourthExercise_weight"
-          placeholder="Enter weight in KG..."
-        />
-        {errors.fourthExercise_weight && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 4 })}
-          type="number"
-          name="fourthExercise_sets"
-          placeholder="Enter sets..."
-        />
-        {errors.fourthExercise_sets && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 40 })}
-          type="number"
-          name="fourthExercise_reps"
-          placeholder="Enter reps..."
-        />
-        {errors.fourthExercise_reps && <span>Invalid input</span>}
-        <br />
-      </Group>
-      <Group>
-        <label>{exercise[4]}</label>
-        <br />
-        <input
-          ref={register({
-            required: true,
-            maxLength: 6,
-            pattern: /^\d+$/,
-          })}
-          type="number"
-          name="fifthExercise_weight"
-          placeholder="Enter weight in KG..."
-        />
-        {errors.fifthExercise_weight && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 4 })}
-          type="number"
-          name="fifthExercise_sets"
-          placeholder="Enter sets..."
-        />
-        {errors.fifthExercise_sets && "Invalid input"}
-        <br />
-        <input
-          ref={register({ required: true, max: 40 })}
-          type="number"
-          name="fifthExercise_reps"
-          placeholder="Enter reps..."
-        />
-        {errors.fifthExercise_reps && <span>Invalid input</span>}
-        <br />
-      </Group> */}
-
-      <div>
-        <div>{routine}</div>
+      <HeaderInfo>
+        <div className="font-bold text-lg">{routine}</div>
         <div>
           <p>Start Time</p>
           <input
@@ -265,45 +129,71 @@ export default function WorkoutForm() {
             disabled
           />
         </div>
-      </div>
+      </HeaderInfo>
 
       {exercise.map((exercise, idx) => {
         return (
           <Group key={idx}>
-            <label>{exercise}</label>
-            <div>
-              <label>Weight : </label>
-              <input
+            <label className="font-bold text-md">Ex {idx + 1}. {exercise}</label>
+            <SetInfo className="pt-4">
+              <label>Weight: </label>
+              <ExerciseInput
                 ref={register({
-                  required: true,
+                  required: "Input is required.",
                   maxLength: 6,
                   pattern: /^\d+$/,
                 })}
                 name={`${idx}_weight`}
                 placeholder="Enter weight..."
               />
-            </div>
-            <div>
+            </SetInfo>
+            <p className="text-red-500 mb-3">
+                {console.log(errors)}
+                {console.log(`${idx}_weight`)}
+                {errors[`${idx}_weight`] ? errors[`${idx}_weight`].message : <></>}
+            </p>
+            <SetInfo>
               <label>Sets: </label>
-              <input
-                ref={register({ required: true, max: 4 })}
+              <ExerciseInput
+                ref={register({ 
+                  required: "Input is required.",
+                  max: 4 
+                })}
                 name={`${idx}_sets`}
                 placeholder="Enter sets..."
               />
-            </div>
-            <div>
+            </SetInfo>
+            <p className="text-red-500 mb-3">
+                {console.log(errors)}
+                {console.log(`${idx}_weight`)}
+                {errors[`${idx}_sets`] ? errors[`${idx}_sets`].message : <></>}
+            </p>
+            <SetInfo>
               <label>Reps: </label>
-              <input
-                ref={register({ required: true, max: 40 })}
+              <ExerciseInput
+                ref={register({ 
+                  required: "Input is required.",
+                  max: 40 
+                })}
                 name={`${idx}_reps`}
                 placeholder="Enter reps..."
               />
-            </div>
+            </SetInfo>
+            <p className="text-red-500 mb-3">
+                {console.log(errors)}
+                {console.log(`${idx}_weight`)}
+                {errors[`${idx}_reps`] ? errors[`${idx}_reps`].message : <></>}
+            </p>
           </Group>
         );
       })}
 
-      <SubmitBtn type="submit">Finish workout</SubmitBtn>
+      <button
+        type="submit"
+        className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+      >
+        Finish workout
+      </button>
     </Form>
   );
 }
