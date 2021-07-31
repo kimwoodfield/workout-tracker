@@ -4,12 +4,11 @@ import IconNavBar from "../components/Navigation/IconNavBar";
 import PageTitle from "../components/PageTitle";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Spinner from "../components/Common/Spinner";
-import { ImBin } from "react-icons/im";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
-import { config } from "../components/Common/constants"
+import { config } from "../components/Common/constants";
 
 const EmptyPage = styled.div`
   display: flex;
@@ -45,39 +44,31 @@ export default function Admin() {
       credentials: "include",
     })
       .then((res) => {
-        console.log(res.status);
         switch (res.status) {
           case 400:
-            console.log("400 error");
             break;
           case 401:
-            console.log("401 error, user is unauthorized");
             setIsAdmin(false);
             router.push("/");
             break;
           case 403:
-            console.log("403 error");
             router.back();
             break;
           case 500:
-            console.log("500 error");
             router.push("/");
             break;
           case 200:
             setIsAdmin(true);
-            console.log("the response code was ", res.status);
             break;
         }
       })
       .catch((err) => {
-        console.log("fetch failed");
         console.log(err);
       });
   };
   adminCheck();
 
   const fetchUsers = async () => {
-    console.log("before the fetch");
     const res = await fetch(config.url.API_USERS, {
       method: "GET",
       headers: {
@@ -86,17 +77,12 @@ export default function Admin() {
       credentials: "include",
     });
 
-    console.log("after the fetch");
     if (!res.ok) {
       const message = `An error has occured: ${res.status}`;
       throw new Error(message);
     }
 
     const body = await res.json();
-
-    console.log(body);
-
-    console.log(body.users);
     let allUsers = body.users;
     setUsers(allUsers);
     setViewUsers("Hide all users");
@@ -131,14 +117,12 @@ export default function Admin() {
       }
 
       const body = await res.json();
-      console.log(body);
       fetchUsers();
     }
     doDelete();
   };
 
   const changeRole = (username) => {
-    console.log("before the PATCH fetch");
     async function doChangeRole() {
       const res = await fetch(config.url.API_USERS, {
         method: "PATCH",
@@ -155,7 +139,6 @@ export default function Admin() {
       }
 
       const body = await res.json();
-      console.log(body);
       fetchUsers();
     }
     doChangeRole();
@@ -172,7 +155,6 @@ export default function Admin() {
         },
         {
           label: "No",
-          // onClick: () => alert("Click No"),
         },
       ],
     });

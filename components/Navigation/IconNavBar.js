@@ -2,11 +2,8 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { BiDumbbell } from "react-icons/bi";
 import { CgNotes } from "react-icons/cg";
 import { IoSettingsOutline } from "react-icons/io5";
-
 import styled from "styled-components";
-
 import NavIcon from "./NavIcon";
-
 import { useRouter } from "next/router";
 
 const Clock = <AiOutlineClockCircle />;

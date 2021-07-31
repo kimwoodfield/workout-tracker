@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Input from "./FormInput";
 import SubmitBtn from "./SubmitBtn";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../Common/ErrorMessage";
 import { useRouter } from "next/router";
@@ -18,20 +18,14 @@ const Form = styled.form`
 const Group = styled.div`
   padding: 0.5rem 0;
   margin: 0.5rem 0;
-  // border: 1px dashed grey;
 `;
 
 export default function Routine() {
   const router = useRouter();
-
   const alert = useAlert();
-
   const { register, handleSubmit, errors } = useForm();
 
-  // Handles the form submission
   const onSubmit = (data) => {
-    // If the input data is valid -
-    // Make a POST request to our api route with the input data
     fetch(config.url.API_EXERCISES, {
       method: "POST",
       headers: {
@@ -42,22 +36,16 @@ export default function Routine() {
     }).then((res) => {
       switch (res.status) {
         case 400:
-          console.log("This is a 400 error.");
           break;
         case 409:
-          console.log("This exercise already exists.");
           alert("This exercise already exists.");
           break;
         case 429:
-          console.log("This is a 429 error. Rate limit exceeded");
           break;
         case 201:
           res.json().then((data) => {
-            // request sent
-            console.log("this worked");
             alert.show("Exercise added!");
             router.push("/exercises");
-            // Create an alert to say exercise was added!
           });
       }
     });

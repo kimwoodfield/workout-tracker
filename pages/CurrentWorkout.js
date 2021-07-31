@@ -3,8 +3,7 @@ import styled from "styled-components";
 import WorkoutForm from "../components/Forms/WorkoutForm";
 import PageTitle from "../components/PageTitle";
 import BackButton from "../components/Common/BackButton";
-import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -23,13 +22,9 @@ const Padding = styled.div`
 
 const WorkoutFormWrapper = styled.main`
   width: 90%;
-`
+`;
 
 export default function CurrentWorkout() {
-  const router = useRouter();
-
-  const currentWorkoutID = router.query;
-
   return (
     <Container>
       <Head>

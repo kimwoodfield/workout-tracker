@@ -41,9 +41,7 @@ export default function RegisterForm() {
         }
       })
       .catch((err) => {
-        // Fetch couldn't send the request.
-        // 500 Error
-        console.log("Fetch failed");
+        console.log(err);
       });
   };
 

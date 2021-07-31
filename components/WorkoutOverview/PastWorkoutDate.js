@@ -18,7 +18,6 @@ const WorkoutDate = styled.div`
 
 const WorkoutQty = styled.div`
   height: 100%;
-  // border: 1px solid green;
   padding: 0 1rem;
   margin: 0;
   font-size: 0.85rem;

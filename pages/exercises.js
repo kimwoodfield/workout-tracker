@@ -16,7 +16,6 @@ const PageWrapper = styled.div`
 `;
 
 const ExercisesContainer = styled.div`
-  // border: 1px dashed blue;
   width: 100%;
   padding-left: 1.25rem;
   padding-bottom: 6.5rem;
@@ -47,7 +46,6 @@ const ExerciseName = styled.p`
 `;
 
 const ExerciseLinkSpace = styled.div`
-  // border: 1px dashed black;
   height: 4rem;
   width: 100%;
   display: flex;
@@ -75,34 +73,26 @@ export default function Exercises() {
       credentials: "include",
     })
       .then((res) => {
-        console.log(res.status);
         switch (res.status) {
           case 400:
-            console.log("400 error");
             setIsAdmin(false);
             break;
           case 401:
-            console.log("401 error, user is unauthorized");
             setIsAdmin(false);
             router.push("/");
             break;
           case 403:
-            console.log("403 error");
             setIsAdmin(false);
             break;
           case 500:
-            console.log("500 error");
             setIsAdmin(false);
             break;
           case 200:
             setIsAdmin(true);
-            console.log("the response code was ", res.status);
-            console.log(res.status.msg);
             break;
         }
       })
       .catch((err) => {
-        console.log("fetch failed");
         console.log(err);
       });
   };
@@ -118,12 +108,10 @@ export default function Exercises() {
         credentials: "include",
       });
       if (res.status === 403) {
-        console.log("403 error");
         router.push("/");
       }
       setSpinLoading(false);
       const body = await res.json();
-      console.log("body is ...", body);
       setExercise(body.exercisesResults);
     }
 
@@ -132,13 +120,9 @@ export default function Exercises() {
 
   useEffect(() => {
     if (!router.isReady) return;
-
-    // codes using router.query
-    console.log("inside router is ready hook ", router.query);
   }, [router.isReady]);
 
   const deleteEntry = (id) => {
-    let currentExerciseID = id; // 34
     fetch(config.url.API_EXERCISES + "/" + id, {
       method: "DELETE",
       headers: {
@@ -148,15 +132,11 @@ export default function Exercises() {
     }).then((res) => {
       switch (res.status) {
         case 400:
-          console.log("This is a 400 error.");
           break;
         case 429:
-          console.log("This is a 429 error. Rate limit exceeded");
           break;
         case 201:
           res.json().then((data) => {
-            // request sent
-            console.log("this worked");
             alert.show("Exercise deleted!");
             updatedExercises();
           });
@@ -192,7 +172,6 @@ export default function Exercises() {
       });
       setSpinLoading(false);
       const body = await res.json();
-      console.log("body is ...", body);
       setExercise(body.exercisesResults);
     }
     doFetch();
@@ -205,10 +184,7 @@ export default function Exercises() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {
-        // If a userType of "Admin" has not been set, the user cannot access this button.
-        isAdmin ? <NewExerciseLink /> : <ExerciseLinkSpace />
-      }
+      {isAdmin ? <NewExerciseLink /> : <ExerciseLinkSpace />}
 
       <PageTitle name="Exercises" />
 
@@ -225,19 +201,16 @@ export default function Exercises() {
                   <ExerciseName key={idx}>
                     {exercise.exercise_name}
                   </ExerciseName>
-                  {
-                    // If a userType of "Admin" has not been set, the user cannot access this button.
-                    isAdmin ? (
-                      <span
-                        className="pr-4 text-2xl text-red-500"
-                        onClick={() => prompt(exercise.id)}
-                      >
-                        <TiDelete />
-                      </span>
-                    ) : (
-                      <></>
-                    )
-                  }
+                  {isAdmin ? (
+                    <span
+                      className="pr-4 text-2xl text-red-500"
+                      onClick={() => prompt(exercise.id)}
+                    >
+                      <TiDelete />
+                    </span>
+                  ) : (
+                    <></>
+                  )}
                 </Exercise>
               );
             })}

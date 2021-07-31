@@ -5,7 +5,6 @@ export default function Spinner(props) {
   const [loading, isLoading] = useState(false);
 
   const startSpinner = () => {
-    console.log("Spinning!");
     isLoading(true);
   };
 

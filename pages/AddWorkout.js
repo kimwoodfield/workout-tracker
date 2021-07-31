@@ -1,21 +1,17 @@
 import Head from "next/head";
 import PageTitle from "../components/PageTitle";
 import styled from "styled-components";
-import AddWorkoutHeader from "../components/Common/AddWorkoutHeader";
-import Input from "../components/Common/Input";
-import TextButton from "../components/Common/TextButton";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import ChooseRoutineForm from "../components/Forms/ChooseRoutineForm";
 import BackButton from "../components/Common/BackButton";
 import { config } from "../components/Common/constants";
 
-const PageWrap = styled.div`
-`
+const PageWrap = styled.div``;
 
 const FormWrap = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 const Padding = styled.div`
   display: flex;
@@ -37,9 +33,7 @@ export default function AddWorkout() {
         credentials: "include",
       });
       const body = await res.json();
-      console.log("body is ...", body);
     }
-
     doFetch();
   }, []);
 

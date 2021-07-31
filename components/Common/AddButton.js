@@ -1,7 +1,5 @@
 import Link from "next/link";
-
 import styled from "styled-components";
-
 import { AiOutlinePlus } from "react-icons/ai";
 
 const ButtonWrap = styled.span`

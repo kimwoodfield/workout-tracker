@@ -2,14 +2,9 @@ import Head from "next/head";
 import styled from "styled-components";
 import IconNavBar from "../components/Navigation/IconNavBar";
 import PageTitle from "../components/PageTitle";
-import SettingsButton from "../components/Common/SettingsButton";
 import { useState, useEffect } from "react";
 import useDarkMode from "use-dark-mode";
-import {
-  lightTheme,
-  darkTheme,
-  GlobalStyles,
-} from "../components/Themes/ThemeConfig";
+import { lightTheme, darkTheme } from "../components/Themes/ThemeConfig";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useRouter } from "next/router";
@@ -80,28 +75,22 @@ export default function Settings() {
       credentials: "include",
     })
       .then((res) => {
-        console.log(res.status);
         switch (res.status) {
           case 400:
-            console.log("400 error");
             break;
           case 401:
-            console.log("401 error, user is unauthorized");
             setIsAdmin(false);
             router.push("/");
             break;
           case 403:
-            console.log("403 error");
             router.push("/");
             break;
           case 200:
-            console.log("the response code was ", res.status);
-            console.log(res.status);
             break;
         }
       })
       .catch((err) => {
-        console.log("fetch failed");
+        console.log(err);
       });
   };
   isAuthenticated();
@@ -115,36 +104,28 @@ export default function Settings() {
       credentials: "include",
     })
       .then((res) => {
-        console.log(res.status);
         switch (res.status) {
           case 400:
-            console.log("400 error");
             setIsAdmin(false);
             break;
           case 403:
-            console.log("403 error");
             setIsAdmin(false);
             break;
           case 500:
-            console.log("500 error");
             setIsAdmin(false);
             break;
           case 200:
             setIsAdmin(true);
-            console.log("the response code was ", res.status);
-            console.log(res.status.msg);
             break;
         }
       })
       .catch((err) => {
-        console.log("fetch failed");
         console.log(err);
       });
   };
   adminCheck();
 
   const Logout = () => {
-    console.log("function fired");
     fetch(config.url.API_LOGOUT, {
       method: "POST",
       headers: {
@@ -155,23 +136,19 @@ export default function Settings() {
       .then((res) => {
         switch (res.status) {
           case 400:
-            console.log("400 error");
             break;
           case 403:
-            console.log("403 error");
             router.push("/");
             break;
           case 201:
             localStorage.removeItem("lastLoggedIn");
             localStorage.setItem("loggedIn", false);
-            console.log("we got a 200 back from the server");
-            console.log(res.status.msg);
             router.push("/");
             break;
         }
       })
       .catch((err) => {
-        console.log("fetch failed");
+        console.log(err);
       });
   };
 
@@ -186,7 +163,6 @@ export default function Settings() {
         },
         {
           label: "No",
-          // onClick: () => alert("Click No"),
         },
       ],
     });
@@ -216,21 +192,18 @@ export default function Settings() {
         >
           Send Feedback
         </button>
-        {
-          // If a userType of "Admin" has not been set, the user cannot access this button.
-          isAdmin ? (
-            <Link href="/admin">
-              <button
-                type="submit"
-                className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
-              >
-                Admin Panel
-              </button>
-            </Link>
-          ) : (
-            <></>
-          )
-        }
+        {isAdmin ? (
+          <Link href="/admin">
+            <button
+              type="submit"
+              className="rounded-md text-white my-1 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500"
+            >
+              Admin Panel
+            </button>
+          </Link>
+        ) : (
+          <></>
+        )}
         <Link href="/help">
           <button
             type="submit"

@@ -1,18 +1,14 @@
 import styled from "styled-components";
-import SubmitBtn from "./SubmitBtn";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
 import { config } from "../Common/constants";
 
-
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   padding-bottom: 1rem;
-  // width: 90%;
   box-sizing: border-box;
   margin: 0 auto;
   align-items: center;
@@ -25,16 +21,15 @@ const HeaderInfo = styled.div`
   align-self: flex-start;
   width: 100%;
   margin-bottom: 20px;
-`
+`;
 
 const SetInfo = styled.div`
   display: flex;
   width: 100%;
-  // border: 1px solid blue;
   justify-content: space-between;
   margin: 0.25rem 0;
   align-items: center;
-`
+`;
 
 const ExerciseInput = styled.input`
   color: gray;
@@ -42,7 +37,7 @@ const ExerciseInput = styled.input`
   padding-left: 7px;
   border-radius: 7px;
   height: 30px;
-`
+`;
 
 const Group = styled.div`
   background-color: ${({ theme }) => theme.navbar};
@@ -55,16 +50,14 @@ const Group = styled.div`
 
 export default function WorkoutForm() {
   const router = useRouter();
-
   const alert = useAlert();
-
   const { register, handleSubmit, errors } = useForm();
 
   const [routine, setRoutine] = useState([]);
   const [exercise, setExercise] = useState([]);
 
-  let urlValue = router.query; // { id: 34 }
-  let currentWorkoutID = urlValue.id; // 34
+  let urlValue = router.query;
+  let currentWorkoutID = urlValue.id;
 
   const onSubmit = (data) => {
     fetch(config.url.API_CURRENTWORKOUT + "/" + currentWorkoutID, {
@@ -77,15 +70,11 @@ export default function WorkoutForm() {
     }).then((res) => {
       switch (res.status) {
         case 400:
-          console.log("This is a 400 error.");
           break;
         case 429:
-          console.log("This is a 429 error. Rate limit exceeded");
           break;
         case 201:
           res.json().then((data) => {
-            // request sent
-            console.log("this worked");
             alert.show("Workout complete!");
             router.push("/log");
           });
@@ -106,7 +95,6 @@ export default function WorkoutForm() {
         }
       );
       const body = await res.json();
-      console.log("body is ...", body);
       setExercise(body.currentWorkout.RoutineExercises);
       setRoutine(body.currentWorkout.RoutineName);
     }
@@ -134,7 +122,9 @@ export default function WorkoutForm() {
       {exercise.map((exercise, idx) => {
         return (
           <Group key={idx}>
-            <label className="font-bold text-md">Ex {idx + 1}. {exercise}</label>
+            <label className="font-bold text-md">
+              Ex {idx + 1}. {exercise}
+            </label>
             <SetInfo className="pt-4">
               <label>Weight: </label>
               <ExerciseInput
@@ -148,41 +138,39 @@ export default function WorkoutForm() {
               />
             </SetInfo>
             <p className="text-red-500 mb-3">
-                {console.log(errors)}
-                {console.log(`${idx}_weight`)}
-                {errors[`${idx}_weight`] ? errors[`${idx}_weight`].message : <></>}
+              {errors[`${idx}_weight`] ? (
+                errors[`${idx}_weight`].message
+              ) : (
+                <></>
+              )}
             </p>
             <SetInfo>
               <label>Sets: </label>
               <ExerciseInput
-                ref={register({ 
+                ref={register({
                   required: "Input is required.",
-                  max: 4 
+                  max: 4,
                 })}
                 name={`${idx}_sets`}
                 placeholder="Enter sets..."
               />
             </SetInfo>
             <p className="text-red-500 mb-3">
-                {console.log(errors)}
-                {console.log(`${idx}_weight`)}
-                {errors[`${idx}_sets`] ? errors[`${idx}_sets`].message : <></>}
+              {errors[`${idx}_sets`] ? errors[`${idx}_sets`].message : <></>}
             </p>
             <SetInfo>
               <label>Reps: </label>
               <ExerciseInput
-                ref={register({ 
+                ref={register({
                   required: "Input is required.",
-                  max: 40 
+                  max: 40,
                 })}
                 name={`${idx}_reps`}
                 placeholder="Enter reps..."
               />
             </SetInfo>
             <p className="text-red-500 mb-3">
-                {console.log(errors)}
-                {console.log(`${idx}_weight`)}
-                {errors[`${idx}_reps`] ? errors[`${idx}_reps`].message : <></>}
+              {errors[`${idx}_reps`] ? errors[`${idx}_reps`].message : <></>}
             </p>
           </Group>
         );

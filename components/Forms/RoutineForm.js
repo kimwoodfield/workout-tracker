@@ -17,21 +17,16 @@ const Form = styled.form`
 const Group = styled.div`
   padding: 0.5rem 0;
   margin: 0.5rem 0;
-  // border: 1px dashed grey;
 `;
 
 export default function Routine() {
   const router = useRouter();
-
   const alert = useAlert();
-
   const { register, handleSubmit, errors } = useForm();
 
   const [exercise, setExercise] = useState([]);
 
-  // Handles the form submission
   const onSubmit = (data) => {
-    // If the input data is valid -
     fetch(config.url.API_ROUTINES, {
       method: "POST",
       headers: {
@@ -42,15 +37,12 @@ export default function Routine() {
     }).then((res) => {
       switch (res.status) {
         case 400:
-          console.log("This is a 400 error.");
           break;
         case 429:
-          console.log("This is a 429 error. Rate limit exceeded");
+          console.log("Rate limit exceeded");
           break;
         case 201:
           res.json().then((data) => {
-            // request sent
-            console.log("this worked");
             alert.show("Routine added!");
             router.push("/routines");
           });
@@ -68,7 +60,6 @@ export default function Routine() {
         credentials: "include",
       });
       const body = await res.json();
-      console.log("body is ...", body);
       setExercise(body.exercisesResults);
     }
 

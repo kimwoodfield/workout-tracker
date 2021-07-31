@@ -10,6 +10,6 @@ const AppTitle = styled.h1`
   padding: 1.25rem 1rem;
 `;
 
-export default function Title(props) {
+export default function Title() {
   return <AppTitle>Workout Tracker</AppTitle>;
 }

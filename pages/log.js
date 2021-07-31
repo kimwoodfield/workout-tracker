@@ -108,9 +108,7 @@ export default function Log() {
         credentials: "include",
       });
       const body = await res.json();
-      console.log(body);
       const workouts = body.workouts;
-      console.log(workouts);
       workouts.reverse();
       setSpinLoading(false);
       setWorkout(workouts);
@@ -139,9 +137,8 @@ export default function Log() {
   };
 
   const deleteEntry = () => {
-    let urlValue = router.query; // { id: 34 }
-    console.log('the query is ', router.query);
-    let currentWorkoutID = urlValue.workoutId; // 34
+    let urlValue = router.query;
+    let currentWorkoutID = urlValue.workoutId;
     fetch(config.url.API_WORKOUT + "/" + currentWorkoutID, {
       method: "DELETE",
       headers: {
@@ -151,15 +148,14 @@ export default function Log() {
     }).then((res) => {
       switch (res.status) {
         case 400:
-          console.log("This is a 400 error.");
+          console.log("400 error");
           break;
         case 429:
-          console.log("This is a 429 error. Rate limit exceeded");
+          console.log("Rate limit exceeded");
           break;
         case 201:
           res.json().then((data) => {
             // request sent
-            console.log("this worked");
             alert.show("Entry deleted!");
             setModalIsOpen(false);
             updatedWorkouts();

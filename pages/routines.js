@@ -6,7 +6,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import Modal from "react-modal";
-import { AiOutlinePlus } from "react-icons/ai";
 import Spinner from "../components/Common/Spinner";
 import { AiOutlineClose } from "react-icons/ai";
 import { useAlert } from "react-alert";
@@ -18,7 +17,6 @@ const PageWrapper = styled.div`
 `;
 
 const RoutinesContainer = styled.div`
-  // border: 1px dashed blue;
   width: 100%;
   padding-left: 1.25rem;
   padding-bottom: 6.5rem;
@@ -43,11 +41,8 @@ const SpinnerContainer = styled.div`
 const StyledModal = styled(Modal)`
   background: ${({ theme }) => theme.body};
   position: absolute;
-  // inset: 20px;
   inset: 0px;
-  // border: 1px solid rgb(204, 204, 204);
   overflow: auto;
-  // border-radius: 4px;
   outline: none;
   padding: 20px;
   padding-top: 3rem;
@@ -71,7 +66,6 @@ const CloseButton = styled.div`
 `;
 
 const ExerciseLinkSpace = styled.div`
-  // border: 1px dashed black;
   height: 4rem;
   width: 100%;
   display: flex;
@@ -102,40 +96,31 @@ export default function Routines() {
       credentials: "include",
     })
       .then((res) => {
-        console.log(res.status);
         switch (res.status) {
           case 400:
-            console.log("400 error");
             setIsAdmin(false);
             break;
           case 401:
-            console.log("401 error, user is unauthorized");
             setIsAdmin(false);
             router.push("/");
             break;
           case 403:
-            console.log("403 error");
             setIsAdmin(false);
             break;
           case 500:
-            console.log("500 error");
             setIsAdmin(false);
             break;
           case 200:
             setIsAdmin(true);
-            console.log("the response code was ", res.status);
-            console.log(res.status.msg);
             break;
         }
       })
       .catch((err) => {
-        console.log("fetch failed");
         console.log(err);
       });
   };
   adminCheck();
 
-  // Make the call to our api
   useEffect(() => {
     async function doFetch() {
       const res = await fetch(config.url.API_ROUTINEEXERCISE, {
@@ -146,7 +131,6 @@ export default function Routines() {
         credentials: "include",
       });
       if (res.status === 403) {
-        console.log("403 error");
         router.push("/");
       }
       if (res.status === 204) {
@@ -155,10 +139,7 @@ export default function Routines() {
       }
       setSpinLoading(false);
       const body = await res.json();
-      console.log(body);
       let routineList = body.routineList;
-      console.log("this is routineList ", routineList);
-
       setRoutine(routineList);
     }
 
@@ -176,10 +157,7 @@ export default function Routines() {
       });
       setSpinLoading(false);
       const body = await res.json();
-      console.log(body);
       let routineList = body.routineList;
-      console.log("this is routineList ", routineList);
-
       setRoutine(routineList);
     }
     doFetch();
@@ -197,15 +175,12 @@ export default function Routines() {
     }).then((res) => {
       switch (res.status) {
         case 400:
-          console.log("This is a 400 error.");
           break;
         case 429:
-          console.log("This is a 429 error. Rate limit exceeded");
+          console.log("Rate limit exceeded");
           break;
         case 201:
           res.json().then((data) => {
-            // request sent
-            console.log("this worked");
             alert.show("Entry deleted!");
             setModalIsOpen(false);
             updatedRoutines();
@@ -225,7 +200,6 @@ export default function Routines() {
         },
         {
           label: "No",
-          // onClick: () => alert("Click No"),
         },
       ],
     });
@@ -238,10 +212,7 @@ export default function Routines() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {
-        // If a userType of "Admin" has not been set, the user cannot access this button.
-        isAdmin ? <NewRoutineLink /> : <ExerciseLinkSpace />
-      }
+      {isAdmin ? <NewRoutineLink /> : <ExerciseLinkSpace />}
 
       <PageTitle name="Routines" />
 
@@ -255,73 +226,63 @@ export default function Routines() {
             <>
               {routine ? (
                 <>
-                {routine.map((routine, idx) => {
-                return (
-                  <>
-                    <Routine
-                      key={idx}
-                      onClick={() => {
-                        setModalIsOpen(true);
-                        setModalData(routine.routine_name);
-                        setModalDataExercises(routine.routine_exercises);
-                        router.push({
-                          query: { routineId: routine.routine_id },
-                        });
-                      }}
-                    >
-                      {routine.routine_name}
-                    </Routine>
-                  </>
-                );
-              })}
-              <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
-                <div>
-                  <CloseButton
-                    onClick={() => {
-                      setModalIsOpen(false);
-                      router.push({ query: null });
-                    }}
-                  >
-                    <AiOutlineClose />
-                  </CloseButton>
-                </div>
-                <h1 className="text-3xl font-bold pb-3 border-b-2 mb-4">
-                  {modalData}
-                </h1>
-                {modalDataExercises.map((exercise, idx) => {
-                  return (
-                    <p key={idx} className="py-2">
-                      <span className="font-bold">Exercise {idx + 1}.</span>{" "}
-                      <span className="pl-3">{exercise}</span>
-                    </p>
-                  );
-                })}
-                {
-                  // If a userType of "Admin" has not been set, the user cannot access this button.
-                  isAdmin ? (
-                    <>
-                      <div className="border-t-2 mt-4">
-                        {/* <button
-                        type="submit"
-                        className="rounded-md text-white my-3 w-full bg-blue-400 hover:bg-blue-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
-                        onClick={prompt}
-                      >
-                        Edit
-                      </button> */}
-                        <button
-                          type="submit"
-                          className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
-                          onClick={prompt}
+                  {routine.map((routine, idx) => {
+                    return (
+                      <>
+                        <Routine
+                          key={idx}
+                          onClick={() => {
+                            setModalIsOpen(true);
+                            setModalData(routine.routine_name);
+                            setModalDataExercises(routine.routine_exercises);
+                            router.push({
+                              query: { routineId: routine.routine_id },
+                            });
+                          }}
                         >
-                          Delete Routine
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <ExerciseLinkSpace />
-                  )
-                }
-              </StyledModal>
+                          {routine.routine_name}
+                        </Routine>
+                      </>
+                    );
+                  })}
+                  <StyledModal isOpen={modalIsOpen} ariaHideApp={false}>
+                    <div>
+                      <CloseButton
+                        onClick={() => {
+                          setModalIsOpen(false);
+                          router.push({ query: null });
+                        }}
+                      >
+                        <AiOutlineClose />
+                      </CloseButton>
+                    </div>
+                    <h1 className="text-3xl font-bold pb-3 border-b-2 mb-4">
+                      {modalData}
+                    </h1>
+                    {modalDataExercises.map((exercise, idx) => {
+                      return (
+                        <p key={idx} className="py-2">
+                          <span className="font-bold">Exercise {idx + 1}.</span>{" "}
+                          <span className="pl-3">{exercise}</span>
+                        </p>
+                      );
+                    })}
+                    {isAdmin ? (
+                      <>
+                        <div className="border-t-2 mt-4">
+                          <button
+                            type="submit"
+                            className="rounded-md text-white my-3 w-full bg-red-400 hover:bg-red-700 hover:text-white py-2 font-bold transition duration-500 mt-5"
+                            onClick={prompt}
+                          >
+                            Delete Routine
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <ExerciseLinkSpace />
+                    )}
+                  </StyledModal>
                 </>
               ) : (
                 <></>
@@ -330,7 +291,6 @@ export default function Routines() {
           )}
         </RoutinesContainer>
       </main>
-
       <IconNavBar />
     </PageWrapper>
   );

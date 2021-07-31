@@ -3,14 +3,8 @@ import Link from "next/link";
 import LoginForm from "../components/Forms/LoginForm";
 import styled from "styled-components";
 import Title from "../components/Common/Title";
+import PageWrapper from "../components/Common/PageWrapper";
 
-const PageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 90vh;
-`;
 const ContentWrap = styled.main`
   display: flex;
   flex-direction: column;
