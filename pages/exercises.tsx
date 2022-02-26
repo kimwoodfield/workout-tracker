@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Spinner from "../components/Common/Spinner";
 import { useAlert } from "react-alert";
-import { config } from "../components/Common/constants";
 import {
   Container,
   List,
@@ -19,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { makeStyles } from "@mui/styles";
 import { AddButton } from '../components/Common/AddButton';
 import { Modal } from '../components/Common/Modal'
+import * as workoutTrackerApi from '../api/index';
 
 interface Exercise {
   id: number;
@@ -65,22 +65,11 @@ export default function Exercises() {
     setShowModal(false);
   }
 
-  const adminCheck = async () => {
+  const adminCheckHandler = async () => {
     try {
-      const response = await fetch(config.url.API_ISADMIN, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-  
-      if (!response.ok) {
-        throw new Error(genericErrorMessage);
-      }
-
-      response.status === 200 ? setIsAdmin(true) : setIsAdmin(false);
-
+      const response = await workoutTrackerApi.checkAdminStatus();
+      handleRequestErrors(response);
+      response?.status === 200 ? setIsAdmin(true) : setIsAdmin(false);
     } catch (e) {
       console.log(e);
     }
@@ -89,20 +78,10 @@ export default function Exercises() {
   const getExercisesHandler = async () => {
     setSpinLoading(true);
     try {
-      const response = await fetch(config.url.API_EXERCISES, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error(genericErrorMessage);
-      }
-
-      const data = await response.json();
-
+      const response = await workoutTrackerApi.getExercises();
+      handleRequestErrors(response);
+      const data = await response?.json();
       const { exercisesResults } = data;
-
       setSpinLoading(false);
       setExercises(exercisesResults);
     } catch (error: unknown) {
@@ -115,32 +94,26 @@ export default function Exercises() {
 
   useEffect(() => {
     getExercisesHandler();
-    adminCheck();
+    adminCheckHandler();
   }, []);
 
   useEffect(() => {
     if (!router.isReady) return;
   }, [router.isReady]);
 
+  const handleRequestErrors = (response: Response | undefined) => {
+    if (!response || !response.ok) {
+      throw new Error(genericErrorMessage);
+    }
+  }
 
   const removeExerciseHandler = async () => {
-
     if (!currentExerciseId) return;
-
     try {
-      const response = await fetch(`${config.url.API_EXERCISES}/${currentExerciseId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error(genericErrorMessage);
-      }
-
+      const response = await workoutTrackerApi.removeExercise(currentExerciseId);
+      handleRequestErrors(response);
       alert.show("Exercise deleted!");
       getExercisesHandler();
-
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);
