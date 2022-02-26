@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import AddButton from "./Common/AddButton";
+import { AddButton } from "./Common/AddButton";
 
 const AddNewItemContainer = styled.div`
   height: 4rem;
