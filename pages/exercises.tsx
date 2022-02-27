@@ -12,12 +12,12 @@ import {
   ListItemIcon,
   Divider,
   Typography,
-  Box
+  Box,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { makeStyles } from "@mui/styles";
 import { AddButton } from '../components/Common/AddButton';
 import { Modal } from '../components/Common/Modal'
+import { ItemActions } from '../components/Common/ItemActions'
 import * as workoutTrackerApi from '../api/index';
 
 interface Exercise {
@@ -121,8 +121,8 @@ export default function Exercises() {
     }
   };
 
-  const showModalHandler = (id: number) => {
-    setCurrentExerciseId(id);
+  const showModalHandler = (exerciseId: number) => {
+    setCurrentExerciseId(exerciseId);
     setShowModal(true);
   };
 
@@ -153,9 +153,8 @@ export default function Exercises() {
                     {isAdmin && (
                       <ListItemIcon
                         className={classes.remove}
-                        onClick={() => showModalHandler(id)}
                       >
-                        <DeleteIcon />
+                          <ItemActions onModalOpen={showModalHandler} exerciseId={id} />
                       </ListItemIcon>
                     )}
                   </ListItem>
